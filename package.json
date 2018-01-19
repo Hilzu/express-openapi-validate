@@ -6,5 +6,45 @@
   "repository": "git@github.com:Hilzu/express-openapi-validate.git",
   "author": "Santeri Hiltunen <hilzu@iki.fi>",
   "license": "Apache-2.0",
-  "private": false
+  "private": false,
+  "engines": {
+    "node": "^6.5.0 || ^8.7.0 || ^9.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "yarn lint"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "prettier": "^1.10.2"
+  },
+  "eslintConfig": {
+    "plugins": [
+      "node"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "airbnb-base",
+      "plugin:node/recommended",
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2017,
+      "sourceType": "script"
+    },
+    "env": {
+      "node": true
+    },
+    "rules": {
+      "strict": [
+        "error",
+        "global"
+      ]
+    }
+  }
 }
