@@ -10,19 +10,32 @@
   "engines": {
     "node": "^6.5.0 || ^8.7.0 || >=9.0.0"
   },
-  "keywords": ["openapi", "openapi3", "swagger", "express", "middleware", "validation"],
+  "keywords": [
+    "openapi",
+    "openapi3",
+    "swagger",
+    "express",
+    "middleware",
+    "validation"
+  ],
   "scripts": {
     "format": "prettier --write *.{md,js,json} 'src/**/*.js'",
     "lint": "eslint .",
-    "test": "yarn lint"
+    "test": "yarn lint && yarn test:jest",
+    "test:jest": "jest"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ajv": "^6.0.1",
+    "lodash": "^4.17.4",
+    "semver": "^5.5.0"
+  },
   "devDependencies": {
-    "eslint": "^4.15.0",
+    "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
+    "jest": "^22.1.4",
     "prettier": "1.10.2"
   },
   "eslintConfig": {
@@ -40,6 +53,7 @@
       "sourceType": "script"
     },
     "env": {
+      "jest": true,
       "node": true
     },
     "rules": {
