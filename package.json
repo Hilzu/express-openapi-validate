@@ -8,7 +8,7 @@
   "license": "Apache-2.0",
   "private": false,
   "engines": {
-    "node": "^6.5.0 || ^8.7.0 || ^9.0.0"
+    "node": "^6.5.0 || ^8.7.0 || >=9.0.0"
   },
   "scripts": {
     "format": "prettier --write 'src/**/*.js'",
