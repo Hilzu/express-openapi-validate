@@ -1,10 +1,10 @@
 {
   "name": "express-openapi-validate",
   "version": "0.1.0",
-  "description": "Express middleware to validate request based on OpenAPI 3 document",
+  "description": "Express middleware to validate request based on an OpenAPI 3 document",
   "main": "src/index.js",
   "repository": "git@github.com:Hilzu/express-openapi-validate.git",
-  "author": "Santeri Hiltunen <hilzu@iki.fi>",
+  "author": "Santeri Hiltunen",
   "license": "Apache-2.0",
   "private": false,
   "engines": {
