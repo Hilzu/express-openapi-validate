@@ -7,3 +7,8 @@ cache:
   yarn: true
   directories:
     - node_modules
+install:
+  - yarn global install codecov
+script:
+  - yarn test
+  - codecov
