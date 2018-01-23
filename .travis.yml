@@ -8,7 +8,7 @@ cache:
   directories:
     - node_modules
 install:
-  - yarn global install codecov
+  - yarn global add codecov
 script:
   - yarn test
   - codecov
