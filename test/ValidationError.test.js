@@ -1,6 +1,6 @@
 "use strict";
 
-const ValidationError = require("./ValidationError");
+const ValidationError = require("../dist/ValidationError").default;
 
 test("ValidationError can be created and has correct fields", () => {
   const e = new ValidationError("msg", [1, 2, 3]);

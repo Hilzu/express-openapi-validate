@@ -2,9 +2,9 @@
 
 exports[`OpenApiValidator creating throws with Swagger 2.0 document 1`] = `"Unsupported OpenAPI / Swagger version=2.0"`;
 
-exports[`OpenApiValidator getting an operation object fails with invalid arguments 1`] = `"Not a valid method=POST"`;
+exports[`OpenApiValidator getting an operation object fails with invalid arguments 1`] = `"Path=/echo with method=POST not found from OpenAPI document"`;
 
-exports[`OpenApiValidator getting an operation object fails with invalid arguments 2`] = `"Not a valid method=ppost"`;
+exports[`OpenApiValidator getting an operation object fails with invalid arguments 2`] = `"Path=/echo with method=ppost not found from OpenAPI document"`;
 
 exports[`OpenApiValidator getting an operation object fails with invalid arguments 3`] = `"Path=/echoo with method=post not found from OpenAPI document"`;
 

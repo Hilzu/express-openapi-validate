@@ -1,6 +1,6 @@
 "use strict";
 
-const OpenApiValidator = require("./OpenApiValidator");
+const OpenApiValidator = require("../dist/OpenApiValidator").default;
 
 const minimumValidOpenApiDocument = {
   openapi: "3.0.1",
@@ -95,7 +95,7 @@ describe("OpenApiValidator", () => {
   test("validate", done => {
     const validator = new OpenApiValidator(openApiDocument);
     const validate = validator.validate("post", "/echo");
-    validate({ body: { input: "hello" }}, {}, err => {
+    validate({ body: { input: "hello" } }, {}, err => {
       expect(err).toBeUndefined();
       done();
     });

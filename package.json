@@ -2,7 +2,7 @@
   "name": "express-openapi-validate",
   "version": "0.1.0",
   "description": "Express middleware to validate request based on an OpenAPI 3 document",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:Hilzu/express-openapi-validate.git",
   "author": "Santeri Hiltunen",
   "license": "Apache-2.0",
@@ -19,9 +19,14 @@
     "validation"
   ],
   "scripts": {
-    "format": "prettier --write *.{md,js,json} 'src/**/*.js'",
-    "lint": "eslint .",
+    "build": "yarn clean && yarn build:ts",
+    "build:ts": "tsc",
+    "clean": "rm -r dist",
+    "format": "prettier --write *.{md,js,json} 'src/**/*.{js,json,ts}'",
+    "lint": "eslint --ext js,ts .",
+    "prepublishOnly": "yarn build",
     "test": "yarn lint && yarn test:jest",
+    "pretest:jest": "yarn build",
     "test:jest": "jest"
   },
   "dependencies": {
@@ -30,33 +35,56 @@
     "semver": "^5.5.0"
   },
   "devDependencies": {
+    "@types/express": "^4.11.0",
+    "@types/lodash": "^4.14.95",
+    "@types/semver": "^5.4.0",
     "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
     "jest": "^22.1.4",
-    "prettier": "1.10.2"
+    "prettier": "1.10.2",
+    "typescript": "^2.6.2",
+    "typescript-eslint-parser": "^12.0.0"
   },
   "eslintConfig": {
-    "plugins": [
-      "node"
-    ],
     "extends": [
       "eslint:recommended",
       "airbnb-base",
-      "plugin:node/recommended",
       "prettier"
     ],
-    "parserOptions": {
-      "ecmaVersion": 2017,
-      "sourceType": "script"
+    "parser": "typescript-eslint-parser",
+    "settings": {
+      "import/extensions": [
+        ".ts",
+        ".js"
+      ],
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".ts",
+            ".js",
+            ".json"
+          ]
+        }
+      }
     },
     "env": {
       "jest": true,
       "node": true
     },
     "rules": {
+      "import/extensions": [
+        "error",
+        "always",
+        {
+          "ts": "never",
+          "js": "never"
+        }
+      ],
+      "no-undef": "off",
+      "no-unused-vars": "off",
+      "no-useless-constructor": "off",
       "strict": [
         "error",
         "global"
