@@ -86,6 +86,14 @@
           "js": "never"
         }
       ],
+      "import/no-unresolved": [
+        "error",
+        {
+          "ignore": [
+            "\\.\\.?/dist/"
+          ]
+        }
+      ],
       "no-undef": "off",
       "no-unused-vars": "off",
       "no-useless-constructor": "off",
