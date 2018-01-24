@@ -21,7 +21,7 @@
   "scripts": {
     "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc",
-    "clean": "rm -r dist",
+    "clean": "rm -rfv dist",
     "format": "prettier --write *.{md,js,json} 'src/**/*.{js,json,ts}'",
     "lint": "yarn lint:eslint && yarn lint:tslint",
     "lint:eslint": "eslint --ext js,ts .",
