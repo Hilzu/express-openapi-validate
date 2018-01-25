@@ -5,7 +5,7 @@ const jsYaml = require("js-yaml");
 const OpenApiValidator = require("../dist/OpenApiValidator").default;
 
 const openApiDocument = jsYaml.safeLoad(
-  fs.readFileSync("./openapi.yaml", "utf-8")
+  fs.readFileSync("./test/openapi.yaml", "utf-8")
 );
 
 describe("OpenApiValidator", () => {
