@@ -1,82 +1,16 @@
 "use strict";
 
+const fs = require("fs");
+const jsYaml = require("js-yaml");
 const OpenApiValidator = require("../dist/OpenApiValidator").default;
 
-const minimumValidOpenApiDocument = {
-  openapi: "3.0.1",
-  info: { title: "Example API", version: "1.0.0" },
-  paths: {},
-};
-
-const openApiDocument = Object.assign({}, minimumValidOpenApiDocument, {
-  components: {
-    schemas: {
-      Test: {
-        type: "object",
-        properties: {
-          value: { type: "number" },
-        },
-        required: ["value"],
-      },
-    },
-  },
-  paths: {
-    "/echo": {
-      post: {
-        description: "Echo input back",
-        requestBody: {
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  input: {
-                    type: "string",
-                  },
-                },
-                required: ["input"],
-              },
-            },
-          },
-        },
-        responses: {
-          200: {
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    output: {
-                      type: "string",
-                    },
-                  },
-                  required: ["output"],
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    "/test": {
-      post: {
-        requestBody: {
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Test",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-});
+const openApiDocument = jsYaml.safeLoad(
+  fs.readFileSync("./openapi.yaml", "utf-8")
+);
 
 describe("OpenApiValidator", () => {
   test("can be created with valid OpenAPI document", () => {
-    const validator = new OpenApiValidator(minimumValidOpenApiDocument);
+    const validator = new OpenApiValidator(openApiDocument);
     expect(validator).toBeInstanceOf(OpenApiValidator);
   });
 

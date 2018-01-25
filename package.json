@@ -45,6 +45,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
     "jest": "^22.1.4",
+    "js-yaml": "^3.10.0",
     "prettier": "1.10.2",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.6.0",

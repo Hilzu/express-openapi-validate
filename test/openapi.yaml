@@ -1,0 +1,45 @@
+openapi: 3.0.1
+info:
+  title: Example API
+  version: 1.0.0
+components:
+  schemas:
+    Test:
+      type: object
+      properties:
+        value:
+          type: number
+      required:
+      - value
+paths:
+  /echo:
+    post:
+      description: Echo input back
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: string
+              required:
+              - input
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  output:
+                    type: string
+                required:
+                - output
+  /test:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Test"
