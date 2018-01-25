@@ -3,7 +3,7 @@ export default interface OpenApiDocument {
   info: InfoObject;
   servers?: any[];
   paths: PathsObject;
-  components?: any;
+  components?: ComponentsObject;
   security?: any[];
   tags?: any[];
   externalDocs?: any;
@@ -18,6 +18,20 @@ export interface InfoObject {
   version: string;
 }
 
+export type SchemaObject = any;
+
+export interface ComponentsObject {
+  schemas?: { [index: string]: SchemaObject };
+  responses?: { [index: string]: any };
+  parameters?: { [index: string]: any };
+  examples?: { [index: string]: any };
+  requestBodies?: { [index: string]: any };
+  headers?: { [index: string]: any };
+  securitySchemes?: { [index: string]: any };
+  links?: { [index: string]: any };
+  callbacks?: { [index: string]: any };
+}
+
 export type Operation =
   | "get"
   | "put"
@@ -29,7 +43,7 @@ export type Operation =
   | "trace";
 
 export interface PathsObject {
-  [index: string]: PathItemObject;
+  [path: string]: PathItemObject;
 }
 
 export interface PathItemObject {
@@ -66,12 +80,16 @@ export interface OperationObject {
 export interface RequestBodyObject {
   description?: string;
   required?: boolean;
-  content: { [content: string]: MediaTypeObject };
+  content: { [mediaType: string]: MediaTypeObject };
 }
 
 export interface MediaTypeObject {
-  schema?: any;
+  schema?: SchemaObject | ReferenceObject;
   example?: any;
   examples?: any;
   encoding?: any;
+}
+
+export interface ReferenceObject {
+  $ref: string;
 }

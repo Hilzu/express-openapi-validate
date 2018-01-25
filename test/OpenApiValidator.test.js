@@ -9,6 +9,17 @@ const minimumValidOpenApiDocument = {
 };
 
 const openApiDocument = Object.assign({}, minimumValidOpenApiDocument, {
+  components: {
+    schemas: {
+      Test: {
+        type: "object",
+        properties: {
+          value: { type: "number" },
+        },
+        required: ["value"],
+      },
+    },
+  },
   paths: {
     "/echo": {
       post: {
@@ -41,6 +52,19 @@ const openApiDocument = Object.assign({}, minimumValidOpenApiDocument, {
                   },
                   required: ["output"],
                 },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/test": {
+      post: {
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Test",
               },
             },
           },
@@ -105,6 +129,32 @@ describe("OpenApiValidator", () => {
     const validator = new OpenApiValidator(openApiDocument);
     const validate = validator.validate("post", "/echo");
     validate({ body: {} }, {}, err => {
+      expect(err).toBeInstanceOf(Error);
+      expect(err).toMatchSnapshot();
+      done();
+    });
+  });
+
+  test("resolveSchema throws with unsupported $ref", () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    expect(() => {
+      validator.resolveSchema({ $ref: "#/a/b/C" });
+    }).toThrowErrorMatchingSnapshot();
+  });
+
+  test("validate with schema in internal ref", done => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validate("post", "/test");
+    validate({ body: { value: 123 } }, {}, err => {
+      expect(err).toBeUndefined();
+      done();
+    });
+  });
+
+  test("validate with schema in internal ref fails with invalid body", done => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validate("post", "/test");
+    validate({ body: { value: "123" } }, {}, err => {
       expect(err).toBeInstanceOf(Error);
       expect(err).toMatchSnapshot();
       done();

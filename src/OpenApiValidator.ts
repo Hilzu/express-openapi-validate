@@ -4,8 +4,16 @@ import { RequestHandler } from "express";
 import * as _ from "lodash";
 import * as semver from "semver";
 
-import OpenApiDocument, { Operation, OperationObject } from "./OpenApiDocument";
+import OpenApiDocument, {
+  Operation,
+  OperationObject,
+  ReferenceObject,
+  SchemaObject,
+} from "./OpenApiDocument";
 import ValidationError from "./ValidationError";
+
+const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
+  (x as ReferenceObject).$ref !== undefined;
 
 export default class OpenApiValidator {
   private ajv: Ajv.Ajv;
@@ -23,13 +31,14 @@ export default class OpenApiValidator {
 
   public validate(method: Operation, path: string): RequestHandler {
     const operation = this.getOperationObject(method, path);
+    const bodySchema = _.get(
+      operation,
+      ["requestBody", "content", "application/json", "schema"],
+      {}
+    );
     const schema = {
       properties: {
-        body: _.get(
-          operation,
-          ["requestBody", "content", "application/json", "schema"],
-          {}
-        ),
+        body: this.resolveSchema(bodySchema),
       },
       required: ["body"],
     };
@@ -56,5 +65,16 @@ export default class OpenApiValidator {
     throw new Error(
       `Path=${path} with method=${method} not found from OpenAPI document`
     );
+  }
+
+  private resolveSchema(schema: SchemaObject | ReferenceObject): SchemaObject {
+    if (isReferenceObject(schema)) {
+      if (!schema.$ref.startsWith("#/components/schemas/")) {
+        throw new Error(`Unsupported $ref=${schema.$ref}`);
+      }
+      const name = _.last(schema.$ref.split("/")) as string;
+      return _.get(this.document, ["components", "schemas", name], {});
+    }
+    return schema;
   }
 }
