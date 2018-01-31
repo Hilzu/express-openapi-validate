@@ -27,6 +27,7 @@ paths:
               - input
       responses:
         '200':
+          description: Response
           content:
             application/json:
               schema:
@@ -38,6 +39,9 @@ paths:
                 - output
   /test:
     post:
+      responses:
+        '200':
+          description: Response
       requestBody:
         content:
           application/json:
