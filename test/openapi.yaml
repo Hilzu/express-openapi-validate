@@ -47,3 +47,51 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/Test"
+  /parameters:
+    get:
+      parameters:
+        - name: param
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: porom
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Response
+  /parameters/header:
+    get:
+      parameters:
+        - name: x-param
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Response
+  /parameters/cookie:
+    get:
+      parameters:
+        - name: session
+          in: cookie
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Response
+  /parameters/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Response

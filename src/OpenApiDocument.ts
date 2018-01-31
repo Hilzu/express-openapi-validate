@@ -68,13 +68,40 @@ export interface OperationObject {
   description?: string;
   externalDocs?: any;
   operationId?: any;
-  parameters?: any[];
+  parameters?: ParameterObject[];
   requestBody?: RequestBodyObject;
   responses: any;
   callbacks?: any;
   deprecated?: boolean;
   security?: any[];
   servers?: any[];
+}
+
+export type ParameterLocation = "query" | "header" | "path" | "cookie";
+
+export type ParameterStyle =
+  | "matrix"
+  | "label"
+  | "form"
+  | "simple"
+  | "spaceDelimited"
+  | "pipeDelimited"
+  | "deepObject";
+
+export interface ParameterObject {
+  name: string;
+  in: ParameterLocation;
+  description?: string;
+  required?: boolean;
+  deprecated?: boolean;
+  allowEmptyValue?: boolean;
+  style?: ParameterStyle;
+  explode?: boolean;
+  allowReserved?: boolean;
+  schema?: SchemaObject | ReferenceObject;
+  example?: any;
+  examples?: { [mediaType: string]: any };
+  content?: { [mediaType: string]: MediaTypeObject };
 }
 
 export interface RequestBodyObject {

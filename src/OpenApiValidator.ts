@@ -7,6 +7,7 @@ import * as semver from "semver";
 import OpenApiDocument, {
   Operation,
   OperationObject,
+  ParameterLocation,
   ReferenceObject,
   SchemaObject,
 } from "./OpenApiDocument";
@@ -14,6 +15,24 @@ import ValidationError from "./ValidationError";
 
 const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
   (x as ReferenceObject).$ref !== undefined;
+
+const concatArraysCustomizer = (objValue: any, srcValue: any) =>
+  Array.isArray(objValue) ? objValue.concat(srcValue) : undefined;
+
+const parameterLocationToRequestField = (
+  location: ParameterLocation
+): "headers" | "params" | "query" | "cookies" => {
+  if (location === "header") {
+    return "headers";
+  } else if (location === "path") {
+    return "params";
+  } else if (location === "cookie") {
+    return "cookies";
+  } else if (location === "query") {
+    return "query";
+  }
+  throw new Error(`Unrecognized parameter location=${location}`);
+};
 
 export default class OpenApiValidator {
   private ajv: Ajv.Ajv;
@@ -36,12 +55,17 @@ export default class OpenApiValidator {
       ["requestBody", "content", "application/json", "schema"],
       {}
     );
+    const parametersSchema = this.parameterObjectsToSchema(operation);
     const schema = {
       properties: {
         body: this.resolveSchema(bodySchema),
+        ...parametersSchema,
       },
-      required: ["body"],
+      required: ["body", "query", "headers", "params"],
     };
+    if (!_.isEmpty(parametersSchema.cookies)) {
+      schema.required.push("cookies");
+    }
     const validator = this.ajv.compile(schema);
     const validate: RequestHandler = (req, res, next) => {
       const valid = validator(req);
@@ -56,6 +80,33 @@ export default class OpenApiValidator {
       }
     };
     return validate;
+  }
+
+  private parameterObjectsToSchema(op: OperationObject): any {
+    const schema = { query: {}, headers: {}, params: {}, cookies: {} };
+    const parameterObjects = op.parameters;
+    if (Array.isArray(parameterObjects)) {
+      parameterObjects.forEach(parameterObject => {
+        const location = parameterObject.in;
+        const parameterSchema = {
+          type: "object",
+          properties: {
+            [parameterObject.name]: this.resolveSchema(
+              parameterObject.schema || {}
+            ),
+          },
+        };
+        if (parameterObject.required) {
+          (parameterSchema as any).required = [parameterObject.name];
+        }
+        _.mergeWith(
+          schema[parameterLocationToRequestField(location)],
+          parameterSchema,
+          concatArraysCustomizer
+        );
+      });
+    }
+    return schema;
   }
 
   private getOperationObject(method: Operation, path: string): OperationObject {
