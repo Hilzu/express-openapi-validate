@@ -1,8 +1,8 @@
 # express-openapi-validate
 
-[![Travis](https://img.shields.io/travis/Hilzu/express-openapi-validate.svg)](https://travis-ci.org/Hilzu/express-openapi-validate)
-[![Codecov](https://img.shields.io/codecov/c/github/Hilzu/express-openapi-validate.svg)](https://codecov.io/gh/Hilzu/express-openapi-validate)
-[![npm](https://img.shields.io/npm/v/express-openapi-validate.svg)](https://www.npmjs.com/package/express-openapi-validate)
+[![Build Status](https://travis-ci.org/Hilzu/express-openapi-validate.svg?branch=master)](https://travis-ci.org/Hilzu/express-openapi-validate)
+[![codecov](https://codecov.io/gh/Hilzu/express-openapi-validate/branch/master/graph/badge.svg)](https://codecov.io/gh/Hilzu/express-openapi-validate)
+[![npm version](https://badge.fury.io/js/express-openapi-validate.svg)](https://badge.fury.io/js/express-openapi-validate)
 
 Express middleware to validate request based on an [OpenAPI 3.0
 document][openapi-3]. OpenAPI used to be called the Swagger specification before
