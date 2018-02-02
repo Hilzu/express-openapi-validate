@@ -140,7 +140,12 @@ export default class OpenApiValidator {
         throw new Error(`Unsupported $ref=${schema.$ref}`);
       }
       const name = _.last(schema.$ref.split("/")) as string;
-      return _.get(this.document, ["components", "schemas", name], {});
+      const schemaPath = ["components", "schemas", name];
+      const resolvedSchema = _.get(this.document, schemaPath);
+      if (resolvedSchema === undefined) {
+        throw new Error(`Schema not found with $ref=${schema.$ref}`);
+      }
+      return resolvedSchema;
     }
     return schema;
   }

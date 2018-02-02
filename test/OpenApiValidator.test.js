@@ -17,7 +17,6 @@
 "use strict";
 
 const fs = require("fs");
-const _ = require("lodash");
 const jsYaml = require("js-yaml");
 const OpenApiValidator = require("../dist/OpenApiValidator").default;
 const ValidationError = require("../dist/ValidationError").default;
@@ -219,4 +218,11 @@ describe("OpenApiValidator", () => {
       done();
     });
   });
+
+  test("resolveSchema throws with unresolved $ref path", () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    expect(() => {
+      validator.resolveSchema({ $ref: "#/components/schemas/Testt" })
+    }).toThrowErrorMatchingSnapshot();
+  })
 });
