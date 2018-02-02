@@ -20,15 +20,13 @@ const fs = require("fs");
 const jsYaml = require("js-yaml");
 const OpenApiValidator = require("../dist/OpenApiValidator").default;
 const ValidationError = require("../dist/ValidationError").default;
+const { assoc } = require("../dist/object-utils");
 
 const openApiDocument = jsYaml.safeLoad(
   fs.readFileSync("./test/openapi.yaml", "utf-8")
 );
 
 const baseReq = { body: {}, query: {}, headers: {}, cookies: {}, params: {} };
-
-const assoc = (obj, property, value) =>
-  Object.assign({}, obj, { [property]: value });
 
 describe("OpenApiValidator", () => {
   test("can be created with valid OpenAPI document", () => {
