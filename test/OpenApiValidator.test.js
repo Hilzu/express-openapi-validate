@@ -52,23 +52,23 @@ describe("OpenApiValidator", () => {
 
     expect(() => {
       // eslint-disable-next-line no-unused-vars
-      const op = validator.getOperationObject("POST", "/echo");
+      const op = validator._getOperationObject("POST", "/echo");
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
       // eslint-disable-next-line no-unused-vars
-      const op = validator.getOperationObject("ppost", "/echo");
+      const op = validator._getOperationObject("ppost", "/echo");
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
       // eslint-disable-next-line no-unused-vars
-      const op = validator.getOperationObject("post", "/echoo");
+      const op = validator._getOperationObject("post", "/echoo");
     }).toThrowErrorMatchingSnapshot();
   });
 
   test("getting an operation object succeeds", () => {
     const validator = new OpenApiValidator(openApiDocument);
-    const op = validator.getOperationObject("post", "/echo");
+    const op = validator._getOperationObject("post", "/echo");
     expect(op).toEqual(openApiDocument.paths["/echo"].post);
   });
 
@@ -94,7 +94,7 @@ describe("OpenApiValidator", () => {
   test("resolveSchema throws with unsupported $ref", () => {
     const validator = new OpenApiValidator(openApiDocument);
     expect(() => {
-      validator.resolveSchema({ $ref: "#/a/b/C" });
+      validator._resolveSchema({ $ref: "#/a/b/C" });
     }).toThrowErrorMatchingSnapshot();
   });
 
@@ -121,11 +121,11 @@ describe("OpenApiValidator", () => {
     const validator = new OpenApiValidator(openApiDocument);
 
     expect(() => {
-      const op = validator.getOperationObject("get", "/parameters");
+      const op = validator._getOperationObject("get", "/parameters");
       const withInvalidParam = Object.assign({}, op, {
         parameters: [{ name: "invalid", in: "invalid" }, ...op.parameters],
       });
-      validator.parameterObjectsToSchema(withInvalidParam);
+      validator._parameterObjectsToSchema(withInvalidParam);
     }).toThrowErrorMatchingSnapshot();
   });
 
@@ -222,7 +222,7 @@ describe("OpenApiValidator", () => {
   test("resolveSchema throws with unresolved $ref path", () => {
     const validator = new OpenApiValidator(openApiDocument);
     expect(() => {
-      validator.resolveSchema({ $ref: "#/components/schemas/Testt" })
+      validator._resolveSchema({ $ref: "#/components/schemas/Testt" })
     }).toThrowErrorMatchingSnapshot();
   })
 });

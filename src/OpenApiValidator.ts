@@ -51,8 +51,8 @@ const parameterLocationToRequestField = (
 };
 
 export default class OpenApiValidator {
-  private ajv: Ajv.Ajv;
-  private document: OpenApiDocument;
+  private _ajv: Ajv.Ajv;
+  private _document: OpenApiDocument;
 
   constructor(openApiDocument: OpenApiDocument) {
     if (!semver.satisfies(openApiDocument.openapi, "^3.0.0")) {
@@ -60,21 +60,21 @@ export default class OpenApiValidator {
         openApiDocument.openapi || (openApiDocument as any).swagger;
       throw new Error(`Unsupported OpenAPI / Swagger version=${version}`);
     }
-    this.document = openApiDocument;
-    this.ajv = new Ajv();
+    this._document = openApiDocument;
+    this._ajv = new Ajv();
   }
 
   public validate(method: Operation, path: string): RequestHandler {
-    const operation = this.getOperationObject(method, path);
+    const operation = this._getOperationObject(method, path);
     const bodySchema = _.get(
       operation,
       ["requestBody", "content", "application/json", "schema"],
       {}
     );
-    const parametersSchema = this.parameterObjectsToSchema(operation);
+    const parametersSchema = this._parameterObjectsToSchema(operation);
     const schema = {
       properties: {
-        body: this.resolveSchema(bodySchema),
+        body: this._resolveSchema(bodySchema),
         ...parametersSchema,
       },
       required: ["body", "query", "headers", "params"],
@@ -82,7 +82,7 @@ export default class OpenApiValidator {
     if (!_.isEmpty(parametersSchema.cookies)) {
       schema.required.push("cookies");
     }
-    const validator = this.ajv.compile(schema);
+    const validator = this._ajv.compile(schema);
     const validate: RequestHandler = (req, res, next) => {
       const valid = validator(req);
       if (valid) {
@@ -98,7 +98,7 @@ export default class OpenApiValidator {
     return validate;
   }
 
-  private parameterObjectsToSchema(op: OperationObject): any {
+  private _parameterObjectsToSchema(op: OperationObject): any {
     const schema = { query: {}, headers: {}, params: {}, cookies: {} };
     const parameterObjects = op.parameters;
     if (Array.isArray(parameterObjects)) {
@@ -107,7 +107,7 @@ export default class OpenApiValidator {
         const parameterSchema = {
           type: "object",
           properties: {
-            [parameterObject.name]: this.resolveSchema(
+            [parameterObject.name]: this._resolveSchema(
               parameterObject.schema || {}
             ),
           },
@@ -125,23 +125,23 @@ export default class OpenApiValidator {
     return schema;
   }
 
-  private getOperationObject(method: Operation, path: string): OperationObject {
-    if (_.has(this.document, ["paths", path, method])) {
-      return this.document.paths[path][method] as OperationObject;
+  private _getOperationObject(method: Operation, path: string): OperationObject {
+    if (_.has(this._document, ["paths", path, method])) {
+      return this._document.paths[path][method] as OperationObject;
     }
     throw new Error(
       `Path=${path} with method=${method} not found from OpenAPI document`
     );
   }
 
-  private resolveSchema(schema: SchemaObject | ReferenceObject): SchemaObject {
+  private _resolveSchema(schema: SchemaObject | ReferenceObject): SchemaObject {
     if (isReferenceObject(schema)) {
       if (!schema.$ref.startsWith("#/components/schemas/")) {
         throw new Error(`Unsupported $ref=${schema.$ref}`);
       }
       const name = _.last(schema.$ref.split("/")) as string;
       const schemaPath = ["components", "schemas", name];
-      const resolvedSchema = _.get(this.document, schemaPath);
+      const resolvedSchema = _.get(this._document, schemaPath);
       if (resolvedSchema === undefined) {
         throw new Error(`Schema not found with $ref=${schema.$ref}`);
       }

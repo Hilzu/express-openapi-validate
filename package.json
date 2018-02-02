@@ -97,6 +97,7 @@
       ],
       "no-restricted-globals": "off",
       "no-undef": "off",
+      "no-underscore-dangle": "off",
       "no-unused-vars": "off",
       "no-useless-constructor": "off",
       "strict": [
