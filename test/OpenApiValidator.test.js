@@ -220,7 +220,7 @@ describe("OpenApiValidator", () => {
   test("resolveSchema throws with unresolved $ref path", () => {
     const validator = new OpenApiValidator(openApiDocument);
     expect(() => {
-      validator._resolveSchema({ $ref: "#/components/schemas/Testt" })
+      validator._resolveSchema({ $ref: "#/components/schemas/Testt" });
     }).toThrowErrorMatchingSnapshot();
-  })
+  });
 });

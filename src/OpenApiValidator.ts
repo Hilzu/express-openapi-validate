@@ -125,7 +125,10 @@ export default class OpenApiValidator {
     return schema;
   }
 
-  private _getOperationObject(method: Operation, path: string): OperationObject {
+  private _getOperationObject(
+    method: Operation,
+    path: string
+  ): OperationObject {
     if (_.has(this._document, ["paths", path, method])) {
       return this._document.paths[path][method] as OperationObject;
     }
