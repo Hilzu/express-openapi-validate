@@ -55,6 +55,10 @@ app.use((err, req, res, next) => {
     },
   });
 });
+
+const server = app.listen(3000, () => {
+  console.log("Listening on", server.address());
+});
 ```
 
 ```yaml
