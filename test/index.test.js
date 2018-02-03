@@ -18,7 +18,12 @@
 
 const index = require("../dist");
 const OpenApiValidator = require("../dist/OpenApiValidator").default;
+const ValidationError = require("../dist/ValidationError").default;
 
-test("index exports OpenApiValidator class", () => {
-  expect(index).toBe(OpenApiValidator);
+test("index exports OpenApiValidator and ValidationError", () => {
+  expect(index.OpenApiValidator).toBeDefined();
+  expect(index.OpenApiValidator).toBe(OpenApiValidator);
+
+  expect(index.ValidationError).toBeDefined();
+  expect(index.ValidationError).toBe(ValidationError);
 });

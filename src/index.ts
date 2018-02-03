@@ -15,5 +15,6 @@
 */
 
 import OpenApiValidator from "./OpenApiValidator";
+import ValidationError from "./ValidationError";
 
-export = OpenApiValidator;
+export { OpenApiValidator, ValidationError };
