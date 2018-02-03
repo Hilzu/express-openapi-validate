@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`schema module resolveReference throws with unresolved $ref path 1`] = `"Object not found with $ref=#/components/schemas/Testt"`;
+
+exports[`schema module resolveReference throws with unsupported $ref 1`] = `"Unsupported $ref=#/a/b/C"`;

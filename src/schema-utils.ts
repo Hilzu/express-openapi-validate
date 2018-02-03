@@ -16,7 +16,10 @@
 
 import * as _ from "lodash";
 import { assoc } from "./object-utils";
-import { SchemaObject } from "./OpenApiDocument";
+import OpenApiDocument, {
+  ReferenceObject,
+  SchemaObject,
+} from "./OpenApiDocument";
 
 type Schema = SchemaObject;
 
@@ -49,4 +52,25 @@ export const mapOasSchemaToJsonSchema = (originalSchema: Schema) => {
     return schema;
   };
   return walkSchema(originalSchema, mapOasFieldsToJsonSchemaFields);
+};
+
+const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
+  (x as ReferenceObject).$ref !== undefined;
+
+export const resolveReference = <T>(
+  document: OpenApiDocument,
+  object: T | ReferenceObject
+): T => {
+  if (isReferenceObject(object)) {
+    if (!object.$ref.startsWith("#/components/")) {
+      throw new Error(`Unsupported $ref=${object.$ref}`);
+    }
+    const path = _.drop(object.$ref.split("/"), 1);
+    const resolvedObject = _.get(document, path);
+    if (resolvedObject === undefined) {
+      throw new Error(`Object not found with $ref=${object.$ref}`);
+    }
+    return resolvedObject;
+  }
+  return object;
 };

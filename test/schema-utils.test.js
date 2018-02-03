@@ -18,6 +18,7 @@
 
 const _ = require("lodash");
 const schemaUtils = require("../dist/schema-utils");
+const openApiDocument = require("./open-api-document");
 
 describe("schema module", () => {
   test("walkSchema returns the same schema that was passed in with identity function as the mapper", () => {
@@ -84,5 +85,19 @@ describe("schema module", () => {
         },
       },
     });
+  });
+
+  test("resolveReference throws with unresolved $ref path", () => {
+    expect(() => {
+      schemaUtils.resolveReference(openApiDocument, {
+        $ref: "#/components/schemas/Testt",
+      });
+    }).toThrowErrorMatchingSnapshot();
+  });
+
+  test("resolveReference throws with unsupported $ref", () => {
+    expect(() => {
+      schemaUtils.resolveReference(openApiDocument, { $ref: "#/a/b/C" });
+    }).toThrowErrorMatchingSnapshot();
   });
 });

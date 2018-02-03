@@ -16,15 +16,10 @@
 
 "use strict";
 
-const fs = require("fs");
-const jsYaml = require("js-yaml");
 const OpenApiValidator = require("../dist/OpenApiValidator").default;
 const ValidationError = require("../dist/ValidationError").default;
 const { assoc } = require("../dist/object-utils");
-
-const openApiDocument = jsYaml.safeLoad(
-  fs.readFileSync("./test/openapi.yaml", "utf-8")
-);
+const openApiDocument = require("./open-api-document");
 
 const baseReq = { body: {}, query: {}, headers: {}, cookies: {}, params: {} };
 
@@ -87,13 +82,6 @@ describe("OpenApiValidator", () => {
       expect(err).toMatchSnapshot();
       done();
     });
-  });
-
-  test("resolveSchema throws with unsupported $ref", () => {
-    const validator = new OpenApiValidator(openApiDocument);
-    expect(() => {
-      validator._resolveSchema({ $ref: "#/a/b/C" });
-    }).toThrowErrorMatchingSnapshot();
   });
 
   test("validate with schema in internal ref", done => {
@@ -217,13 +205,6 @@ describe("OpenApiValidator", () => {
     });
   });
 
-  test("resolveSchema throws with unresolved $ref path", () => {
-    const validator = new OpenApiValidator(openApiDocument);
-    expect(() => {
-      validator._resolveSchema({ $ref: "#/components/schemas/Testt" });
-    }).toThrowErrorMatchingSnapshot();
-  });
-
   test("validation fails with null field in body", done => {
     const validator = new OpenApiValidator(openApiDocument);
     const validate = validator.validate("post", "/nullable");
@@ -239,6 +220,25 @@ describe("OpenApiValidator", () => {
     const validate = validator.validate("post", "/nullable");
     validate(assoc(baseReq, "body", { baz: null }), {}, err => {
       expect(err).toBeUndefined();
+      done();
+    });
+  });
+
+  test("validation with reference parameter succeeds with correct data", done => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validate("get", "/ref-parameter");
+    validate(assoc(baseReq, "query", { hello: "hello" }), {}, err => {
+      expect(err).toBeUndefined();
+      done();
+    });
+  });
+
+  test("validation with reference parameter fails with invalid data", done => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validate("get", "/ref-parameter");
+    validate(assoc(baseReq, "query", { hello: "" }), {}, err => {
+      expect(err).toBeInstanceOf(ValidationError);
+      expect(err).toMatchSnapshot();
       done();
     });
   });

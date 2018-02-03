@@ -24,14 +24,10 @@ import OpenApiDocument, {
   Operation,
   OperationObject,
   ParameterLocation,
-  ReferenceObject,
   SchemaObject,
 } from "./OpenApiDocument";
-import { mapOasSchemaToJsonSchema } from "./schema-utils";
+import { mapOasSchemaToJsonSchema, resolveReference } from "./schema-utils";
 import ValidationError from "./ValidationError";
-
-const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
-  (x as ReferenceObject).$ref !== undefined;
 
 const concatArraysCustomizer = <T>(
   objValue: T,
@@ -78,7 +74,7 @@ export default class OpenApiValidator {
     const parametersSchema = this._parameterObjectsToSchema(operation);
     const schema = {
       properties: {
-        body: this._resolveSchema(bodySchema),
+        body: resolveReference(this._document, bodySchema),
         ...parametersSchema,
       },
       required: ["body", "query", "headers", "params"],
@@ -108,12 +104,14 @@ export default class OpenApiValidator {
     const schema = { query: {}, headers: {}, params: {}, cookies: {} };
     const parameterObjects = op.parameters;
     if (Array.isArray(parameterObjects)) {
-      parameterObjects.forEach(parameterObject => {
+      parameterObjects.forEach(po => {
+        const parameterObject = resolveReference(this._document, po);
         const location = parameterObject.in;
         const parameterSchema = {
           type: "object",
           properties: {
-            [parameterObject.name]: this._resolveSchema(
+            [parameterObject.name]: resolveReference(
+              this._document,
               parameterObject.schema || {}
             ),
           },
@@ -141,21 +139,5 @@ export default class OpenApiValidator {
     throw new Error(
       `Path=${path} with method=${method} not found from OpenAPI document`
     );
-  }
-
-  private _resolveSchema(schema: SchemaObject | ReferenceObject): SchemaObject {
-    if (isReferenceObject(schema)) {
-      if (!schema.$ref.startsWith("#/components/schemas/")) {
-        throw new Error(`Unsupported $ref=${schema.$ref}`);
-      }
-      const name = _.last(schema.$ref.split("/")) as string;
-      const schemaPath = ["components", "schemas", name];
-      const resolvedSchema = _.get(this._document, schemaPath);
-      if (resolvedSchema === undefined) {
-        throw new Error(`Schema not found with $ref=${schema.$ref}`);
-      }
-      return resolvedSchema;
-    }
-    return schema;
   }
 }

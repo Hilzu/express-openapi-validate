@@ -10,10 +10,6 @@ exports[`OpenApiValidator getting an operation object fails with invalid argumen
 
 exports[`OpenApiValidator getting an operation object fails with invalid arguments 3`] = `"Path=/echoo with method=post not found from OpenAPI document"`;
 
-exports[`OpenApiValidator resolveSchema throws with unresolved $ref path 1`] = `"Schema not found with $ref=#/components/schemas/Testt"`;
-
-exports[`OpenApiValidator resolveSchema throws with unsupported $ref 1`] = `"Unsupported $ref=#/a/b/C"`;
-
 exports[`OpenApiValidator validate with invalid body 1`] = `[ValidationError: Error while validating request parameters]`;
 
 exports[`OpenApiValidator validate with schema in internal ref fails with invalid body 1`] = `[ValidationError: Error while validating request parameters]`;
@@ -29,3 +25,5 @@ exports[`OpenApiValidator validating params with parameters schema fails 1`] = `
 exports[`OpenApiValidator validating query with parameters schema fails 1`] = `[ValidationError: Error while validating request parameters]`;
 
 exports[`OpenApiValidator validation fails with null field in body 1`] = `[ValidationError: Error while validating request parameters]`;
+
+exports[`OpenApiValidator validation with reference parameter fails with invalid data 1`] = `[ValidationError: Error while validating request parameters]`;
