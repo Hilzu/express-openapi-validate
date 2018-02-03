@@ -88,9 +88,11 @@ export default class OpenApiValidator {
       if (valid) {
         next();
       } else {
+        const errors = validator.errors as Ajv.ErrorObject[];
+        const errorText = this._ajv.errorsText(errors, { dataVar: "request" });
         const err = new ValidationError(
-          "Error while validating request parameters",
-          validator.errors as Ajv.ErrorObject[]
+          `Error while validating request: ${errorText}`,
+          errors
         );
         next(err);
       }

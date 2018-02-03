@@ -10,20 +10,20 @@ exports[`OpenApiValidator getting an operation object fails with invalid argumen
 
 exports[`OpenApiValidator getting an operation object fails with invalid arguments 3`] = `"Path=/echoo with method=post not found from OpenAPI document"`;
 
-exports[`OpenApiValidator validate with invalid body 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validate with invalid body 1`] = `[ValidationError: Error while validating request: request.body should have required property 'input']`;
 
-exports[`OpenApiValidator validate with schema in internal ref fails with invalid body 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validate with schema in internal ref fails with invalid body 1`] = `[ValidationError: Error while validating request: request.body.value should be number]`;
 
-exports[`OpenApiValidator validating cookies with parameters schema fails 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validating cookies with parameters schema fails 1`] = `[ValidationError: Error while validating request: request.cookies should have required property 'session']`;
 
-exports[`OpenApiValidator validating cookies with parameters schema fails with no cookie parser 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validating cookies with parameters schema fails with no cookie parser 1`] = `[ValidationError: Error while validating request: request should have required property 'cookies']`;
 
-exports[`OpenApiValidator validating headers with parameters schema fails 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validating headers with parameters schema fails 1`] = `[ValidationError: Error while validating request: request.headers should have required property 'x-param']`;
 
-exports[`OpenApiValidator validating params with parameters schema fails 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validating params with parameters schema fails 1`] = `[ValidationError: Error while validating request: request.params should have required property 'id']`;
 
-exports[`OpenApiValidator validating query with parameters schema fails 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validating query with parameters schema fails 1`] = `[ValidationError: Error while validating request: request.query should have required property 'param']`;
 
-exports[`OpenApiValidator validation fails with null field in body 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validation fails with null field in body 1`] = `[ValidationError: Error while validating request: request.body.bar should be string]`;
 
-exports[`OpenApiValidator validation with reference parameter fails with invalid data 1`] = `[ValidationError: Error while validating request parameters]`;
+exports[`OpenApiValidator validation with reference parameter fails with invalid data 1`] = `[ValidationError: Error while validating request: request.query.hello should NOT be shorter than 1 characters]`;
