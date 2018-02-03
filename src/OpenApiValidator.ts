@@ -32,7 +32,10 @@ import ValidationError from "./ValidationError";
 const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
   (x as ReferenceObject).$ref !== undefined;
 
-const concatArraysCustomizer = (objValue: any, srcValue: any) =>
+const concatArraysCustomizer = <T>(
+  objValue: T,
+  srcValue: any
+): T[] | undefined =>
   Array.isArray(objValue) ? objValue.concat(srcValue) : undefined;
 
 const parameterLocationToRequestField = (
@@ -98,7 +101,9 @@ export default class OpenApiValidator {
     return validate;
   }
 
-  private _parameterObjectsToSchema(op: OperationObject): any {
+  private _parameterObjectsToSchema(
+    op: OperationObject
+  ): { [field: string]: SchemaObject } {
     const schema = { query: {}, headers: {}, params: {}, cookies: {} };
     const parameterObjects = op.parameters;
     if (Array.isArray(parameterObjects)) {

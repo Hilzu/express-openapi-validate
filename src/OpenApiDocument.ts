@@ -34,7 +34,13 @@ export interface InfoObject {
   version: string;
 }
 
-export type SchemaObject = any;
+export interface SchemaObject {
+  type?: string;
+  items?: SchemaObject;
+  properties?: { [property: string]: SchemaObject };
+  nullable?: boolean;
+  required?: string[];
+}
 
 export interface ComponentsObject {
   schemas?: { [index: string]: SchemaObject };
