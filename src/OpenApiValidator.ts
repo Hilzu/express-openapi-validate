@@ -27,6 +27,7 @@ import OpenApiDocument, {
   ReferenceObject,
   SchemaObject,
 } from "./OpenApiDocument";
+import { mapOasSchemaToJsonSchema } from "./schema-utils";
 import ValidationError from "./ValidationError";
 
 const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
@@ -85,7 +86,7 @@ export default class OpenApiValidator {
     if (!_.isEmpty(parametersSchema.cookies)) {
       schema.required.push("cookies");
     }
-    const validator = this._ajv.compile(schema);
+    const validator = this._ajv.compile(mapOasSchemaToJsonSchema(schema));
     const validate: RequestHandler = (req, res, next) => {
       const valid = validator(req);
       if (valid) {

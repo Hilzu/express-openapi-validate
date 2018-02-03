@@ -95,3 +95,19 @@ paths:
       responses:
         '200':
           description: Response
+  /nullable:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bar:
+                  type: string
+                baz:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Response

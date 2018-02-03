@@ -27,3 +27,5 @@ exports[`OpenApiValidator validating headers with parameters schema fails 1`] = 
 exports[`OpenApiValidator validating params with parameters schema fails 1`] = `[ValidationError: Error while validating request parameters]`;
 
 exports[`OpenApiValidator validating query with parameters schema fails 1`] = `[ValidationError: Error while validating request parameters]`;
+
+exports[`OpenApiValidator validation fails with null field in body 1`] = `[ValidationError: Error while validating request parameters]`;

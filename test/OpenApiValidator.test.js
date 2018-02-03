@@ -223,4 +223,23 @@ describe("OpenApiValidator", () => {
       validator._resolveSchema({ $ref: "#/components/schemas/Testt" });
     }).toThrowErrorMatchingSnapshot();
   });
+
+  test("validation fails with null field in body", done => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validate("post", "/nullable");
+    validate(assoc(baseReq, "body", { bar: null }), {}, err => {
+      expect(err).toBeInstanceOf(ValidationError);
+      expect(err).toMatchSnapshot();
+      done();
+    });
+  });
+
+  test("validation passes with null field in body that has nullable set", done => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validate("post", "/nullable");
+    validate(assoc(baseReq, "body", { baz: null }), {}, err => {
+      expect(err).toBeUndefined();
+      done();
+    });
+  });
 });
