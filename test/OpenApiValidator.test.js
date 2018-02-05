@@ -18,10 +18,23 @@
 
 const OpenApiValidator = require("../dist/OpenApiValidator").default;
 const ValidationError = require("../dist/ValidationError").default;
-const { assoc } = require("../dist/object-utils");
 const openApiDocument = require("./open-api-document");
 
 const baseReq = { body: {}, query: {}, headers: {}, cookies: {}, params: {} };
+
+const createTestValidator = document => {
+  const validator = new OpenApiValidator(document);
+  return (method, path) => {
+    const validate = validator.validate(method, path);
+    return userReq =>
+      new Promise(resolve => {
+        const req = Object.assign({}, baseReq, userReq);
+        validate(req, {}, resolve);
+      });
+  };
+};
+
+const getValidator = createTestValidator(openApiDocument);
 
 describe("OpenApiValidator", () => {
   test("can be created with valid OpenAPI document", () => {
@@ -65,41 +78,33 @@ describe("OpenApiValidator", () => {
     expect(op).toEqual(openApiDocument.paths["/echo"].post);
   });
 
-  test("validate", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("post", "/echo");
-    validate(assoc(baseReq, "body", { input: "hello" }), {}, err => {
+  test("validate", () => {
+    const validate = getValidator("post", "/echo");
+    return validate({ body: { input: "hello" } }).then(err => {
       expect(err).toBeUndefined();
-      done();
     });
   });
 
-  test("validate with invalid body", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("post", "/echo");
-    validate(baseReq, {}, err => {
+  test("validate with invalid body", () => {
+    const validate = getValidator("post", "/echo");
+    return validate().then(err => {
       expect(err).toBeInstanceOf(ValidationError);
       expect(err).toMatchSnapshot();
-      done();
     });
   });
 
-  test("validate with schema in internal ref", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("post", "/test");
-    validate(assoc(baseReq, "body", { value: 123 }), {}, err => {
+  test("validate with schema in internal ref", () => {
+    const validate = getValidator("post", "/test");
+    return validate({ body: { value: 123 } }).then(err => {
       expect(err).toBeUndefined();
-      done();
     });
   });
 
-  test("validate with schema in internal ref fails with invalid body", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("post", "/test");
-    validate(assoc(baseReq, "body", { value: "123" }), {}, err => {
+  test("validate with schema in internal ref fails with invalid body", () => {
+    const validate = getValidator("post", "/test");
+    return validate({ body: { value: "123" } }).then(err => {
       expect(err).toBeInstanceOf(ValidationError);
       expect(err).toMatchSnapshot();
-      done();
     });
   });
 
@@ -115,131 +120,101 @@ describe("OpenApiValidator", () => {
     }).toThrowErrorMatchingSnapshot();
   });
 
-  test("validating query with parameters schema succeeds", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters");
-    validate(
-      assoc(baseReq, "query", { param: "123", porom: "abc" }),
-      {},
-      err => {
-        expect(err).toBeUndefined();
-        done();
-      }
-    );
-  });
-
-  test("validating query with parameters schema fails", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters");
-    validate(assoc(baseReq, "query", { porom: "abc" }), {}, err => {
-      expect(err).toBeInstanceOf(ValidationError);
-      expect(err).toMatchSnapshot();
-      done();
-    });
-  });
-
-  test("validating headers with parameters schema succeeds", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters/header");
-    validate(assoc(baseReq, "headers", { "x-param": "let-in" }), {}, err => {
+  test("validating query with parameters schema succeeds", () => {
+    const validate = getValidator("get", "/parameters");
+    return validate({ query: { param: "123", porom: "abc" } }).then(err => {
       expect(err).toBeUndefined();
-      done();
     });
   });
 
-  test("validating headers with parameters schema fails", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters/header");
-    validate(baseReq, {}, err => {
+  test("validating query with parameters schema fails", () => {
+    const validate = getValidator("get", "/parameters");
+    return validate({ query: { porom: "abc" } }).then(err => {
       expect(err).toBeInstanceOf(ValidationError);
       expect(err).toMatchSnapshot();
-      done();
     });
   });
 
-  test("validating cookies with parameters schema succeeds", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters/cookie");
-    validate(assoc(baseReq, "cookies", { session: "abc123" }), {}, err => {
+  test("validating headers with parameters schema succeeds", () => {
+    const validate = getValidator("get", "/parameters/header");
+    return validate({ headers: { "x-param": "let-in" } }).then(err => {
       expect(err).toBeUndefined();
-      done();
     });
   });
 
-  test("validating cookies with parameters schema fails", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters/cookie");
-    validate(baseReq, {}, err => {
+  test("validating headers with parameters schema fails", () => {
+    const validate = getValidator("get", "/parameters/header");
+    return validate().then(err => {
       expect(err).toBeInstanceOf(ValidationError);
       expect(err).toMatchSnapshot();
-      done();
     });
   });
 
-  test("validating cookies with parameters schema fails with no cookie parser", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters/cookie");
-    validate(assoc(baseReq, "cookies", undefined), {}, err => {
-      expect(err).toBeInstanceOf(ValidationError);
-      expect(err).toMatchSnapshot();
-      done();
-    });
-  });
-
-  test("validating params with parameters schema succeeds", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters/{id}");
-    validate(assoc(baseReq, "params", { id: "123" }), {}, err => {
+  test("validating cookies with parameters schema succeeds", () => {
+    const validate = getValidator("get", "/parameters/cookie");
+    return validate({ cookies: { session: "abc123" } }).then(err => {
       expect(err).toBeUndefined();
-      done();
     });
   });
 
-  test("validating params with parameters schema fails", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/parameters/{id}");
-    validate(baseReq, {}, err => {
+  test("validating cookies with parameters schema fails", () => {
+    const validate = getValidator("get", "/parameters/cookie");
+    return validate().then(err => {
       expect(err).toBeInstanceOf(ValidationError);
       expect(err).toMatchSnapshot();
-      done();
     });
   });
 
-  test("validation fails with null field in body", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("post", "/nullable");
-    validate(assoc(baseReq, "body", { bar: null }), {}, err => {
+  test("validating cookies with parameters schema fails with no cookie parser", () => {
+    const validate = getValidator("get", "/parameters/cookie");
+    return validate({ cookies: undefined }).then(err => {
       expect(err).toBeInstanceOf(ValidationError);
       expect(err).toMatchSnapshot();
-      done();
     });
   });
 
-  test("validation passes with null field in body that has nullable set", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("post", "/nullable");
-    validate(assoc(baseReq, "body", { baz: null }), {}, err => {
+  test("validating params with parameters schema succeeds", () => {
+    const validate = getValidator("get", "/parameters/{id}");
+    return validate({ params: { id: "123" } }).then(err => {
       expect(err).toBeUndefined();
-      done();
     });
   });
 
-  test("validation with reference parameter succeeds with correct data", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/ref-parameter");
-    validate(assoc(baseReq, "query", { hello: "hello" }), {}, err => {
-      expect(err).toBeUndefined();
-      done();
-    });
-  });
-
-  test("validation with reference parameter fails with invalid data", done => {
-    const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validate("get", "/ref-parameter");
-    validate(assoc(baseReq, "query", { hello: "" }), {}, err => {
+  test("validating params with parameters schema fails", () => {
+    const validate = getValidator("get", "/parameters/{id}");
+    return validate().then(err => {
       expect(err).toBeInstanceOf(ValidationError);
       expect(err).toMatchSnapshot();
-      done();
+    });
+  });
+
+  test("validation fails with null field in body", () => {
+    const validate = getValidator("post", "/nullable");
+    return validate({ body: { bar: null } }).then(err => {
+      expect(err).toBeInstanceOf(ValidationError);
+      expect(err).toMatchSnapshot();
+    });
+  });
+
+  test("validation passes with null field in body that has nullable set", () => {
+    const validate = getValidator("post", "/nullable");
+    return validate({ body: { baz: null } }).then(err => {
+      expect(err).toBeUndefined();
+    });
+  });
+
+  test("validation with reference parameter succeeds with correct data", () => {
+    const validate = getValidator("get", "/ref-parameter");
+    return validate({ query: { hello: "hello" } }).then(err => {
+      expect(err).toBeUndefined();
+    });
+  });
+
+  test("validation with reference parameter fails with invalid data", () => {
+    const validate = getValidator("get", "/ref-parameter");
+    return validate({ query: { hello: "" } }).then(err => {
+      expect(err).toBeInstanceOf(ValidationError);
+      expect(err).toMatchSnapshot();
     });
   });
 });
