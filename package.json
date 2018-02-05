@@ -26,7 +26,7 @@
     "lint": "yarn lint:eslint && yarn lint:tslint",
     "lint:eslint": "eslint --ext js,ts .",
     "lint:tslint": "tslint --project tsconfig.json",
-    "prepublishOnly": "yarn build",
+    "prepublishOnly": "yarn test",
     "test": "yarn lint && yarn test:jest",
     "pretest:jest": "yarn build",
     "test:jest": "jest"
