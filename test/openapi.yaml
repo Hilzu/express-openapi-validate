@@ -11,6 +11,11 @@ components:
           type: number
       required:
       - value
+    Tag:
+      type: string
+      minLength: 3
+      maxLength: 10
+      pattern: "^[a-zA-Z]+$"
   parameters:
     hello:
       name: hello
@@ -123,6 +128,27 @@ paths:
     get:
       parameters:
         - $ref: "#/components/parameters/hello"
+      responses:
+        '200':
+          description: Response
+  /different-rules:
+    post:
+      parameters:
+        - name: q1
+          in: query
+          schema:
+            $ref: "#/components/schemas/Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                i:
+                  type: integer
+                  multipleOf: 2
+                  minimum: 2
+                  maximum: 256
       responses:
         '200':
           description: Response

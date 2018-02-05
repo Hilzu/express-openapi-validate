@@ -217,4 +217,45 @@ describe("OpenApiValidator", () => {
       expect(err).toMatchSnapshot();
     });
   });
+
+  test("validation with multiple different rules schema", () => {
+    const validate = getValidator("post", "/different-rules");
+    return validate({ query: {} })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ query: { q1: "abc1def" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ query: { q1: "abcdef" } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ query: { q1: "ab" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ query: { q1: "abcabcabcdef" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { i: 1.2 } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { i: 256.0 } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { i: 111 } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+      });
+  });
 });

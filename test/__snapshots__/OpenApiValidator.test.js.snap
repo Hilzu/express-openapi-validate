@@ -26,4 +26,14 @@ exports[`OpenApiValidator validating query with parameters schema fails 1`] = `[
 
 exports[`OpenApiValidator validation fails with null field in body 1`] = `[ValidationError: Error while validating request: request.body.bar should be string]`;
 
+exports[`OpenApiValidator validation with multiple different rules schema 1`] = `[ValidationError: Error while validating request: request.query.q1 should match pattern "^[a-zA-Z]+$"]`;
+
+exports[`OpenApiValidator validation with multiple different rules schema 2`] = `[ValidationError: Error while validating request: request.query.q1 should NOT be shorter than 3 characters]`;
+
+exports[`OpenApiValidator validation with multiple different rules schema 3`] = `[ValidationError: Error while validating request: request.query.q1 should NOT be longer than 10 characters]`;
+
+exports[`OpenApiValidator validation with multiple different rules schema 4`] = `[ValidationError: Error while validating request: request.body.i should be integer]`;
+
+exports[`OpenApiValidator validation with multiple different rules schema 5`] = `[ValidationError: Error while validating request: request.body.i should be multiple of 2]`;
+
 exports[`OpenApiValidator validation with reference parameter fails with invalid data 1`] = `[ValidationError: Error while validating request: request.query.hello should NOT be shorter than 1 characters]`;
