@@ -77,10 +77,13 @@ export default class OpenApiValidator {
         body: resolveReference(this._document, bodySchema),
         ...parametersSchema,
       },
-      required: ["body", "query", "headers", "params"],
+      required: ["query", "headers", "params"],
     };
     if (!_.isEmpty(parametersSchema.cookies)) {
       schema.required.push("cookies");
+    }
+    if (_.get(operation, ["requestBody", "required"]) === true) {
+      schema.required.push("body");
     }
     const validator = this._ajv.compile(mapOasSchemaToJsonSchema(schema));
     const validate: RequestHandler = (req, res, next) => {

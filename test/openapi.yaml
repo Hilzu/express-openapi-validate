@@ -152,3 +152,19 @@ paths:
       responses:
         '200':
           description: Response
+  /required-body:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                a:
+                  type: string
+              required:
+                - a
+      responses:
+        '200':
+          description: Response

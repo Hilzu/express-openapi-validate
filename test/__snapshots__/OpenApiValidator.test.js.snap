@@ -37,3 +37,9 @@ exports[`OpenApiValidator validation with multiple different rules schema 4`] = 
 exports[`OpenApiValidator validation with multiple different rules schema 5`] = `[ValidationError: Error while validating request: request.body.i should be multiple of 2]`;
 
 exports[`OpenApiValidator validation with reference parameter fails with invalid data 1`] = `[ValidationError: Error while validating request: request.query.hello should NOT be shorter than 1 characters]`;
+
+exports[`OpenApiValidator validation with required body 1`] = `[ValidationError: Error while validating request: request should have required property 'body']`;
+
+exports[`OpenApiValidator validation with required body 2`] = `[ValidationError: Error while validating request: request.body should have required property 'a']`;
+
+exports[`OpenApiValidator validation with required body 3`] = `[ValidationError: Error while validating request: request.body should have required property 'a']`;

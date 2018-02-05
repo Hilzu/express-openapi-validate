@@ -258,4 +258,27 @@ describe("OpenApiValidator", () => {
         expect(err).toMatchSnapshot();
       });
   });
+
+  test("validation with required body", () => {
+    const validate = getValidator("post", "/required-body");
+    return validate({ body: undefined })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: {} });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { a: undefined } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { a: "a" } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+      });
+  });
 });
