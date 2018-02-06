@@ -5,11 +5,8 @@
 [![npm version](https://badge.fury.io/js/express-openapi-validate.svg)](https://badge.fury.io/js/express-openapi-validate)
 
 Express middleware to validate requests based on an [OpenAPI 3.0
-document][openapi-3]. OpenAPI used to be called the Swagger specification before
+document][openapi-3]. OpenAPI specification was called the Swagger specification before
 version 3.
-
-This package is in early development so most features that you would except are
-missing.
 
 ## Usage
 
