@@ -20,6 +20,7 @@ import { RequestHandler } from "express";
 import * as _ from "lodash";
 import * as semver from "semver";
 
+import * as formats from "./formats";
 import OpenApiDocument, {
   Operation,
   OperationObject,
@@ -61,7 +62,7 @@ export default class OpenApiValidator {
       throw new Error(`Unsupported OpenAPI / Swagger version=${version}`);
     }
     this._document = openApiDocument;
-    this._ajv = new Ajv();
+    this._ajv = new Ajv({ formats });
   }
 
   public validate(method: Operation, path: string): RequestHandler {

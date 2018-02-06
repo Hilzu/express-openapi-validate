@@ -168,3 +168,39 @@ paths:
       responses:
         '200':
           description: Response
+  /format:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                i32:
+                  type: integer
+                  format: int32
+                i64:
+                  type: integer
+                  format: int64
+                f:
+                  type: number
+                  format: float
+                d:
+                  type: number
+                  format: double
+                byte:
+                  type: string
+                  format: byte
+                binary:
+                  type: string
+                  format: binary
+                password:
+                  type: string
+                  format: password
+                date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Response

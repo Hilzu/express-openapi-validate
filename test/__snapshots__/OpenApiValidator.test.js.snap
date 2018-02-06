@@ -26,6 +26,24 @@ exports[`OpenApiValidator validating query with parameters schema fails 1`] = `[
 
 exports[`OpenApiValidator validation fails with null field in body 1`] = `[ValidationError: Error while validating request: request.body.bar should be string]`;
 
+exports[`OpenApiValidator validation of OpenAPI string formats 1`] = `[ValidationError: Error while validating request: request.body.byte should match format "byte"]`;
+
+exports[`OpenApiValidator validation of OpenAPI string formats 2`] = `[ValidationError: Error while validating request: request.body.date should match format "date"]`;
+
+exports[`OpenApiValidator validation of OpenAPI string formats 3`] = `[ValidationError: Error while validating request: request.body.date should match format "date"]`;
+
+exports[`OpenApiValidator validation of numeric OpenAPI formats 1`] = `[ValidationError: Error while validating request: request.body.i32 should match format "int32"]`;
+
+exports[`OpenApiValidator validation of numeric OpenAPI formats 2`] = `[ValidationError: Error while validating request: request.body.i32 should be integer]`;
+
+exports[`OpenApiValidator validation of numeric OpenAPI formats 3`] = `[ValidationError: Error while validating request: request.body.i64 should be integer]`;
+
+exports[`OpenApiValidator validation of numeric OpenAPI formats 4`] = `[ValidationError: Error while validating request: request.body.i64 should be integer]`;
+
+exports[`OpenApiValidator validation of numeric OpenAPI formats 5`] = `[ValidationError: Error while validating request: request.body.f should match format "float"]`;
+
+exports[`OpenApiValidator validation of numeric OpenAPI formats 6`] = `[ValidationError: Error while validating request: request.body.d should be number]`;
+
 exports[`OpenApiValidator validation with multiple different rules schema 1`] = `[ValidationError: Error while validating request: request.query.q1 should match pattern "^[a-zA-Z]+$"]`;
 
 exports[`OpenApiValidator validation with multiple different rules schema 2`] = `[ValidationError: Error while validating request: request.query.q1 should NOT be shorter than 3 characters]`;

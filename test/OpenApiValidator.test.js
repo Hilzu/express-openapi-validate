@@ -281,4 +281,98 @@ describe("OpenApiValidator", () => {
         expect(err).toBeUndefined();
       });
   });
+
+  test("validation of numeric OpenAPI formats", () => {
+    const validate = getValidator("post", "/format");
+    return validate({ body: { i32: 2147483648 } })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { i32: "123" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { i32: 123 } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { i64: "123" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { i64: 123.1 } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { i64: 123 } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { f: 123 } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { f: 123.1 } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { f: 3.4038234663852886e38 } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { d: 3.4038234663852886e38 } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { d: null } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+      });
+  });
+
+  test("validation of OpenAPI string formats", () => {
+    const validate = getValidator("post", "/format");
+    return validate({ body: { byte: "" } })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { byte: "aGVsbG8=" } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { byte: "aGVsbG8" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        const binary = Buffer.from([0x00, 0xff, 0x10, 0x88]).toString("binary");
+        return validate({ body: { binary } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { password: "password" } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { date: "98-01-01" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { date: "05/04/2014" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { date: "2015-08-02" } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+      });
+  });
 });
