@@ -114,5 +114,6 @@
     "trailingComma": "es5",
     "printWidth": 80,
     "proseWrap": "always"
-  }
+  },
+  "runkitExampleFilename": "./resources/runkit-example.js"
 }
