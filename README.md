@@ -5,8 +5,8 @@
 [![npm version](https://badge.fury.io/js/express-openapi-validate.svg)](https://badge.fury.io/js/express-openapi-validate)
 
 Express middleware to validate requests based on an [OpenAPI 3.0
-document][openapi-3]. OpenAPI specification was called the Swagger specification before
-version 3.
+document][openapi-3]. OpenAPI specification was called the Swagger specification
+before version 3.
 
 ## Usage
 
@@ -90,6 +90,34 @@ paths:
                     type: string
 ```
 
+## Supported features
+
+* Validating request bodies according to schema (See [Request Body
+  Object][openapi-request-body-object])
+  * All schema properties in a [Schema Object][openapi-schema-object] that are
+    directly supported by [JSON Schema][json-schema] and [Ajv][ajv] work.
+  * `nullable` property (See [OpenAPI fixed fields][openapi-fixed-fields])
+  * Validation according to `format` including additional data type formats
+    (like int32 and bytes) defined by OpenAPI (See [OpenAPI data
+    types][openapi-data-types])
+  * Schemas that are references to [Components
+    Object][openapi-components-object]
+* Validating parameters: query, header, path and cookies (including signed
+  cookies) (See [Parameter Object][openapi-parameter-object])
+  * `required` field is supported
+  * Validating according to `schema` field
+  * Parameters can be references to Components Object
+* Typescript definitions are included in package
+
+### Currently unsupported features
+
+* Validating request bodies with media type other than `application/json` (See
+  `content` under [Request Body Object][openapi-request-body-object])
+* References outside the components object in the document (See [Reference
+  Object][openapi-reference-object] and [Components
+  Object][openapi-components-object])
+  * This means references to other local documents and also to external schemas
+
 ## Public API
 
 ### `class OpenApiValidator`
@@ -169,11 +197,16 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 `ErrorObject`.
 
 [openapi-3]: https://github.com/OAI/OpenAPI-Specification
+[openapi-components-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#componentsObject
+[openapi-data-types]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
+[openapi-fixed-fields]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#fixed-fields-20
 [openapi-formats]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
 [openapi-operation-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#operationObject
 [openapi-path-item-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#path-item-object
 [openapi-parameter-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#parameterObject
 [openapi-request-body-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#request-body-object
+[openapi-reference-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#referenceObject
+[openapi-schema-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#schemaObject
 [json-schema]: http://json-schema.org/
 [ajv]: http://epoberezkin.github.io/ajv/
 [ajv-error-objects]: http://epoberezkin.github.io/ajv/#error-objects
