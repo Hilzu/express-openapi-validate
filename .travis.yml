@@ -6,10 +6,10 @@ node_js:
 cache:
   yarn: true
 install:
-  - yarn global add codecov greenkeeper-lockfile@1
+  - yarn global add coveralls greenkeeper-lockfile@1
   - yarn install
 before_script: greenkeeper-lockfile-update
 after_script: greenkeeper-lockfile-upload
 script:
   - yarn test
-  - codecov
+  - cat coverage/lcov.info | coveralls
