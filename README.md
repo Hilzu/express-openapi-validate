@@ -105,7 +105,7 @@ The main class of this package. Creates [JSON schema][json-schema] validators
 for the given operations defined in an OpenAPI v3 document. In the background
 [Ajv][ajv] is used to validate the request.
 
-#### `public constructor(openApiDocument: OpenApiDocument): OpenApiValidator`
+#### `public constructor(openApiDocument: OpenApiDocument, options: ValidatorConfig = {})): OpenApiValidator`
 
 Creates a new validator for the given OpenAPI document.
 
@@ -128,6 +128,18 @@ Object][openapi-path-item-object]:
 
 `RequestHandler` is an express middleware function with the signature
 `(req: Request, res: Response, next: NextFunction): any;`.
+
+`options` parameter is optional. It has the following optional fields:
+
+```javascript
+{
+  ajvOptions: Ajv.Options;
+}
+```
+
+You can find the list of options accepted by Ajv from its
+[documentation][ajv-options]. The `formats` object passed to Ajv will be merged
+with additional [OpenAPI formats][openapi-formats] supported by this library.
 
 ### `class ValidationError extends Error`
 
@@ -160,6 +172,7 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 `ErrorObject`.
 
 [openapi-3]: https://github.com/OAI/OpenAPI-Specification
+[openapi-formats]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
 [openapi-operation-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#operationObject
 [openapi-path-item-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#path-item-object
 [openapi-parameter-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#parameterObject
@@ -167,3 +180,4 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 [json-schema]: http://json-schema.org/
 [ajv]: http://epoberezkin.github.io/ajv/
 [ajv-error-objects]: http://epoberezkin.github.io/ajv/#error-objects
+[ajv-options]: http://epoberezkin.github.io/ajv/#options
