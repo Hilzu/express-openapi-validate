@@ -51,18 +51,27 @@ const parameterLocationToRequestField = (
   throw new Error(`Unrecognized parameter location=${location}`);
 };
 
+export interface ValidatorConfig {
+  ajvOptions?: Ajv.Options;
+}
+
 export default class OpenApiValidator {
   private _ajv: Ajv.Ajv;
   private _document: OpenApiDocument;
 
-  constructor(openApiDocument: OpenApiDocument) {
+  constructor(openApiDocument: OpenApiDocument, options: ValidatorConfig = {}) {
     if (!semver.satisfies(openApiDocument.openapi, "^3.0.0")) {
       const version =
         openApiDocument.openapi || (openApiDocument as any).swagger;
       throw new Error(`Unsupported OpenAPI / Swagger version=${version}`);
     }
     this._document = openApiDocument;
-    this._ajv = new Ajv({ formats });
+    const userAjvFormats = _.get(options, ["ajvOptions", "formats"], {});
+    const ajvOptions = {
+      ...options.ajvOptions,
+      formats: { ...formats, ...userAjvFormats },
+    };
+    this._ajv = new Ajv(ajvOptions);
   }
 
   public validate(method: Operation, path: string): RequestHandler {

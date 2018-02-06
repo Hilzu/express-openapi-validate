@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`OpenApiValidator Ajv formats can be passed in 1`] = `[ValidationError: Error while validating request: request.body.password should match format "password"]`;
+
 exports[`OpenApiValidator creating schema with invalid parameter location throws 1`] = `"Unrecognized parameter location=invalid"`;
 
 exports[`OpenApiValidator creating throws with Swagger 2.0 document 1`] = `"Unsupported OpenAPI / Swagger version=2.0"`;

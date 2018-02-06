@@ -22,8 +22,8 @@ const openApiDocument = require("./open-api-document");
 
 const baseReq = { body: {}, query: {}, headers: {}, cookies: {}, params: {} };
 
-const createTestValidator = document => {
-  const validator = new OpenApiValidator(document);
+const createTestValidator = (...args) => {
+  const validator = new OpenApiValidator(...args);
   return (method, path) => {
     const validate = validator.validate(method, path);
     return userReq =>
@@ -51,6 +51,25 @@ describe("OpenApiValidator", () => {
         paths: {},
       });
     }).toThrowErrorMatchingSnapshot();
+  });
+
+  test("Ajv formats can be passed in", () => {
+    const opts = { ajvOptions: { formats: { password: /[a-zA-Z0-9]{8,}/ } } };
+    const validator = createTestValidator(openApiDocument, opts);
+    const validate = validator("post", "/format");
+    return validate({ body: { password: "abc" } })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ body: { password: "password123" } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+        return validate({ body: { d: 123.1 } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+      });
   });
 
   test("getting an operation object fails with invalid arguments", () => {
