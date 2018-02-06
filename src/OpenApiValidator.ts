@@ -96,8 +96,15 @@ export default class OpenApiValidator {
       schema.required.push("body");
     }
     const validator = this._ajv.compile(mapOasSchemaToJsonSchema(schema));
+
     const validate: RequestHandler = (req, res, next) => {
-      const valid = validator(req);
+      const reqToValidate = {
+        ...req,
+        cookies: req.cookies
+          ? { ...req.cookies, ...req.signedCookies }
+          : undefined,
+      };
+      const valid = validator(reqToValidate);
       if (valid) {
         next();
       } else {
@@ -110,6 +117,7 @@ export default class OpenApiValidator {
         next(err);
       }
     };
+
     return validate;
   }
 
