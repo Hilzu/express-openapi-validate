@@ -105,9 +105,21 @@ The main class of this package. Creates [JSON schema][json-schema] validators
 for the given operations defined in an OpenAPI v3 document. In the background
 [Ajv][ajv] is used to validate the request.
 
-#### `public constructor(openApiDocument: OpenApiDocument, options: ValidatorConfig = {})): OpenApiValidator`
+#### `public constructor(openApiDocument: OpenApiDocument, options: ValidatorConfig = {}))`
 
 Creates a new validator for the given OpenAPI document.
+
+`options` parameter is optional. It has the following optional fields:
+
+```javascript
+{
+  ajvOptions: Ajv.Options;
+}
+```
+
+You can find the list of options accepted by Ajv from its
+[documentation][ajv-options]. The `formats` object passed to Ajv will be merged
+with additional [OpenAPI formats][openapi-formats] supported by this library.
 
 #### `public validate(method: Operation, path: string): RequestHandler`
 
@@ -128,18 +140,6 @@ Object][openapi-path-item-object]:
 
 `RequestHandler` is an express middleware function with the signature
 `(req: Request, res: Response, next: NextFunction): any;`.
-
-`options` parameter is optional. It has the following optional fields:
-
-```javascript
-{
-  ajvOptions: Ajv.Options;
-}
-```
-
-You can find the list of options accepted by Ajv from its
-[documentation][ajv-options]. The `formats` object passed to Ajv will be merged
-with additional [OpenAPI formats][openapi-formats] supported by this library.
 
 ### `class ValidationError extends Error`
 
