@@ -419,4 +419,22 @@ describe("OpenApiValidator", () => {
         expect(err).toBeUndefined();
       });
   });
+
+  test("validating parameters with two required query parameters", () => {
+    const validate = getValidator("get", "/parameters/required");
+    return validate({ query: { q1: "a" } })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ query: { q2: "b" } });
+      })
+      .then(err => {
+        expect(err).toBeInstanceOf(ValidationError);
+        expect(err).toMatchSnapshot();
+        return validate({ query: { q1: "c", q2: "d" } });
+      })
+      .then(err => {
+        expect(err).toBeUndefined();
+      });
+  });
 });

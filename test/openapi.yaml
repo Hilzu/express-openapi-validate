@@ -75,6 +75,24 @@ paths:
       responses:
         '200':
           description: Response
+  /parameters/required:
+    get:
+      parameters:
+        - name: q1
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+        - name: q2
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        200:
+          description: Response
   /parameters/header:
     get:
       parameters:
