@@ -14,18 +14,16 @@
   limitations under the License.
 */
 
-"use strict";
-
-const _ = require("lodash");
-const schemaUtils = require("../dist/schema-utils");
-const openApiDocument = require("./open-api-document");
+import * as _ from "lodash";
+import * as schemaUtils from "../src/schema-utils";
+import openApiDocument from "./open-api-document";
 
 describe("schema module", () => {
   test("walkSchema returns the same schema that was passed in with identity function as the mapper", () => {
     const schema = {
       properties: {
         foo: { type: "string" },
-        bar: { type: ["number", "null"], maximum: 3, exclusiveMinimum: 0 },
+        bar: { type: "number", maximum: 3, exclusiveMinimum: 0 },
         version: {
           type: "string",
           const: "v1",

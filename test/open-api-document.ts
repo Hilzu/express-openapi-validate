@@ -14,16 +14,11 @@
   limitations under the License.
 */
 
-"use strict";
+import * as fs from "fs";
+import * as jsYaml from "js-yaml";
 
-const index = require("../dist");
-const OpenApiValidator = require("../dist/OpenApiValidator").default;
-const ValidationError = require("../dist/ValidationError").default;
+const openApiDocument = jsYaml.safeLoad(
+  fs.readFileSync("./test/openapi.yaml", "utf-8")
+);
 
-test("index exports OpenApiValidator and ValidationError", () => {
-  expect(index.OpenApiValidator).toBeDefined();
-  expect(index.OpenApiValidator).toBe(OpenApiValidator);
-
-  expect(index.ValidationError).toBeDefined();
-  expect(index.ValidationError).toBe(ValidationError);
-});
+export default openApiDocument;

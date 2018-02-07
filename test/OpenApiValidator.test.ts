@@ -14,22 +14,30 @@
   limitations under the License.
 */
 
-"use strict";
+import OpenApiDocument, { Operation } from "../src/OpenApiDocument";
+import OpenApiValidator, { ValidatorConfig } from "../src/OpenApiValidator";
+import ValidationError from "../src/ValidationError";
+import openApiDocument from "./open-api-document";
 
-const OpenApiValidator = require("../dist/OpenApiValidator").default;
-const ValidationError = require("../dist/ValidationError").default;
-const openApiDocument = require("./open-api-document");
+const baseReq: any = {
+  body: {},
+  query: {},
+  headers: {},
+  cookies: {},
+  params: {},
+};
 
-const baseReq = { body: {}, query: {}, headers: {}, cookies: {}, params: {} };
-
-const createTestValidator = (...args) => {
-  const validator = new OpenApiValidator(...args);
-  return (method, path) => {
+const createTestValidator = (
+  document: OpenApiDocument,
+  opts?: ValidatorConfig
+) => {
+  const validator = new OpenApiValidator(document, opts);
+  return (method: Operation, path: string) => {
     const validate = validator.validate(method, path);
-    return userReq =>
+    return (userReq?: any) =>
       new Promise(resolve => {
-        const req = Object.assign({}, baseReq, userReq);
-        validate(req, {}, resolve);
+        const req = { ...baseReq, ...userReq };
+        validate(req, {} as any, resolve);
       });
   };
 };
@@ -49,7 +57,7 @@ describe("OpenApiValidator", () => {
         swagger: "2.0",
         info: { title: "Swagger API", version: "1.0.0" },
         paths: {},
-      });
+      } as any);
     }).toThrowErrorMatchingSnapshot();
   });
 
@@ -77,23 +85,23 @@ describe("OpenApiValidator", () => {
 
     expect(() => {
       // eslint-disable-next-line no-unused-vars
-      const op = validator._getOperationObject("POST", "/echo");
+      const op = (validator as any)._getOperationObject("POST", "/echo");
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
       // eslint-disable-next-line no-unused-vars
-      const op = validator._getOperationObject("ppost", "/echo");
+      const op = (validator as any)._getOperationObject("ppost", "/echo");
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
       // eslint-disable-next-line no-unused-vars
-      const op = validator._getOperationObject("post", "/echoo");
+      const op = (validator as any)._getOperationObject("post", "/echoo");
     }).toThrowErrorMatchingSnapshot();
   });
 
   test("getting an operation object succeeds", () => {
     const validator = new OpenApiValidator(openApiDocument);
-    const op = validator._getOperationObject("post", "/echo");
+    const op = (validator as any)._getOperationObject("post", "/echo");
     expect(op).toEqual(openApiDocument.paths["/echo"].post);
   });
 
@@ -131,11 +139,12 @@ describe("OpenApiValidator", () => {
     const validator = new OpenApiValidator(openApiDocument);
 
     expect(() => {
-      const op = validator._getOperationObject("get", "/parameters");
-      const withInvalidParam = Object.assign({}, op, {
+      const op = (validator as any)._getOperationObject("get", "/parameters");
+      const withInvalidParam = {
+        ...op,
         parameters: [{ name: "invalid", in: "invalid" }, ...op.parameters],
-      });
-      validator._parameterObjectsToSchema(withInvalidParam);
+      };
+      (validator as any)._parameterObjectsToSchema(withInvalidParam);
     }).toThrowErrorMatchingSnapshot();
   });
 

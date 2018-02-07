@@ -38,6 +38,8 @@
   },
   "devDependencies": {
     "@types/express": "^4.11.1",
+    "@types/jest": "^22.1.1",
+    "@types/js-yaml": "^3.10.1",
     "@types/lodash": "^4.14.100",
     "@types/semver": "^5.5.0",
     "eslint": "^4.17.0",
@@ -47,6 +49,7 @@
     "jest": "^22.1.4",
     "js-yaml": "^3.10.0",
     "prettier": "1.10.2",
+    "ts-jest": "^22.0.3",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.7.0",
     "typescript": "^2.7.1",
@@ -107,7 +110,18 @@
     }
   },
   "jest": {
-    "collectCoverage": true
+    "collectCoverage": true,
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
+    "mapCoverage": true,
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ]
   },
   "prettier": {
     "tabWidth": 2,
