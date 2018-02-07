@@ -42,13 +42,16 @@
     "@types/js-yaml": "^3.10.1",
     "@types/lodash": "^4.14.100",
     "@types/semver": "^5.5.0",
+    "@types/supertest": "^2.0.4",
     "eslint": "^4.17.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
+    "express": "^4.16.2",
     "jest": "^22.1.4",
     "js-yaml": "^3.10.0",
     "prettier": "1.10.2",
+    "supertest": "^3.0.0",
     "ts-jest": "^22.0.3",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.7.0",
@@ -111,6 +114,10 @@
   },
   "jest": {
     "collectCoverage": true,
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/dist/",
+      "<rootDir>/node_modules/"
+    ],
     "transform": {
       "^.+\\.ts$": "ts-jest"
     },
