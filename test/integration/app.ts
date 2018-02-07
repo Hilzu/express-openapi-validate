@@ -15,7 +15,7 @@
 */
 
 import * as express from "express";
-import { OpenApiValidator } from "../../dist";
+import { OpenApiValidator } from "../../dist"; // eslint-disable-line
 import openApiDocument from "../open-api-document";
 
 const app: express.Express = express();
