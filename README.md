@@ -22,6 +22,8 @@ yarn add express-openapi-validate
 
 Then use the validator like this:
 
+### `index.js`
+
 ```javascript
 const fs = require("fs");
 const express = require("express");
@@ -34,15 +36,11 @@ app.use(express.json());
 const openApiDocument = jsYaml.safeLoad(
   fs.readFileSync("openapi.yaml", "utf-8")
 );
-const openApiValidator = new OpenApiValidator(openApiDocument);
+const validator = new OpenApiValidator(openApiDocument);
 
-app.post(
-  "/echo",
-  openApiValidator.validate("post", "/echo"),
-  (req, res, next) => {
-    res.json({ output: req.body.input });
-  }
-);
+app.post("/echo", validator.validate("post", "/echo"), (req, res, next) => {
+  res.json({ output: req.body.input });
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -60,8 +58,9 @@ const server = app.listen(3000, () => {
 });
 ```
 
+### `openapi.yaml`
+
 ```yaml
-# openapi.yaml
 openapi: 3.0.1
 info:
   title: Example API
@@ -94,31 +93,33 @@ paths:
 
 ## Supported features
 
-* Validating request bodies according to schema (See [Request Body
-  Object][openapi-request-body-object])
-  * All schema properties in a [Schema Object][openapi-schema-object] that are
-    directly supported by [JSON Schema][json-schema] and [Ajv][ajv] work.
-  * `nullable` property (See [OpenAPI fixed fields][openapi-fixed-fields])
+* Validating request bodies with a schema (See [Request Body
+  Object][openapi-request-body-object] and [Schema
+  Object][openapi-schema-object])
+  * All schema properties in a Schema Object that are directly supported by
+    [JSON Schema][json-schema] and [Ajv][ajv] are used in validation.
+  * `nullable` field for handling properties that can be null is supported (See
+    [OpenAPI fixed fields][openapi-fixed-fields])
   * Validation according to `format` including additional data type formats
     (like int32 and bytes) defined by OpenAPI (See [OpenAPI data
-    types][openapi-data-types])
-  * Schemas that are references to [Components
-    Object][openapi-components-object]
+    types][openapi-data-types] and [Ajv formats][ajv-formats])
+  * Schemas that are references to the [Components
+    Object][openapi-components-object] are supported (See [Reference
+    Object][openapi-reference-object])
 * Validating parameters: query, header, path and cookies (including signed
   cookies) (See [Parameter Object][openapi-parameter-object])
-  * `required` field is supported
-  * Validating according to `schema` field
-  * Parameters can be references to Components Object
-* Typescript definitions are included in package
+  * The same `schema` features that are supported for request bodies are also
+    supported for parameters
+  * `required` field for marking parameters that must be given is supported
+  * Parameters and their schemas can be references to the Components Object
+* Typescript definitions are included in the package
 
 ### Currently unsupported features
 
 * Validating request bodies with media type other than `application/json` (See
   `content` under [Request Body Object][openapi-request-body-object])
-* References outside the components object in the document (See [Reference
-  Object][openapi-reference-object] and [Components
-  Object][openapi-components-object])
-  * This means references to other local documents and also to external schemas
+* External references (references to other files and network resources) (See
+  [Reference Object][openapi-reference-object])
 
 ## Public API
 
@@ -129,7 +130,7 @@ const { OpenApiValidator } = require("express-openapi-validate");
 ```
 
 The main class of this package. Creates [JSON schema][json-schema] validators
-for the given operations defined in an OpenAPI v3 document. In the background
+for the given operations defined in the OpenAPI document. In the background
 [Ajv][ajv] is used to validate the request.
 
 #### `public constructor(openApiDocument: OpenApiDocument, options: ValidatorConfig = {}))`
@@ -152,14 +153,17 @@ with additional [OpenAPI formats][openapi-formats] supported by this library.
 
 Returns an express middleware function for the given operation. The operation
 matching the given method and path has to be defined in the OpenAPI document or
-this method throws. The middleware validates the incoming request according to
-the `parameters` and `requestBody` fields defined in the [Operation
+this method throws.
+
+The middleware validates the incoming request according to the `parameters` and
+`requestBody` fields defined in the [Operation
 Object][openapi-operation-object]. If the validation fails the `next` express
-function is called with an `ValidationError`.
+function is called with an
+[`ValidationError`](#class-validationerror-extends-error).
 
 See the [Parameter Object][openapi-parameter-object] and [Request Body
 Object][openapi-request-body-object] sections of the OpenAPI specification for
-details how to define schemas for requests.
+details how to define schemas for operations.
 
 `method` must be one of the valid operations of an [OpenAPI Path Item
 Object][openapi-path-item-object]:
@@ -212,4 +216,5 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 [json-schema]: http://json-schema.org/
 [ajv]: http://epoberezkin.github.io/ajv/
 [ajv-error-objects]: http://epoberezkin.github.io/ajv/#error-objects
+[ajv-formats]: http://epoberezkin.github.io/ajv/#formats
 [ajv-options]: http://epoberezkin.github.io/ajv/#options
