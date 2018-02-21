@@ -1,5 +1,105 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Integration tests with real app cookie parameters are validated 1`] = `
+Object {
+  "error": Object {
+    "data": Array [
+      Object {
+        "dataPath": ".cookies",
+        "keyword": "required",
+        "message": "should have required property 'session'",
+        "params": Object {
+          "missingProperty": "session",
+        },
+        "schemaPath": "#/properties/cookies/required",
+      },
+    ],
+    "message": "Error while validating request: request.cookies should have required property 'session'",
+    "name": "ValidationError",
+  },
+}
+`;
+
+exports[`Integration tests with real app header parameters are validated 1`] = `
+Object {
+  "error": Object {
+    "data": Array [
+      Object {
+        "dataPath": ".headers",
+        "keyword": "required",
+        "message": "should have required property 'x-param'",
+        "params": Object {
+          "missingProperty": "x-param",
+        },
+        "schemaPath": "#/properties/headers/required",
+      },
+    ],
+    "message": "Error while validating request: request.headers should have required property 'x-param'",
+    "name": "ValidationError",
+  },
+}
+`;
+
+exports[`Integration tests with real app path parameters are validated 1`] = `
+Object {
+  "error": Object {
+    "data": Array [
+      Object {
+        "dataPath": ".params.id",
+        "keyword": "pattern",
+        "message": "should match pattern \\"^[0-9]+$\\"",
+        "params": Object {
+          "pattern": "^[0-9]+$",
+        },
+        "schemaPath": "#/properties/params/properties/id/pattern",
+      },
+    ],
+    "message": "Error while validating request: request.params.id should match pattern \\"^[0-9]+$\\"",
+    "name": "ValidationError",
+  },
+}
+`;
+
+exports[`Integration tests with real app query parameters are validated 1`] = `
+Object {
+  "error": Object {
+    "data": Array [
+      Object {
+        "dataPath": ".query",
+        "keyword": "required",
+        "message": "should have required property 'param'",
+        "params": Object {
+          "missingProperty": "param",
+        },
+        "schemaPath": "#/properties/query/required",
+      },
+    ],
+    "message": "Error while validating request: request.query should have required property 'param'",
+    "name": "ValidationError",
+  },
+}
+`;
+
+exports[`Integration tests with real app query parameters are validated 2`] = `
+Object {
+  "error": Object {
+    "data": Array [
+      Object {
+        "dataPath": ".query",
+        "keyword": "required",
+        "message": "should have required property 'param'",
+        "params": Object {
+          "missingProperty": "param",
+        },
+        "schemaPath": "#/properties/query/required",
+      },
+    ],
+    "message": "Error while validating request: request.query should have required property 'param'",
+    "name": "ValidationError",
+  },
+}
+`;
+
 exports[`Integration tests with real app requests against /echo are validated correctly 1`] = `
 Object {
   "error": Object {

@@ -14,6 +14,7 @@
   limitations under the License.
 */
 
+import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import { OpenApiValidator } from "../../dist"; // eslint-disable-line
 import openApiDocument from "../open-api-document";
@@ -23,10 +24,46 @@ const validator = new OpenApiValidator(openApiDocument);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.post("/echo", validator.validate("post", "/echo"), (req, res, next) => {
   res.json({ output: req.body.input });
 });
+
+app.get(
+  "/parameters",
+  validator.validate("get", "/parameters"),
+  (req, res, next) => {
+    const { param, porom } = req.query;
+    res.json({ param, porom });
+  }
+);
+
+app.get(
+  "/parameters/id/:id",
+  validator.validate("get", "/parameters/id/{id}"),
+  (req, res, next) => {
+    res.json({ id: Number(req.params.id) });
+  }
+);
+
+app.get(
+  "/parameters/header",
+  validator.validate("get", "/parameters/header"),
+  (req, res, next) => {
+    const header = req.get("X-Param");
+    res.json({ header });
+  }
+);
+
+app.get(
+  "/parameters/cookie",
+  validator.validate("get", "/parameters/cookie"),
+  (req, res, next) => {
+    const cookie = req.cookies.session;
+    res.json({ cookie });
+  }
+);
 
 const errorHandler: express.ErrorRequestHandler = (err, req, res, next) => {
   res.status(err.statusCode).json({

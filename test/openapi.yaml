@@ -116,7 +116,7 @@ paths:
       responses:
         '200':
           description: Response
-  /parameters/{id}:
+  /parameters/id/{id}:
     get:
       parameters:
         - name: id
@@ -124,6 +124,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: "^[0-9]+$"
       responses:
         '200':
           description: Response

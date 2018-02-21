@@ -23,6 +23,7 @@ describe("Integration tests with real app", () => {
       .post("/echo")
       .send({});
     expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("error");
     expect(res.body).toMatchSnapshot();
 
     res = await request(app)
@@ -30,5 +31,62 @@ describe("Integration tests with real app", () => {
       .send({ input: "Hello!" });
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ output: "Hello!" });
+  });
+
+  test("path parameters are validated", async () => {
+    let res = await request(app).get("/parameters/id/lol");
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body).toMatchSnapshot();
+
+    res = await request(app).get("/parameters/id/789");
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ id: 789 });
+  });
+
+  test("query parameters are validated", async () => {
+    let res = await request(app).get("/parameters");
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body).toMatchSnapshot();
+
+    res = await request(app)
+      .get("/parameters")
+      .query({ porom: "moi" });
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body).toMatchSnapshot();
+
+    res = await request(app)
+      .get("/parameters")
+      .query({ param: "hallo", porom: "moi" });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ param: "hallo", porom: "moi" });
+  });
+
+  test("header parameters are validated", async () => {
+    let res = await request(app).get("/parameters/header");
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body).toMatchSnapshot();
+
+    res = await request(app)
+      .get("/parameters/header")
+      .set("X-param", "hullo");
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ header: "hullo" });
+  });
+
+  test("cookie parameters are validated", async () => {
+    let res = await request(app).get("/parameters/cookie");
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body).toMatchSnapshot();
+
+    res = await request(app)
+      .get("/parameters/cookie")
+      .set("cookie", "session=hullo");
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ cookie: "hullo" });
   });
 });

@@ -26,6 +26,8 @@ exports[`OpenApiValidator validating parameters with two required query paramete
 
 exports[`OpenApiValidator validating path parameters with a parameters schema 1`] = `[ValidationError: Error while validating request: request.params should have required property 'id']`;
 
+exports[`OpenApiValidator validating path parameters with a parameters schema 2`] = `[ValidationError: Error while validating request: request.params.id should match pattern "^[0-9]+$"]`;
+
 exports[`OpenApiValidator validating query parameters with internal references 1`] = `[ValidationError: Error while validating request: request.query.hello should NOT be shorter than 1 characters]`;
 
 exports[`OpenApiValidator validating query with a parameter schema 1`] = `[ValidationError: Error while validating request: request.query should have required property 'param']`;
