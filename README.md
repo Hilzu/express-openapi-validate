@@ -120,7 +120,7 @@ paths:
   `content` under [Request Body Object][openapi-request-body-object])
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
-* Validating responses. See issue #8 for a discussion about it.
+* Validating responses. See [issue #8][i8] for a discussion about it.
 
 ## Public API
 
@@ -219,3 +219,4 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 [ajv-error-objects]: http://epoberezkin.github.io/ajv/#error-objects
 [ajv-formats]: http://epoberezkin.github.io/ajv/#formats
 [ajv-options]: http://epoberezkin.github.io/ajv/#options
+[i8]: https://github.com/Hilzu/express-openapi-validate/issues/8
