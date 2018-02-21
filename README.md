@@ -120,6 +120,7 @@ paths:
   `content` under [Request Body Object][openapi-request-body-object])
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
+* Validating responses. See issue #8 for a discussion about it.
 
 ## Public API
 
