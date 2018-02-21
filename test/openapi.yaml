@@ -50,7 +50,7 @@ paths:
                     type: string
                 required:
                 - output
-  /test:
+  /internal-ref:
     post:
       responses:
         '200':

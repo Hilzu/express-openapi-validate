@@ -105,28 +105,22 @@ describe("OpenApiValidator", () => {
     expect(op).toEqual(openApiDocument.paths["/echo"].post);
   });
 
-  test("validate", async () => {
+  test("validating with a simple echo endpoint", async () => {
     const validate = getValidator("post", "/echo");
-    const err = await validate({ body: { input: "hello" } });
+    let err = await validate({ body: { input: "hello" } });
     expect(err).toBeUndefined();
-  });
 
-  test("validate with invalid body", async () => {
-    const validate = getValidator("post", "/echo");
-    const err = await validate();
+    err = await validate();
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
   });
 
-  test("validate with schema in internal ref", async () => {
-    const validate = getValidator("post", "/test");
-    const err = await validate({ body: { value: 123 } });
+  test("validating with schema as an internal reference", async () => {
+    const validate = getValidator("post", "/internal-ref");
+    let err = await validate({ body: { value: 123 } });
     expect(err).toBeUndefined();
-  });
 
-  test("validate with schema in internal ref fails with invalid body", async () => {
-    const validate = getValidator("post", "/test");
-    const err = await validate({ body: { value: "123" } });
+    err = await validate({ body: { value: "123" } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
   });
@@ -144,41 +138,32 @@ describe("OpenApiValidator", () => {
     }).toThrowErrorMatchingSnapshot();
   });
 
-  test("validating query with parameters schema succeeds", async () => {
+  test("validating query with a parameter schema", async () => {
     const validate = getValidator("get", "/parameters");
-    const err = await validate({ query: { param: "123", porom: "abc" } });
+    let err = await validate({ query: { param: "123", porom: "abc" } });
     expect(err).toBeUndefined();
-  });
 
-  test("validating query with parameters schema fails", async () => {
-    const validate = getValidator("get", "/parameters");
-    const err = await validate({ query: { porom: "abc" } });
+    err = await validate({ query: { porom: "abc" } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
   });
 
-  test("validating headers with parameters schema succeeds", async () => {
+  test("validating headers with a parameter schema", async () => {
     const validate = getValidator("get", "/parameters/header");
-    const err = await validate({ headers: { "x-param": "let-in" } });
+    let err = await validate({ headers: { "x-param": "let-in" } });
     expect(err).toBeUndefined();
-  });
 
-  test("validating headers with parameters schema fails", async () => {
-    const validate = getValidator("get", "/parameters/header");
-    const err = await validate();
+    err = await validate();
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
   });
 
-  test("validating cookies with parameters schema succeeds", async () => {
+  test("validating cookies with a parameter schema", async () => {
     const validate = getValidator("get", "/parameters/cookie");
-    const err = await validate({ cookies: { session: "abc123" } });
+    let err = await validate({ cookies: { session: "abc123" } });
     expect(err).toBeUndefined();
-  });
 
-  test("validating cookies with parameters schema fails", async () => {
-    const validate = getValidator("get", "/parameters/cookie");
-    const err = await validate();
+    err = await validate();
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
   });
@@ -190,41 +175,32 @@ describe("OpenApiValidator", () => {
     expect(err).toMatchSnapshot();
   });
 
-  test("validating params with parameters schema succeeds", async () => {
+  test("validating path parameters with a parameters schema", async () => {
     const validate = getValidator("get", "/parameters/{id}");
-    const err = await validate({ params: { id: "123" } });
+    let err = await validate({ params: { id: "123" } });
     expect(err).toBeUndefined();
-  });
 
-  test("validating params with parameters schema fails", async () => {
-    const validate = getValidator("get", "/parameters/{id}");
-    const err = await validate();
+    err = await validate();
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
   });
 
-  test("validation fails with null field in body", async () => {
+  test("validating bodies with null fields and nullable property is schema", async () => {
     const validate = getValidator("post", "/nullable");
-    const err = await validate({ body: { bar: null } });
+    let err = await validate({ body: { bar: null } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
-  });
 
-  test("validation passes with null field in body that has nullable set", async () => {
-    const validate = getValidator("post", "/nullable");
-    const err = await validate({ body: { baz: null } });
+    err = await validate({ body: { baz: null } });
     expect(err).toBeUndefined();
   });
 
-  test("validation with reference parameter succeeds with correct data", async () => {
+  test("validating query parameters with internal references", async () => {
     const validate = getValidator("get", "/ref-parameter");
-    const err = await validate({ query: { hello: "hello" } });
+    let err = await validate({ query: { hello: "hello" } });
     expect(err).toBeUndefined();
-  });
 
-  test("validation with reference parameter fails with invalid data", async () => {
-    const validate = getValidator("get", "/ref-parameter");
-    const err = await validate({ query: { hello: "" } });
+    err = await validate({ query: { hello: "" } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
   });
