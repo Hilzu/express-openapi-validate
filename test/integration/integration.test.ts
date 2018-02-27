@@ -16,8 +16,9 @@
 
 import * as request from "supertest";
 import app from "./app";
-import OpenApiValidator from "../../dist/OpenApiValidator";
 import openApiDocument from "../open-api-document";
+// eslint-disable-next-line
+import OpenApiValidator from "../../dist/OpenApiValidator";
 
 const validator = new OpenApiValidator(openApiDocument);
 
