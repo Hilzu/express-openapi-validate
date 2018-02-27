@@ -118,6 +118,7 @@ paths:
 
 * Validating request bodies with media type other than `application/json` (See
   `content` under [Request Body Object][openapi-request-body-object])
+* Only schemas and parameters are allowed to be references currently
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
 * Validating responses. See [issue #8][i8] for a discussion about it.
