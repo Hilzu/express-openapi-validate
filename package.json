@@ -23,7 +23,7 @@
     "build:ts": "tsc",
     "clean": "rm -rf dist",
     "format": "prettier --write *.{md,js,json} '{src,test}/**/*.{js,json,ts}'",
-    "lint": "yarn lint:eslint && yarn lint:tslint",
+    "lint": "yarn clean && yarn lint:eslint && yarn lint:tslint",
     "lint:eslint": "eslint --ext js,ts .",
     "lint:tslint": "tslint --project tsconfig.json",
     "prepublishOnly": "yarn test",
