@@ -16,6 +16,10 @@
 
 import * as request from "supertest";
 import app from "./app";
+import OpenApiValidator from "../../dist/OpenApiValidator";
+import openApiDocument from "../open-api-document";
+
+const validator = new OpenApiValidator(openApiDocument);
 
 describe("Integration tests with real app", () => {
   test("requests against /echo are validated correctly", async () => {
@@ -25,12 +29,17 @@ describe("Integration tests with real app", () => {
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("error");
     expect(res.body).toMatchSnapshot();
+    const validate = validator.validateResponse("post", "/echo");
+    expect(() => {
+      validate(res);
+    }).toThrowErrorMatchingSnapshot();
 
     res = await request(app)
       .post("/echo")
       .send({ input: "Hello!" });
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ output: "Hello!" });
+    expect(validate(res)).toBeUndefined();
   });
 
   test("path parameters are validated", async () => {

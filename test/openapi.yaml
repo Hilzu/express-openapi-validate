@@ -224,3 +224,20 @@ paths:
       responses:
         '200':
           description: Response
+  /responses:
+    post:
+      responses:
+        2XX:
+          description: Generic 2xx response
+        201:
+          description: Created response
+          content:
+            application/json:
+              schema:
+                properties:
+                  hello:
+                    type: string
+                required:
+                  - hello
+        default:
+          description: Default response

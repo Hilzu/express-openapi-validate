@@ -115,6 +115,21 @@ describe("OpenApiValidator", () => {
     expect(err).toMatchSnapshot();
   });
 
+  test("validating response of echo endpoint", async () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validateResponse("post", "/echo");
+    expect(() => {
+      validate({ statusCode: 200, body: {} });
+    }).toThrowErrorMatchingSnapshot();
+
+    const err = validate({ statusCode: 200, body: { output: "echo" } });
+    expect(err).toBeUndefined();
+
+    expect(() => {
+      validate({ statusCode: 301, body: {} });
+    }).toThrowErrorMatchingSnapshot();
+  });
+
   test("validating with schema as an internal reference", async () => {
     const validate = getValidator("post", "/internal-ref");
     let err = await validate({ body: { value: 123 } });
@@ -364,5 +379,50 @@ describe("OpenApiValidator", () => {
 
     err = await validate({ query: { q1: "c", q2: "d" } });
     expect(err).toBeUndefined();
+  });
+
+  test("response validation with different kinds of responses", () => {
+    const validator = new OpenApiValidator(openApiDocument);
+
+    expect(() => {
+      validator.validateResponse("post", "/echooo");
+    }).toThrowErrorMatchingSnapshot();
+
+    const validate = validator.validateResponse("post", "/responses");
+    expect(() => {
+      validate({});
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(() => {
+      (validate as any)();
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(() => {
+      validate({ stat: 200, body: {} });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(() => {
+      validate({ status: 200 });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(validate({ status: 200, data: {} })).toBeUndefined();
+    expect(validate({ statusCode: 500, body: {} })).toBeUndefined();
+  });
+
+  test("response validation with different status codes", () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validateResponse("post", "/responses");
+
+    expect(validate({ statusCode: 200, body: {} })).toBeUndefined();
+
+    expect(() => {
+      validate({ statusCode: 201, body: {} });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(
+      validate({ statusCode: 201, body: { hello: "hola" } })
+    ).toBeUndefined();
+
+    expect(validate({ statusCode: 303, body: {} })).toBeUndefined();
   });
 });

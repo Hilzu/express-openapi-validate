@@ -51,6 +51,16 @@ const parameterLocationToRequestField = (
   throw new Error(`Unrecognized parameter location=${location}`);
 };
 
+const resolveResponse = (res: any) => {
+  if (res == null) {
+    throw new TypeError(`Response was ${String(res)}`);
+  }
+  const statusCodeNum = Number(res.statusCode || res.status);
+  const statusCode = Number.isNaN(statusCodeNum) ? null : statusCodeNum;
+  const body = res.body || res.data;
+  return { statusCode, body };
+};
+
 export interface ValidatorConfig {
   ajvOptions?: Ajv.Options;
 }
@@ -119,6 +129,58 @@ export default class OpenApiValidator {
     };
 
     return validate;
+  }
+
+  public validateResponse(method: Operation, path: string): (res: any) => void {
+    const operation = this._getOperationObject(method, path);
+    const validateResponse = (res: any) => {
+      const { statusCode, body } = resolveResponse(res);
+      if (statusCode == null || body == null) {
+        throw new Error("statusCode or body values not found from response");
+      }
+      const responseObject = this._getResponseObject(operation, statusCode);
+      const bodySchema = _.get(
+        responseObject,
+        ["content", "application/json", "schema"],
+        {}
+      );
+      const schema = {
+        type: "object",
+        properties: {
+          body: resolveReference(this._document, bodySchema),
+        },
+      };
+      const valid = this._ajv.validate(mapOasSchemaToJsonSchema(schema), res);
+      if (valid) {
+        return;
+      }
+      const errorText = this._ajv.errorsText(this._ajv.errors, {
+        dataVar: "response",
+      });
+      throw new ValidationError(
+        `Error while validating response: ${errorText}`,
+        this._ajv.errors as Ajv.ErrorObject[]
+      );
+    };
+    return validateResponse;
+  }
+
+  private _getResponseObject(op: OperationObject, statusCode: number) {
+    const statusCodeStr = String(statusCode);
+    let responseObject = _.get(op, ["responses", statusCodeStr], null);
+    if (responseObject === null) {
+      const field = `${statusCodeStr[0]}XX`;
+      responseObject = _.get(op, ["responses", field], null);
+    }
+    if (responseObject === null) {
+      responseObject = _.get(op, ["responses", "default"], null);
+    }
+    if (responseObject === null) {
+      throw new Error(
+        `No response object found with statusCode=${statusCodeStr}`
+      );
+    }
+    return resolveReference(this._document, responseObject);
   }
 
   private _parameterObjectsToSchema(
