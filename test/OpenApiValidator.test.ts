@@ -407,6 +407,14 @@ describe("OpenApiValidator", () => {
 
     expect(validate({ status: 200, data: {} })).toBeUndefined();
     expect(validate({ statusCode: 500, body: {} })).toBeUndefined();
+
+    const echoValidate = validator.validateResponse("post", "/echo");
+    expect(
+      echoValidate({ status: 200, data: { output: "hello" } })
+    ).toBeUndefined();
+    expect(
+      echoValidate({ statusCode: 200, body: { output: "hello" } })
+    ).toBeUndefined();
   });
 
   test("response validation with different status codes", () => {

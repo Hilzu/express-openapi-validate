@@ -150,7 +150,9 @@ export default class OpenApiValidator {
           body: resolveReference(this._document, bodySchema),
         },
       };
-      const valid = this._ajv.validate(mapOasSchemaToJsonSchema(schema), res);
+      const valid = this._ajv.validate(mapOasSchemaToJsonSchema(schema), {
+        body,
+      });
       if (valid) {
         return;
       }
