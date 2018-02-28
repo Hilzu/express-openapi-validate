@@ -198,10 +198,10 @@ If validation fails the validation function throws a
 Example usage when using [Jest][jest] and [SuperTest][supertest]:
 
 ```javascript
-import { OpenApiValidator, ValidationError } from "express-openapi-validate";
+import { OpenApiValidator } from "express-openapi-validate";
 import fs from "fs";
 import jsYaml from "js-yaml";
-import * as request from "supertest";
+import request from "supertest";
 import app from "./app";
 
 const openApiDocument = jsYaml.safeLoad(
@@ -214,9 +214,7 @@ test("/echo responses", async () => {
   let res = await request(app)
     .post("/echo")
     .send({});
-  expect(() => {
-    validateResponse(res);
-  }).toThrow(ValidationError);
+  expect(validateResponse(res)).toBeUndefined();
 
   res = await request(app)
     .post("/echo")
