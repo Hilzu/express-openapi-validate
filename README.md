@@ -118,10 +118,10 @@ paths:
 
 * Validating request bodies with media type other than `application/json` (See
   `content` under [Request Body Object][openapi-request-body-object])
-* Only schemas and parameters are allowed to be references currently
+* Only schema objects, header objects and parameter objects are allowed to be
+  references currently
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
-* Validating responses. See [issue #8][i8] for a discussion about it.
 
 ## Public API
 
@@ -135,7 +135,7 @@ The main class of this package. Creates [JSON schema][json-schema] validators
 for the given operations defined in the OpenAPI document. In the background
 [Ajv][ajv] is used to validate the request.
 
-#### `public constructor(openApiDocument: OpenApiDocument, options: ValidatorConfig = {}))`
+#### `constructor(openApiDocument: OpenApiDocument, options: ValidatorConfig = {}))`
 
 Creates a new validator for the given OpenAPI document.
 
@@ -151,7 +151,7 @@ You can find the list of options accepted by Ajv from its
 [documentation][ajv-options]. The `formats` object passed to Ajv will be merged
 with additional [OpenAPI formats][openapi-formats] supported by this library.
 
-#### `public validate(method: Operation, path: string): RequestHandler`
+#### `validate(method: Operation, path: string): RequestHandler`
 
 Returns an express middleware function for the given operation. The operation
 matching the given method and path has to be defined in the OpenAPI document or
@@ -174,6 +174,54 @@ Object][openapi-path-item-object]:
 `RequestHandler` is an express middleware function with the signature
 `(req: Request, res: Response, next: NextFunction): any;`.
 
+#### `validateResponse(method: Operation, path: string): (res: any) => void`
+
+Creates a function for the given operation that can be used to validate
+responses. Response validation is meant to be used in tests and not in
+production code. See below for example usage.
+
+For documentation of the `method` and `path` parameters see
+[`validate`](#validatemethod-operation-path-string-requesthandler).
+
+`res` is expected to have the shape
+`{ statusCode: number, body: {}, headers: {}}`. The `statusCode` field can also
+be called `status` and the `body` field can be called `data`. This means that
+response objects from most request libraries should work out of the box.
+
+If validation fails the validation function throws a
+[`ValidationError`](#class-validationerror-extends-error). Otherwise it returns
+`undefined`.
+
+Example usage when using [Jest][jest] and [SuperTest][supertest]:
+
+```javascript
+import { OpenApiValidator, ValidationError } from "express-openapi-validate";
+import fs from "fs";
+import jsYaml from "js-yaml";
+import * as request from "supertest";
+import app from "./app";
+
+const openApiDocument = jsYaml.safeLoad(
+  fs.readFileSync("openapi.yaml", "utf-8")
+);
+const validator = new OpenApiValidator(openApiDocument);
+
+test("/echo responses", async () => {
+  const validateResponse = validator.validateResponse("post", "/echo");
+  let res = await request(app)
+    .post("/echo")
+    .send({});
+  expect(() => {
+    validateResponse(res);
+  }).toThrow(ValidationError);
+
+  res = await request(app)
+    .post("/echo")
+    .send({ input: "Hello!" });
+  expect(validateResponse(res)).toBeUndefined();
+});
+```
+
 ### `class ValidationError extends Error`
 
 ```javascript
@@ -188,17 +236,17 @@ the `.data` array.
 You can catch this error in your express error handler and handle it specially.
 You probably want to log the validation error and pass the errors to the client.
 
-#### `public message: string`
+#### `message: string`
 
 Human-readable error message about why the validation failed.
 
-#### `public statusCode: number = 400`
+#### `statusCode: number = 400`
 
 This field is always set to `400`. You can check this field in your express
 error handler to decide what status code to send to the client when errors
 happen.
 
-#### `public data: ErrorObject[]`
+#### `data: ErrorObject[]`
 
 Machine-readable array of validation errors. [Ajv Error
 Objects][ajv-error-objects] documentation contains a list of the fields in
@@ -221,3 +269,5 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 [ajv-formats]: http://epoberezkin.github.io/ajv/#formats
 [ajv-options]: http://epoberezkin.github.io/ajv/#options
 [i8]: https://github.com/Hilzu/express-openapi-validate/issues/8
+[jest]: https://facebook.github.io/jest/
+[supertest]: https://github.com/visionmedia/supertest
