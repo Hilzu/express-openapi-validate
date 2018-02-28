@@ -125,6 +125,7 @@ paths:
   are allowed to be references currently
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
+* Header Objects that define shape using `content` and not `schema`
 
 ## Public API
 
