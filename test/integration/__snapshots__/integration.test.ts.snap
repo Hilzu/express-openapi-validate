@@ -119,5 +119,3 @@ Object {
   },
 }
 `;
-
-exports[`Integration tests with real app requests against /echo are validated correctly 2`] = `"No response object found with statusCode=400"`;

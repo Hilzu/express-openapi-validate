@@ -24,16 +24,15 @@ const validator = new OpenApiValidator(openApiDocument);
 
 describe("Integration tests with real app", () => {
   test("requests against /echo are validated correctly", async () => {
+    const validate = validator.validateResponse("post", "/echo");
+
     let res = await request(app)
       .post("/echo")
       .send({});
+    expect(validate(res)).toBeUndefined();
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("error");
     expect(res.body).toMatchSnapshot();
-    const validate = validator.validateResponse("post", "/echo");
-    expect(() => {
-      validate(res);
-    }).toThrowErrorMatchingSnapshot();
 
     res = await request(app)
       .post("/echo")

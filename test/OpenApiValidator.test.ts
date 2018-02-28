@@ -126,10 +126,6 @@ describe("OpenApiValidator", () => {
 
     const err = validate({ ...baseRes, body: { output: "echo" } });
     expect(err).toBeUndefined();
-
-    expect(() => {
-      validate({ ...baseRes, statusCode: 301 });
-    }).toThrowErrorMatchingSnapshot();
   });
 
   test("validating with schema as an internal reference", async () => {
@@ -423,7 +419,7 @@ describe("OpenApiValidator", () => {
 
   test("response validation with different status codes", () => {
     const validator = new OpenApiValidator(openApiDocument);
-    const validate = validator.validateResponse("post", "/responses");
+    let validate = validator.validateResponse("post", "/responses");
 
     expect(validate(baseRes)).toBeUndefined();
 
@@ -436,6 +432,11 @@ describe("OpenApiValidator", () => {
     ).toBeUndefined();
 
     expect(validate({ ...baseRes, statusCode: 303 })).toBeUndefined();
+
+    validate = validator.validateResponse("get", "/responses/no-default");
+    expect(() => {
+      validate({ ...baseReq, statusCode: 301 });
+    }).toThrowErrorMatchingSnapshot();
   });
 
   test("validating response headers", () => {

@@ -16,6 +16,26 @@ components:
       minLength: 3
       maxLength: 10
       pattern: "^[a-zA-Z]+$"
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+            message:
+              type: string
+            data:
+              type: array
+              items:
+                type: object
+          required:
+            - name
+            - message
+            - data
+      required:
+        - error
   parameters:
     hello:
       name: hello
@@ -24,6 +44,12 @@ components:
       schema:
         type: string
         minLength: 1
+  responses:
+    Error:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
 paths:
   /echo:
     post:
@@ -50,6 +76,8 @@ paths:
                     type: string
                 required:
                 - output
+        default:
+          $ref: "#/components/responses/Error"
   /internal-ref:
     post:
       responses:
@@ -241,6 +269,11 @@ paths:
                   - hello
         default:
           description: Default response
+  /responses/no-default:
+    get:
+      reponses:
+        200:
+          description: Response
   /responses/header:
     post:
       responses:
