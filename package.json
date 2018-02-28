@@ -52,7 +52,7 @@
     "express": "^4.16.2",
     "jest": "^22.4.2",
     "js-yaml": "^3.10.0",
-    "prettier": "1.11.0",
+    "prettier": "1.11.1",
     "supertest": "^3.0.0",
     "ts-jest": "^22.4.0",
     "tslint": "^5.9.1",
