@@ -114,14 +114,15 @@ paths:
   * Parameters and their schemas can be references to the Components Object
 * Validating response bodies and headers in tests (See [Responses
   Object][openapi-responses-object] and [Header Object][openapi-header-object])
+  * Response objects can be references
 * Typescript definitions are included in the package
 
 ### Currently unsupported features
 
 * Validating request bodies with media type other than `application/json` (See
   `content` under [Request Body Object][openapi-request-body-object])
-* Only schema objects, header objects and parameter objects are allowed to be
-  references currently
+* Only schema objects, header objects, response objects and parameter objects
+  are allowed to be references currently
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
 
