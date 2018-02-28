@@ -27,6 +27,8 @@ const baseReq: any = {
   params: {},
 };
 
+const baseRes = { statusCode: 200, body: {}, headers: {} };
+
 const createTestValidator = (
   document: OpenApiDocument,
   opts?: ValidatorConfig
@@ -119,14 +121,14 @@ describe("OpenApiValidator", () => {
     const validator = new OpenApiValidator(openApiDocument);
     const validate = validator.validateResponse("post", "/echo");
     expect(() => {
-      validate({ statusCode: 200, body: {} });
+      validate(baseRes);
     }).toThrowErrorMatchingSnapshot();
 
-    const err = validate({ statusCode: 200, body: { output: "echo" } });
+    const err = validate({ ...baseRes, body: { output: "echo" } });
     expect(err).toBeUndefined();
 
     expect(() => {
-      validate({ statusCode: 301, body: {} });
+      validate({ ...baseRes, statusCode: 301 });
     }).toThrowErrorMatchingSnapshot();
   });
 
@@ -381,7 +383,7 @@ describe("OpenApiValidator", () => {
     expect(err).toBeUndefined();
   });
 
-  test("response validation with different kinds of responses", () => {
+  test("response validation with different kinds of response objects", () => {
     const validator = new OpenApiValidator(openApiDocument);
 
     expect(() => {
@@ -398,22 +400,24 @@ describe("OpenApiValidator", () => {
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
-      validate({ stat: 200, body: {} });
+      validate({ stat: 200, body: {}, headers: {} });
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
-      validate({ status: 200 });
+      validate({ status: 200, headers: {} });
     }).toThrowErrorMatchingSnapshot();
 
-    expect(validate({ status: 200, data: {} })).toBeUndefined();
-    expect(validate({ statusCode: 500, body: {} })).toBeUndefined();
+    expect(validate({ status: 200, data: {}, headers: {} })).toBeUndefined();
+    expect(
+      validate({ statusCode: 500, body: {}, headers: {} })
+    ).toBeUndefined();
 
     const echoValidate = validator.validateResponse("post", "/echo");
     expect(
-      echoValidate({ status: 200, data: { output: "hello" } })
+      echoValidate({ status: 200, data: { output: "hello" }, headers: {} })
     ).toBeUndefined();
     expect(
-      echoValidate({ statusCode: 200, body: { output: "hello" } })
+      echoValidate({ statusCode: 200, body: { output: "hello" }, headers: {} })
     ).toBeUndefined();
   });
 
@@ -421,16 +425,43 @@ describe("OpenApiValidator", () => {
     const validator = new OpenApiValidator(openApiDocument);
     const validate = validator.validateResponse("post", "/responses");
 
-    expect(validate({ statusCode: 200, body: {} })).toBeUndefined();
+    expect(validate(baseRes)).toBeUndefined();
 
     expect(() => {
-      validate({ statusCode: 201, body: {} });
+      validate({ ...baseRes, statusCode: 201 });
     }).toThrowErrorMatchingSnapshot();
 
     expect(
-      validate({ statusCode: 201, body: { hello: "hola" } })
+      validate({ ...baseRes, statusCode: 201, body: { hello: "hola" } })
     ).toBeUndefined();
 
-    expect(validate({ statusCode: 303, body: {} })).toBeUndefined();
+    expect(validate({ ...baseRes, statusCode: 303 })).toBeUndefined();
+  });
+
+  test("validating response headers", () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validateResponse("post", "/responses/header");
+
+    expect(() => {
+      validate(baseRes);
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(
+      validate({ ...baseRes, headers: { "x-header": "heh" } })
+    ).toBeUndefined();
+
+    expect(() => {
+      validate({
+        ...baseRes,
+        headers: { "x-header": "heh", "x-ref-header": "as" },
+      });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(
+      validate({
+        ...baseRes,
+        headers: { "x-header": "heh", "x-ref-header": "asa" },
+      })
+    ).toBeUndefined();
   });
 });

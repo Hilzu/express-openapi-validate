@@ -241,3 +241,20 @@ paths:
                   - hello
         default:
           description: Default response
+  /responses/header:
+    post:
+      responses:
+        default:
+          description: Default response
+          headers:
+            X-HEADER:
+              required: true
+              schema:
+                type: string
+            X-Ref-Header:
+              schema:
+                $ref: "#/components/schemas/Tag"
+            content-type:
+              required: true
+            x-empty:
+              description: Empty header value

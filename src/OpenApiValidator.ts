@@ -58,7 +58,13 @@ const resolveResponse = (res: any) => {
   const statusCodeNum = Number(res.statusCode || res.status);
   const statusCode = Number.isNaN(statusCodeNum) ? null : statusCodeNum;
   const body = res.body || res.data;
-  return { statusCode, body };
+  const { headers } = res;
+  if (statusCode == null || body == null || headers == null) {
+    throw new TypeError(
+      "statusCode, body or header values not found from response"
+    );
+  }
+  return { statusCode, body, headers };
 };
 
 export interface ValidatorConfig {
@@ -133,36 +139,55 @@ export default class OpenApiValidator {
 
   public validateResponse(method: Operation, path: string): (res: any) => void {
     const operation = this._getOperationObject(method, path);
-    const validateResponse = (res: any) => {
-      const { statusCode, body } = resolveResponse(res);
-      if (statusCode == null || body == null) {
-        throw new Error("statusCode or body values not found from response");
-      }
+    const validateResponse = (userResponse: any) => {
+      const { statusCode, ...response } = resolveResponse(userResponse);
       const responseObject = this._getResponseObject(operation, statusCode);
       const bodySchema = _.get(
         responseObject,
         ["content", "application/json", "schema"],
         {}
       );
-      const schema = {
+
+      const headerObjectMap = _.get(responseObject, ["headers"], {});
+      const headersSchema = {
+        required: [] as string[],
+        type: "object",
+        properties: {},
+      };
+      Object.keys(headerObjectMap).forEach(key => {
+        const headerObject = headerObjectMap[key];
+        const name = key.toLowerCase();
+        if (name === "content-type") {
+          return;
+        }
+        if (headerObject.required === true) {
+          headersSchema.required.push(name);
+        }
+        (headersSchema.properties as any)[name] = resolveReference(
+          this._document,
+          headerObject.schema || {}
+        );
+      });
+
+      const schema = mapOasSchemaToJsonSchema({
         type: "object",
         properties: {
           body: resolveReference(this._document, bodySchema),
+          headers: headersSchema,
         },
-      };
-      const valid = this._ajv.validate(mapOasSchemaToJsonSchema(schema), {
-        body,
+        required: ["headers", "body"],
       });
-      if (valid) {
-        return;
+
+      const valid = this._ajv.validate(schema, response);
+      if (!valid) {
+        const errorText = this._ajv.errorsText(this._ajv.errors, {
+          dataVar: "response",
+        });
+        throw new ValidationError(
+          `Error while validating response: ${errorText}`,
+          this._ajv.errors as Ajv.ErrorObject[]
+        );
       }
-      const errorText = this._ajv.errorsText(this._ajv.errors, {
-        dataVar: "response",
-      });
-      throw new ValidationError(
-        `Error while validating response: ${errorText}`,
-        this._ajv.errors as Ajv.ErrorObject[]
-      );
     };
     return validateResponse;
   }

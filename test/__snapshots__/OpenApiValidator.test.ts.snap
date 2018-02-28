@@ -12,15 +12,15 @@ exports[`OpenApiValidator getting an operation object fails with invalid argumen
 
 exports[`OpenApiValidator getting an operation object fails with invalid arguments 3`] = `"Path=/echoo with method=post not found from OpenAPI document"`;
 
-exports[`OpenApiValidator response validation with different kinds of responses 1`] = `"Path=/echooo with method=post not found from OpenAPI document"`;
+exports[`OpenApiValidator response validation with different kinds of response objects 1`] = `"Path=/echooo with method=post not found from OpenAPI document"`;
 
-exports[`OpenApiValidator response validation with different kinds of responses 2`] = `"statusCode or body values not found from response"`;
+exports[`OpenApiValidator response validation with different kinds of response objects 2`] = `"statusCode, body or header values not found from response"`;
 
-exports[`OpenApiValidator response validation with different kinds of responses 3`] = `"Response was undefined"`;
+exports[`OpenApiValidator response validation with different kinds of response objects 3`] = `"Response was undefined"`;
 
-exports[`OpenApiValidator response validation with different kinds of responses 4`] = `"statusCode or body values not found from response"`;
+exports[`OpenApiValidator response validation with different kinds of response objects 4`] = `"statusCode, body or header values not found from response"`;
 
-exports[`OpenApiValidator response validation with different kinds of responses 5`] = `"statusCode or body values not found from response"`;
+exports[`OpenApiValidator response validation with different kinds of response objects 5`] = `"statusCode, body or header values not found from response"`;
 
 exports[`OpenApiValidator response validation with different status codes 1`] = `"Error while validating response: response.body should have required property 'hello'"`;
 
@@ -43,6 +43,10 @@ exports[`OpenApiValidator validating path parameters with a parameters schema 2`
 exports[`OpenApiValidator validating query parameters with internal references 1`] = `[ValidationError: Error while validating request: request.query.hello should NOT be shorter than 1 characters]`;
 
 exports[`OpenApiValidator validating query with a parameter schema 1`] = `[ValidationError: Error while validating request: request.query should have required property 'param']`;
+
+exports[`OpenApiValidator validating response headers 1`] = `"Error while validating response: response.headers should have required property 'x-header'"`;
+
+exports[`OpenApiValidator validating response headers 2`] = `"Error while validating response: response.headers['x-ref-header'] should NOT be shorter than 3 characters"`;
 
 exports[`OpenApiValidator validating response of echo endpoint 1`] = `"Error while validating response: response.body should have required property 'output'"`;
 
