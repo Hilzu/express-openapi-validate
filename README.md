@@ -112,6 +112,8 @@ paths:
     supported for parameters
   * `required` field for marking parameters that must be given is supported
   * Parameters and their schemas can be references to the Components Object
+* Validating response bodies and headers in tests (See [Responses
+  Object][openapi-responses-object] and [Header Object][openapi-header-object])
 * Typescript definitions are included in the package
 
 ### Currently unsupported features
@@ -257,11 +259,13 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 [openapi-data-types]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
 [openapi-fixed-fields]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#fixed-fields-20
 [openapi-formats]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
+[openapi-header-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#headerObject
 [openapi-operation-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#operationObject
-[openapi-path-item-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#path-item-object
 [openapi-parameter-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#parameterObject
-[openapi-request-body-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#request-body-object
+[openapi-path-item-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#path-item-object
 [openapi-reference-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#referenceObject
+[openapi-request-body-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#request-body-object
+[openapi-responses-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#responsesObject
 [openapi-schema-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#schemaObject
 [json-schema]: http://json-schema.org/
 [ajv]: http://epoberezkin.github.io/ajv/
