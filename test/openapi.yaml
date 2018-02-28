@@ -46,6 +46,7 @@ components:
         minLength: 1
   responses:
     Error:
+      description: Error response
       content:
         application/json:
           schema:
@@ -257,7 +258,7 @@ paths:
       responses:
         2XX:
           description: Generic 2xx response
-        201:
+        '201':
           description: Created response
           content:
             application/json:
@@ -271,8 +272,8 @@ paths:
           description: Default response
   /responses/no-default:
     get:
-      reponses:
-        200:
+      responses:
+        '200':
           description: Response
   /responses/header:
     post:
@@ -289,5 +290,10 @@ paths:
                 $ref: "#/components/schemas/Tag"
             content-type:
               required: true
+              schema:
+                type: string
             x-empty:
               description: Empty header value
+              content:
+                application/json:
+                  schema: {}
