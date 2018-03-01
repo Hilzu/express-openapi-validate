@@ -41,6 +41,7 @@ describe("schema utils module", () => {
               maxItems: 100,
             },
           },
+          nullable: true,
         },
       },
     };
@@ -65,6 +66,12 @@ describe("schema utils module", () => {
           type: "string",
           nullable: false,
         },
+        xyz: {
+          nullable: true,
+        },
+        xyz2: {
+          nullable: false,
+        },
       },
     };
     expect(schemaUtils.mapOasSchemaToJsonSchema(schema)).toEqual({
@@ -81,6 +88,8 @@ describe("schema utils module", () => {
         baz: {
           type: "string",
         },
+        xyz: {},
+        xyz2: {},
       },
     });
   });

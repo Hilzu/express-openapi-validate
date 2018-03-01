@@ -50,13 +50,14 @@ export const mapOasSchemaToJsonSchema = (originalSchema: Schema) => {
       throw new TypeError("Items field in schema must not be an array");
     }
 
-    if (schema.nullable !== undefined) {
-      if (schema.nullable) {
-        schema = assoc(schema, "type", [schema.type, "null"]);
-      }
-      schema = assoc(schema, "nullable", undefined);
+    // Need to figure out how to handle the case when nullable is false and
+    // there's no type specified. The OAS spec isn't explicit about that corner
+    // case. Setting type to an array with all the primitive types except null
+    // is one option but doesn't seem right. Do nothing for now.
+    if (schema.nullable === true && typeof schema.type === "string") {
+      schema = assoc(schema, "type", [schema.type, "null"]);
     }
-
+    _.unset(schema, ["nullable"]);
 
     return schema;
   };
