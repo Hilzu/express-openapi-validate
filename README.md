@@ -151,11 +151,17 @@ paths:
 
 * Validating request bodies with media type other than `application/json` (See
   `content` under [Request Body Object][openapi-request-body-object])
+* Some schema fields are unsupported
+  * `deprecated`
+  * `discriminator`
+  * `xml`
 * Only schema objects, header objects, response objects and parameter objects
   are allowed to be references currently
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
 * Header Objects that define shape using `content` and not `schema`
+* Links and callbacks (See [Callback Object][openapi-callback-object] and [Link Object][openapi-link-object])
+* Encodings (See [Encoding Object][openapi-encoding-object])
 
 ## Public API
 
@@ -285,11 +291,14 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 `ErrorObject`.
 
 [openapi-3]: https://github.com/OAI/OpenAPI-Specification
+[openapi-callback-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#callbackObject
 [openapi-components-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#componentsObject
 [openapi-data-types]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
+[openapi-encoding-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#encoding-object
 [openapi-fixed-fields]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#fixed-fields-20
 [openapi-formats]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
 [openapi-header-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#headerObject
+[openapi-link-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#linkObject
 [openapi-operation-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#operationObject
 [openapi-parameter-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#parameterObject
 [openapi-path-item-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#path-item-object
