@@ -30,7 +30,7 @@ export const walkSchema = (
   const schema = mapper(originalSchema);
   if (schema.items) {
     return assoc(schema, "items", walkSchema(schema.items, mapper));
-  } else if (schema.type === "object" || schema.properties) {
+  } else if (schema.properties) {
     return assoc(
       schema,
       "properties",
