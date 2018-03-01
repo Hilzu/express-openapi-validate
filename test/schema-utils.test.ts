@@ -18,7 +18,7 @@ import * as _ from "lodash";
 import * as schemaUtils from "../src/schema-utils";
 import openApiDocument from "./open-api-document";
 
-describe("schema module", () => {
+describe("schema utils module", () => {
   test("walkSchema returns the same schema that was passed in with identity function as the mapper", () => {
     const schema = {
       properties: {
@@ -83,6 +83,18 @@ describe("schema module", () => {
         },
       },
     });
+  });
+
+  test("map schema throws with invalid OAS schemas", () => {
+    expect(() => {
+      schemaUtils.mapOasSchemaToJsonSchema({ type: ["array", "null"] as any });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(() => {
+      schemaUtils.mapOasSchemaToJsonSchema({
+        items: [{ type: "string" }, { type: "number" }] as any,
+      });
+    }).toThrowErrorMatchingSnapshot();
   });
 
   test("resolveReference throws with unresolved $ref path", () => {

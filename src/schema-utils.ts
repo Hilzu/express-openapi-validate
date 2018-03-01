@@ -43,12 +43,21 @@ export const walkSchema = (
 export const mapOasSchemaToJsonSchema = (originalSchema: Schema) => {
   const mapOasFieldsToJsonSchemaFields = (s: Schema) => {
     let schema = s;
+    if (Array.isArray(schema.type)) {
+      throw new TypeError("Type field in schema must not be an array");
+    }
+    if (Array.isArray(schema.items)) {
+      throw new TypeError("Items field in schema must not be an array");
+    }
+
     if (schema.nullable !== undefined) {
       if (schema.nullable) {
         schema = assoc(schema, "type", [schema.type, "null"]);
       }
       schema = assoc(schema, "nullable", undefined);
     }
+
+
     return schema;
   };
   return walkSchema(originalSchema, mapOasFieldsToJsonSchemaFields);
