@@ -111,7 +111,9 @@ export default class OpenApiValidator {
     if (_.get(operation, ["requestBody", "required"]) === true) {
       schema.required.push("body");
     }
-    const validator = this._ajv.compile(mapOasSchemaToJsonSchema(schema));
+    const validator = this._ajv.compile(
+      mapOasSchemaToJsonSchema(schema, this._document)
+    );
 
     const validate: RequestHandler = (req, res, next) => {
       const reqToValidate = {
@@ -169,14 +171,17 @@ export default class OpenApiValidator {
         );
       });
 
-      const schema = mapOasSchemaToJsonSchema({
-        type: "object",
-        properties: {
-          body: resolveReference(this._document, bodySchema),
-          headers: headersSchema,
+      const schema = mapOasSchemaToJsonSchema(
+        {
+          type: "object",
+          properties: {
+            body: resolveReference(this._document, bodySchema),
+            headers: headersSchema,
+          },
+          required: ["headers", "body"],
         },
-        required: ["headers", "body"],
-      });
+        this._document
+      );
 
       const valid = this._ajv.validate(schema, response);
       if (!valid) {

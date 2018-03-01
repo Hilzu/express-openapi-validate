@@ -465,4 +465,22 @@ describe("OpenApiValidator", () => {
       })
     ).toBeUndefined();
   });
+
+  test("schemas with several references", async () => {
+    const validate = getValidator("post", "/schema-references");
+
+    let err = await validate({ body: { value: "1" } });
+    expect(err).toBeUndefined();
+
+    err = await validate({});
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ body: { value: "1", tag: "" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ body: { value: "1", tag: "abc" } });
+    expect(err).toBeUndefined();
+  });
 });

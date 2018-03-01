@@ -36,6 +36,16 @@ components:
             - data
       required:
         - error
+    Reffy:
+      type: object
+      properties:
+        tag:
+          $ref: "#/components/schemas/Tag"
+        value:
+          type: string
+          minLength: 1
+      required:
+        - value
   parameters:
     hello:
       name: hello
@@ -297,3 +307,14 @@ paths:
               content:
                 application/json:
                   schema: {}
+  /schema-references:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Reffy"
+      responses:
+        '200':
+          description: Response

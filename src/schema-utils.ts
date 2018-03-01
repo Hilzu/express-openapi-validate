@@ -23,47 +23,6 @@ import OpenApiDocument, {
 
 type Schema = SchemaObject;
 
-export const walkSchema = (
-  originalSchema: Schema,
-  mapper: (x: Schema) => Schema
-): Schema => {
-  const schema = mapper(originalSchema);
-  if (schema.items) {
-    return assoc(schema, "items", walkSchema(schema.items, mapper));
-  } else if (schema.properties) {
-    return assoc(
-      schema,
-      "properties",
-      _.mapValues(schema.properties, (x: Schema) => walkSchema(x, mapper))
-    );
-  }
-  return schema;
-};
-
-export const mapOasSchemaToJsonSchema = (originalSchema: Schema) => {
-  const mapOasFieldsToJsonSchemaFields = (s: Schema) => {
-    let schema = s;
-    if (Array.isArray(schema.type)) {
-      throw new TypeError("Type field in schema must not be an array");
-    }
-    if (Array.isArray(schema.items)) {
-      throw new TypeError("Items field in schema must not be an array");
-    }
-
-    // Need to figure out how to handle the case when nullable is false and
-    // there's no type specified. The OAS spec isn't explicit about that corner
-    // case. Setting type to an array with all the primitive types except null
-    // is one option but doesn't seem right. Do nothing for now.
-    if (schema.nullable === true && typeof schema.type === "string") {
-      schema = assoc(schema, "type", [schema.type, "null"]);
-    }
-    _.unset(schema, ["nullable"]);
-
-    return schema;
-  };
-  return walkSchema(originalSchema, mapOasFieldsToJsonSchemaFields);
-};
-
 const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
   (x as ReferenceObject).$ref !== undefined;
 
@@ -83,4 +42,48 @@ export const resolveReference = <T>(
     return resolvedObject;
   }
   return object;
+};
+
+export const walkSchema = (
+  originalSchema: Schema,
+  mapper: (x: Schema) => Schema
+): Schema => {
+  const schema = mapper(originalSchema);
+  if (schema.items) {
+    return assoc(schema, "items", walkSchema(schema.items, mapper));
+  } else if (schema.properties) {
+    return assoc(
+      schema,
+      "properties",
+      _.mapValues(schema.properties, (x: Schema) => walkSchema(x, mapper))
+    );
+  }
+  return schema;
+};
+
+export const mapOasSchemaToJsonSchema = (
+  originalSchema: Schema,
+  document: OpenApiDocument
+) => {
+  const mapOasFieldsToJsonSchemaFields = (s: Schema) => {
+    let schema = resolveReference(document, s);
+    if (Array.isArray(schema.type)) {
+      throw new TypeError("Type field in schema must not be an array");
+    }
+    if (Array.isArray(schema.items)) {
+      throw new TypeError("Items field in schema must not be an array");
+    }
+
+    // Need to figure out how to handle the case when nullable is false and
+    // there's no type specified. The OAS spec isn't explicit about that corner
+    // case. Setting type to an array with all the primitive types except null
+    // is one option but doesn't seem right. Do nothing for now.
+    if (schema.nullable === true && typeof schema.type === "string") {
+      schema = assoc(schema, "type", [schema.type, "null"]);
+    }
+    _.unset(schema, ["nullable"]);
+
+    return schema;
+  };
+  return walkSchema(originalSchema, mapOasFieldsToJsonSchemaFields);
 };
