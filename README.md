@@ -63,8 +63,36 @@ const server = app.listen(3000, () => {
 ```yaml
 openapi: 3.0.1
 info:
-  title: Example API
+  title: Example API with a single echo endpoint
   version: 1.0.0
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+            message:
+              type: string
+            data:
+              type: array
+              items:
+                type: object
+          required:
+            - name
+            - message
+      required:
+        - error
+  responses:
+    error:
+      description: Default error response with error object
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
 paths:
   /echo:
     post:
@@ -80,7 +108,7 @@ paths:
               required:
                 - input
       responses:
-        200:
+        "200":
           description: Echoed input
           content:
             application/json:
@@ -89,6 +117,8 @@ paths:
                 properties:
                   output:
                     type: string
+        default:
+          $ref: "#/components/responses/error"
 ```
 
 ## Supported features
