@@ -15,7 +15,7 @@
 */
 
 import * as _ from "lodash";
-import { assoc } from "./object-utils";
+import { assoc, dissoc } from "./object-utils";
 import OpenApiDocument, {
   ReferenceObject,
   SchemaObject,
@@ -81,7 +81,7 @@ export const mapOasSchemaToJsonSchema = (
     if (schema.nullable === true && typeof schema.type === "string") {
       schema = assoc(schema, "type", [schema.type, "null"]);
     }
-    _.unset(schema, ["nullable"]);
+    schema = dissoc(schema, "nullable");
 
     return schema;
   };
