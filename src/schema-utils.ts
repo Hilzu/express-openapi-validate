@@ -15,13 +15,11 @@
 */
 
 import * as _ from "lodash";
-import { assoc, dissoc } from "./object-utils";
+import { dissoc } from "./object-utils";
 import OpenApiDocument, {
   ReferenceObject,
   SchemaObject,
 } from "./OpenApiDocument";
-
-type Schema = SchemaObject;
 
 const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
   (x as ReferenceObject).$ref !== undefined;
@@ -44,28 +42,39 @@ export const resolveReference = <T>(
   return object;
 };
 
+const arrayFields = ["allOf", "anyOf", "oneOf"];
+const schemaFields = ["items", "not", "additionalProperties"];
+
 export const walkSchema = (
-  originalSchema: Schema,
-  mapper: (x: Schema) => Schema
-): Schema => {
-  const schema = mapper(originalSchema);
-  if (schema.items) {
-    return assoc(schema, "items", walkSchema(schema.items, mapper));
-  } else if (schema.properties) {
-    return assoc(
-      schema,
-      "properties",
-      _.mapValues(schema.properties, (x: Schema) => walkSchema(x, mapper))
-    );
+  originalSchema: SchemaObject,
+  mapper: (x: SchemaObject) => SchemaObject
+): SchemaObject => {
+  if (typeof originalSchema === "boolean") {
+    return originalSchema;
   }
+  let schema = mapper(originalSchema);
+  const walk = (s: SchemaObject) => walkSchema(s, mapper);
+
+  if (schema.properties !== undefined) {
+    schema = { ...schema, properties: _.mapValues(schema.properties, walk) };
+  }
+
+  arrayFields.filter(f => f in schema).forEach(f => {
+    schema = { ...schema, [f]: (schema as any)[f].map(walk) };
+  });
+
+  schemaFields.filter(f => f in schema).forEach(f => {
+    schema = { ...schema, [f]: walk((schema as any)[f]) };
+  });
+
   return schema;
 };
 
 export const mapOasSchemaToJsonSchema = (
-  originalSchema: Schema,
+  originalSchema: SchemaObject,
   document: OpenApiDocument
 ) => {
-  const mapOasFieldsToJsonSchemaFields = (s: Schema) => {
+  const mapOasFieldsToJsonSchemaFields = (s: SchemaObject) => {
     let schema = resolveReference(document, s);
     if (Array.isArray(schema.type)) {
       throw new TypeError("Type field in schema must not be an array");
@@ -79,7 +88,7 @@ export const mapOasSchemaToJsonSchema = (
     // case. Setting type to an array with all the primitive types except null
     // is one option but doesn't seem right. Do nothing for now.
     if (schema.nullable === true && typeof schema.type === "string") {
-      schema = assoc(schema, "type", [schema.type, "null"]);
+      schema = { ...schema, type: [schema.type, "null"] } as any;
     }
     schema = dissoc(schema, "nullable");
 

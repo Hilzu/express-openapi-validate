@@ -14,14 +14,7 @@
   limitations under the License.
 */
 
-export const assoc = <T, U extends object, K extends string>(
-  obj: U,
-  property: K,
-  value: T
-): Record<K, T> & U =>
-  // tslint:disable-next-line:prefer-object-spread
-  Object.assign({}, obj, { [property]: value }) as Record<K, T> & U;
-
+// eslint-disable-next-line import/prefer-default-export
 export const dissoc = <T>(obj: any, prop: string): T => {
   const result = { ...obj };
   delete result[prop];

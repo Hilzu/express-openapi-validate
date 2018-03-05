@@ -15,7 +15,11 @@
 */
 
 import * as _ from "lodash";
-import * as schemaUtils from "../src/schema-utils";
+import {
+  mapOasSchemaToJsonSchema,
+  resolveReference,
+  walkSchema,
+} from "../src/schema-utils";
 import openApiDocument from "./open-api-document";
 
 describe("schema utils module", () => {
@@ -45,7 +49,7 @@ describe("schema utils module", () => {
         },
       },
     };
-    expect(schemaUtils.walkSchema(schema, _.identity)).toEqual(schema);
+    expect(walkSchema(schema, _.identity)).toEqual(schema);
   });
 
   test("maps OAS nullable field to correct type array", () => {
@@ -74,7 +78,7 @@ describe("schema utils module", () => {
         },
       },
     };
-    expect(schemaUtils.mapOasSchemaToJsonSchema(schema, {} as any)).toEqual({
+    expect(mapOasSchemaToJsonSchema(schema, {} as any)).toEqual({
       properties: {
         foo: {
           type: ["number", "null"],
@@ -96,14 +100,11 @@ describe("schema utils module", () => {
 
   test("map schema throws with invalid OAS schemas", () => {
     expect(() => {
-      schemaUtils.mapOasSchemaToJsonSchema(
-        { type: ["array", "null"] as any },
-        {} as any
-      );
+      mapOasSchemaToJsonSchema({ type: ["array", "null"] as any }, {} as any);
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
-      schemaUtils.mapOasSchemaToJsonSchema(
+      mapOasSchemaToJsonSchema(
         {
           items: [{ type: "string" }, { type: "number" }] as any,
         },
@@ -114,7 +115,7 @@ describe("schema utils module", () => {
 
   test("resolveReference throws with unresolved $ref path", () => {
     expect(() => {
-      schemaUtils.resolveReference(openApiDocument, {
+      resolveReference(openApiDocument, {
         $ref: "#/components/schemas/Testt",
       });
     }).toThrowErrorMatchingSnapshot();
@@ -122,7 +123,48 @@ describe("schema utils module", () => {
 
   test("resolveReference throws with unsupported $ref", () => {
     expect(() => {
-      schemaUtils.resolveReference(openApiDocument, { $ref: "#/a/b/C" });
+      resolveReference(openApiDocument, { $ref: "#/a/b/C" });
     }).toThrowErrorMatchingSnapshot();
+  });
+
+  test("map schema with several child schemas", () => {
+    const schema = {
+      properties: {
+        a: {
+          type: "string",
+          nullable: true,
+        },
+        b: {
+          oneOf: [{ type: "string", nullable: true }, { type: "number" }],
+        },
+        c: {
+          type: "object",
+          additionalProperties: { type: "string", nullable: true },
+        },
+      },
+      items: {
+        type: "number",
+        nullable: true,
+      },
+      additionalProperties: false,
+    };
+    expect(mapOasSchemaToJsonSchema(schema, {} as any)).toEqual({
+      properties: {
+        a: {
+          type: ["string", "null"],
+        },
+        b: {
+          oneOf: [{ type: ["string", "null"] }, { type: "number" }],
+        },
+        c: {
+          type: "object",
+          additionalProperties: { type: ["string", "null"] },
+        },
+      },
+      items: {
+        type: ["number", "null"],
+      },
+      additionalProperties: false,
+    });
   });
 });

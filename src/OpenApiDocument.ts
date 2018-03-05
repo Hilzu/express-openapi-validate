@@ -40,6 +40,11 @@ export interface SchemaObject {
   properties?: { [property: string]: SchemaObject };
   nullable?: boolean;
   required?: string[];
+  allOf?: SchemaObject[];
+  anyOf?: SchemaObject[];
+  oneOf?: SchemaObject[];
+  not?: SchemaObject;
+  additionalProperties?: boolean | SchemaObject;
 }
 
 export interface ComponentsObject {
