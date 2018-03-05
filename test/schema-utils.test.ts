@@ -74,7 +74,7 @@ describe("schema utils module", () => {
         },
       },
     };
-    expect(schemaUtils.mapOasSchemaToJsonSchema(schema)).toEqual({
+    expect(schemaUtils.mapOasSchemaToJsonSchema(schema, {} as any)).toEqual({
       properties: {
         foo: {
           type: ["number", "null"],
@@ -96,13 +96,19 @@ describe("schema utils module", () => {
 
   test("map schema throws with invalid OAS schemas", () => {
     expect(() => {
-      schemaUtils.mapOasSchemaToJsonSchema({ type: ["array", "null"] as any });
+      schemaUtils.mapOasSchemaToJsonSchema(
+        { type: ["array", "null"] as any },
+        {} as any
+      );
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
-      schemaUtils.mapOasSchemaToJsonSchema({
-        items: [{ type: "string" }, { type: "number" }] as any,
-      });
+      schemaUtils.mapOasSchemaToJsonSchema(
+        {
+          items: [{ type: "string" }, { type: "number" }] as any,
+        },
+        {} as any
+      );
     }).toThrowErrorMatchingSnapshot();
   });
 
