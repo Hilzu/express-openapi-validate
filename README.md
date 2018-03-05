@@ -160,7 +160,8 @@ paths:
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
 * Header Objects that define shape using `content` and not `schema`
-* Links and callbacks (See [Callback Object][openapi-callback-object] and [Link Object][openapi-link-object])
+* Links and callbacks (See [Callback Object][openapi-callback-object] and [Link
+  Object][openapi-link-object])
 * Encodings (See [Encoding Object][openapi-encoding-object])
 
 ## Public API
