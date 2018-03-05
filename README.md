@@ -140,7 +140,7 @@ paths:
   * `required` field for marking parameters that must be given is supported
 * Validating response bodies and headers in tests (See [Responses
   Object][openapi-responses-object] and [Header Object][openapi-header-object])
-* References to [`Components Object`][openapi-components-object] (See [Reference
+* References to [Components Object][openapi-components-object] (See [Reference
   Object][openapi-reference-object])
 * Typescript definitions are included in the package
 
@@ -148,18 +148,21 @@ paths:
 
 * Validating request bodies with media type other than `application/json` (See
   `content` under [Request Body Object][openapi-request-body-object])
-* Some schema fields are unsupported
+* Some [OpenAPI Schema Object specific fields][openapi-fixed-fields] are
+  unsupported:
   * `deprecated`
   * `discriminator`
   * `xml`
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
-* Header Objects that define shape using `content` instead of `schema`
+* [Parameter Objects][openapi-parameter-objects] (including [Header
+  Objects][openapi-header-object]) that define shape using `content` and `style`
+  (only `schema` is supported)
 * Links and callbacks (See [Callback Object][openapi-callback-object] and [Link
   Object][openapi-link-object])
 * Encodings (See [Encoding Object][openapi-encoding-object])
-* Parameters defined in a Path Item Object (parameters that apply to all
-  operations under a path).
+* Parameters defined in a [Path Item Object][openapi-path-item-object]
+  (parameters that apply to all operations under a path).
 
 ## Public API
 
