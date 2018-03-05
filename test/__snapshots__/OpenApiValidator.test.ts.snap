@@ -26,6 +26,10 @@ exports[`OpenApiValidator response validation with different status codes 1`] = 
 
 exports[`OpenApiValidator response validation with different status codes 2`] = `"No response object found with statusCode=301"`;
 
+exports[`OpenApiValidator schemas with request body and headers references 1`] = `[ValidationError: Error while validating request: request.body.ping should be equal to constant]`;
+
+exports[`OpenApiValidator schemas with request body and headers references 2`] = `"Error while validating response: response.headers['x-hullo'] should NOT be shorter than 2 characters"`;
+
 exports[`OpenApiValidator schemas with several references 1`] = `[ValidationError: Error while validating request: request.body should have required property 'value']`;
 
 exports[`OpenApiValidator schemas with several references 2`] = `[ValidationError: Error while validating request: request.body.tag should NOT be shorter than 3 characters]`;

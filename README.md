@@ -133,18 +133,15 @@ paths:
   * Validation according to `format` including additional data type formats
     (like int32 and bytes) defined by OpenAPI (See [OpenAPI data
     types][openapi-data-types] and [Ajv formats][ajv-formats])
-  * Schemas that are references to the [Components
-    Object][openapi-components-object] are supported (See [Reference
-    Object][openapi-reference-object])
 * Validating parameters: query, header, path and cookies (including signed
   cookies) (See [Parameter Object][openapi-parameter-object])
   * The same `schema` features that are supported for request bodies are also
     supported for parameters
   * `required` field for marking parameters that must be given is supported
-  * Parameters and their schemas can be references to the Components Object
 * Validating response bodies and headers in tests (See [Responses
   Object][openapi-responses-object] and [Header Object][openapi-header-object])
-  * Response objects can be references
+* References to [`Components Object`][openapi-components-object] (See [Reference
+  Object][openapi-reference-object])
 * Typescript definitions are included in the package
 
 ### Currently unsupported features
@@ -155,8 +152,6 @@ paths:
   * `deprecated`
   * `discriminator`
   * `xml`
-* Only schema objects, header objects, response objects and parameter objects
-  are allowed to be references currently
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
 * Header Objects that define shape using `content` and not `schema`

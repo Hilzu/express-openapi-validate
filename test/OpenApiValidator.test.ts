@@ -483,4 +483,28 @@ describe("OpenApiValidator", () => {
     err = await validate({ body: { value: "1", tag: "abc" } });
     expect(err).toBeUndefined();
   });
+
+  test("schemas with request body and headers references", async () => {
+    const validate = getValidator("post", "/more-references");
+
+    let err = await validate({ body: { ping: "asd" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ body: { ping: "pong" } });
+    expect(err).toBeUndefined();
+
+    const validator = new OpenApiValidator(openApiDocument);
+    const validateResponse = validator.validateResponse(
+      "post",
+      "/more-references"
+    );
+    expect(() => {
+      validateResponse({ ...baseRes, headers: { "x-hullo": "a" } });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(
+      validateResponse({ ...baseRes, headers: { "x-hullo": "aa" } })
+    ).toBeUndefined();
+  });
 });

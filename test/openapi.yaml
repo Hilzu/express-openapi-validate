@@ -61,6 +61,25 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
+  requestBodies:
+    pong:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ping:
+                type: string
+                const: pong
+            additionalProperties: false
+            required:
+              - ping
+  headers:
+    hullo:
+      schema:
+        type: string
+        minLength: 2
 paths:
   /echo:
     post:
@@ -318,3 +337,13 @@ paths:
       responses:
         '200':
           description: Response
+  /more-references:
+    post:
+      requestBody:
+        $ref: "#/components/requestBodies/pong"
+      responses:
+        '200':
+          description: Response
+          headers:
+            x-hullo:
+              $ref: "#/components/headers/hullo"

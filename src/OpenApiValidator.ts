@@ -92,9 +92,13 @@ export default class OpenApiValidator {
 
   public validate(method: Operation, path: string): RequestHandler {
     const operation = this._getOperationObject(method, path);
+    const requestBodyObject = resolveReference(
+      this._document,
+      _.get(operation, ["requestBody"], {})
+    );
     const bodySchema = _.get(
-      operation,
-      ["requestBody", "content", "application/json", "schema"],
+      requestBodyObject,
+      ["content", "application/json", "schema"],
       {}
     );
     const parametersSchema = this._parameterObjectsToSchema(operation);
@@ -108,7 +112,7 @@ export default class OpenApiValidator {
     if (!_.isEmpty(parametersSchema.cookies)) {
       schema.required.push("cookies");
     }
-    if (_.get(operation, ["requestBody", "required"]) === true) {
+    if (_.get(requestBodyObject, ["required"]) === true) {
       schema.required.push("body");
     }
     const validator = this._ajv.compile(
@@ -157,7 +161,10 @@ export default class OpenApiValidator {
         properties: {},
       };
       Object.keys(headerObjectMap).forEach(key => {
-        const headerObject = headerObjectMap[key];
+        const headerObject = resolveReference(
+          this._document,
+          headerObjectMap[key]
+        );
         const name = key.toLowerCase();
         if (name === "content-type") {
           return;
