@@ -71,7 +71,8 @@ components:
             properties:
               ping:
                 type: string
-                const: pong
+                enum:
+                  - pong
             additionalProperties: false
             required:
               - ping
