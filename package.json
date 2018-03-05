@@ -31,6 +31,11 @@
     "pretest:jest": "yarn build",
     "test:jest": "jest"
   },
+  "files": [
+    "dist",
+    "src",
+    "test"
+  ],
   "dependencies": {
     "ajv": "^6.2.1",
     "lodash": "^4.17.5",
