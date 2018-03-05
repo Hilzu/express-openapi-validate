@@ -154,10 +154,12 @@ paths:
   * `xml`
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
-* Header Objects that define shape using `content` and not `schema`
+* Header Objects that define shape using `content` instead of `schema`
 * Links and callbacks (See [Callback Object][openapi-callback-object] and [Link
   Object][openapi-link-object])
 * Encodings (See [Encoding Object][openapi-encoding-object])
+* Parameters defined in a Path Item Object (parameters that apply to all
+  operations under a path).
 
 ## Public API
 
