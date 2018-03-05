@@ -155,7 +155,7 @@ paths:
   * `xml`
 * External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
-* [Parameter Objects][openapi-parameter-objects] (including [Header
+* [Parameter Objects][openapi-parameter-object] (including [Header
   Objects][openapi-header-object]) that define shape using `content` and `style`
   (only `schema` is supported)
 * Links and callbacks (See [Callback Object][openapi-callback-object] and [Link
