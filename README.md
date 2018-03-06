@@ -127,7 +127,10 @@ paths:
   Object][openapi-request-body-object] and [Schema
   Object][openapi-schema-object])
   * All schema properties in a Schema Object that are directly supported by
-    [JSON Schema][json-schema] and [Ajv][ajv] are used in validation.
+    [JSON Schema][json-schema] and [Ajv][ajv] are used in validation
+  * Schemas are validated according to [JSON Schema Specification Wright Draft
+    00][json-schema-validation-05] (draft-04/05) as specified in [OpenAPI
+    specification][openapi-data-types]
   * `nullable` field for handling properties that can be null is supported (See
     [OpenAPI fixed fields][openapi-fixed-fields])
   * Validation according to `format` including additional data type formats
@@ -308,6 +311,7 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 [openapi-responses-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#responsesObject
 [openapi-schema-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#schemaObject
 [json-schema]: http://json-schema.org/
+[json-schema-validation-05]: https://tools.ietf.org/html/draft-wright-json-schema-validation-00
 [ajv]: http://epoberezkin.github.io/ajv/
 [ajv-error-objects]: http://epoberezkin.github.io/ajv/#error-objects
 [ajv-formats]: http://epoberezkin.github.io/ajv/#formats
