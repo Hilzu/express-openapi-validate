@@ -466,6 +466,23 @@ describe("OpenApiValidator", () => {
     ).toBeUndefined();
   });
 
+  test("validating response headers with several required headers", () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const validate = validator.validateResponse("post", "/responses/header2");
+
+    expect(() => {
+      validate(baseRes);
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(() => {
+      validate({ ...baseRes, headers: { "x-1": "a" } });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(
+      validate({ ...baseRes, headers: { "x-1": "a", "x-2": "b" } })
+    ).toBeUndefined();
+  });
+
   test("schemas with several references", async () => {
     const validate = getValidator("post", "/schema-references");
 

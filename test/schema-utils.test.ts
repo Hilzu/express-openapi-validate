@@ -79,6 +79,7 @@ describe("schema utils module", () => {
       },
     };
     expect(mapOasSchemaToJsonSchema(schema, {} as any)).toEqual({
+      $schema: "http://json-schema.org/draft-04/schema#",
       properties: {
         foo: {
           type: ["number", "null"],
@@ -149,6 +150,7 @@ describe("schema utils module", () => {
       additionalProperties: false,
     };
     expect(mapOasSchemaToJsonSchema(schema, {} as any)).toEqual({
+      $schema: "http://json-schema.org/draft-04/schema#",
       properties: {
         a: {
           type: ["string", "null"],

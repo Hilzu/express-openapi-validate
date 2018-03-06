@@ -116,10 +116,7 @@
       "no-underscore-dangle": "off",
       "no-unused-vars": "off",
       "no-useless-constructor": "off",
-      "strict": [
-        "error",
-        "global"
-      ]
+      "strict": "off"
     }
   },
   "jest": {

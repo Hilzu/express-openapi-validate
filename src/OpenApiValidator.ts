@@ -15,6 +15,7 @@
 */
 
 import * as Ajv from "ajv";
+import * as draft04Schema from "ajv/lib/refs/json-schema-draft-04.json";
 // eslint-disable-next-line
 import { RequestHandler } from "express";
 import * as _ from "lodash";
@@ -84,11 +85,17 @@ export default class OpenApiValidator {
     }
     this._document = openApiDocument;
     const userAjvFormats = _.get(options, ["ajvOptions", "formats"], {});
-    const ajvOptions = {
+    const ajvOptions: Ajv.Options = {
       ...options.ajvOptions,
       formats: { ...formats, ...userAjvFormats },
+      schemaId: "id",
+      meta: false,
     };
     this._ajv = new Ajv(ajvOptions);
+    this._ajv.removeKeyword("propertyNames");
+    this._ajv.removeKeyword("contains");
+    this._ajv.removeKeyword("const");
+    this._ajv.addMetaSchema(draft04Schema);
   }
 
   public validate(method: Operation, path: string): RequestHandler {
@@ -156,8 +163,7 @@ export default class OpenApiValidator {
       );
 
       const headerObjectMap = _.get(responseObject, ["headers"], {});
-      const headersSchema = {
-        required: [] as string[],
+      const headersSchema: SchemaObject = {
         type: "object",
         properties: {},
       };
@@ -171,6 +177,9 @@ export default class OpenApiValidator {
           return;
         }
         if (headerObject.required === true) {
+          if (!Array.isArray(headersSchema.required)) {
+            headersSchema.required = [];
+          }
           headersSchema.required.push(name);
         }
         (headersSchema.properties as any)[name] = resolveReference(

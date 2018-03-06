@@ -49,9 +49,6 @@ export const walkSchema = (
   originalSchema: SchemaObject,
   mapper: (x: SchemaObject) => SchemaObject
 ): SchemaObject => {
-  if (typeof originalSchema === "boolean") {
-    return originalSchema;
-  }
   let schema = mapper(originalSchema);
   const walk = (s: SchemaObject) => walkSchema(s, mapper);
 
@@ -64,7 +61,11 @@ export const walkSchema = (
   });
 
   schemaFields.filter(f => f in schema).forEach(f => {
-    schema = { ...schema, [f]: walk((schema as any)[f]) };
+    const nestedSchema = (schema as any)[f];
+    if (f === "additionalProperties" && typeof nestedSchema === "boolean") {
+      return;
+    }
+    schema = { ...schema, [f]: walk(nestedSchema) };
   });
 
   return schema;
@@ -94,5 +95,7 @@ export const mapOasSchemaToJsonSchema = (
 
     return schema;
   };
-  return walkSchema(originalSchema, mapOasFieldsToJsonSchemaFields);
+  const jsonSchema = walkSchema(originalSchema, mapOasFieldsToJsonSchemaFields);
+  (jsonSchema as any).$schema = "http://json-schema.org/draft-04/schema#";
+  return jsonSchema;
 };

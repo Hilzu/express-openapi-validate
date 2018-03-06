@@ -327,6 +327,20 @@ paths:
               content:
                 application/json:
                   schema: {}
+  /responses/header2:
+    post:
+      responses:
+        '200':
+          description: Response
+          headers:
+            X-1:
+              required: true
+              schema:
+                type: string
+            x-2:
+              required: true
+              schema:
+                type: string
   /schema-references:
     post:
       requestBody:
