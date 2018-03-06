@@ -20,6 +20,7 @@ import { RequestHandler } from "express";
 import * as _ from "lodash";
 import * as semver from "semver";
 
+import debug from "./debug";
 import * as formats from "./formats";
 import OpenApiDocument, {
   Operation,
@@ -115,9 +116,9 @@ export default class OpenApiValidator {
     if (_.get(requestBodyObject, ["required"]) === true) {
       schema.required.push("body");
     }
-    const validator = this._ajv.compile(
-      mapOasSchemaToJsonSchema(schema, this._document)
-    );
+    const jsonSchema = mapOasSchemaToJsonSchema(schema, this._document);
+    const validator = this._ajv.compile(jsonSchema);
+    debug(`Request JSON Schema for ${method} ${path}: %j`, jsonSchema);
 
     const validate: RequestHandler = (req, res, next) => {
       const reqToValidate = {
@@ -188,6 +189,11 @@ export default class OpenApiValidator {
           required: ["headers", "body"],
         },
         this._document
+      );
+
+      debug(
+        `Response JSON Schema for ${method} ${path} ${statusCode}: %j`,
+        schema
       );
 
       const valid = this._ajv.validate(schema, response);
