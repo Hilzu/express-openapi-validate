@@ -14,7 +14,8 @@
   limitations under the License.
 */
 
+import OpenApiDocument from "./OpenApiDocument";
 import OpenApiValidator from "./OpenApiValidator";
 import ValidationError from "./ValidationError";
 
-export { OpenApiValidator, ValidationError };
+export { OpenApiDocument, OpenApiValidator, ValidationError };
