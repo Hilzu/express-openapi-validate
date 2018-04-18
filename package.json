@@ -67,7 +67,7 @@
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.9.0",
     "typescript": "^2.7.2",
-    "typescript-eslint-parser": "^14.0.0"
+    "typescript-eslint-parser": "^15.0.0"
   },
   "eslintConfig": {
     "extends": [
