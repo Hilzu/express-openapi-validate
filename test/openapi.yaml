@@ -187,6 +187,37 @@ paths:
       responses:
         '200':
           description: Response
+  /parameters/all-operations-id/{pid}:
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: "^[0-9]+$"
+    get:
+      responses:
+        '200':
+          description: Response
+  /parameters/both-all-operations-id/{pid}/{id}:
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: "^[0-9]+$"
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^[0-9]+$"
+      responses:
+        '200':
+          description: Response
   /nullable:
     post:
       requestBody:
