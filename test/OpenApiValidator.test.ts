@@ -202,6 +202,24 @@ describe("OpenApiValidator", () => {
     expect(err).toMatchSnapshot();
   });
 
+  test("validating path parameters with a parameters schema in paths object", async () => {
+    const validate = getValidator("get", "/parameters/all-operations-id/{pid}");
+    const err = await validate({ params: { pid: "abc" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+  });
+
+  test("validating path parameters with a parameters schema in both", async () => {
+    const validate = getValidator("get", "/parameters/both-all-operations-id/{pid}/{id}");
+    let err = await validate({ params: { pid: "123" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+    
+    err = await validate({ params: { id: "123" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+  });
+
   test("validating bodies with null fields and nullable property is schema", async () => {
     const validate = getValidator("post", "/nullable");
     let err = await validate({ body: { bar: null } });

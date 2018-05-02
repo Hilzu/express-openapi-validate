@@ -273,7 +273,16 @@ export default class OpenApiValidator {
     path: string
   ): OperationObject {
     if (_.has(this._document, ["paths", path, method])) {
-      return this._document.paths[path][method] as OperationObject;
+      const operationObject: any = {...this._document.paths[path][method]};
+      const pathParameters = this._document.paths[path].parameters;
+      if (Array.isArray(pathParameters)) {
+        if (!Array.isArray(operationObject.parameters)) {
+          operationObject.parameters = [];
+        }
+        operationObject.parameters = 
+          operationObject.parameters.concat(pathParameters);
+      }
+      return operationObject as OperationObject;
     }
     throw new Error(
       `Path=${path} with method=${method} not found from OpenAPI document`
