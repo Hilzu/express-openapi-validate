@@ -210,11 +210,14 @@ describe("OpenApiValidator", () => {
   });
 
   test("validating path parameters with a parameters schema in both", async () => {
-    const validate = getValidator("get", "/parameters/both-all-operations-id/{pid}/{id}");
+    const validate = getValidator(
+      "get",
+      "/parameters/both-all-operations-id/{pid}/{id}"
+    );
     let err = await validate({ params: { pid: "123" } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
-    
+
     err = await validate({ params: { id: "123" } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();

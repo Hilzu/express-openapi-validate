@@ -28,7 +28,8 @@
     "lint:eslint": "eslint --ext js,ts .",
     "lint:tslint": "tslint --project tsconfig.json",
     "prepublishOnly": "yarn test",
-    "test": "yarn lint && yarn test:jest",
+    "test": "yarn lint && yarn test:jest && yarn test:format",
+    "test:format": "yarn format --list-different",
     "pretest:jest": "yarn build",
     "test:jest": "jest"
   },

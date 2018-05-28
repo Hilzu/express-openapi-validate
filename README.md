@@ -123,48 +123,48 @@ paths:
 
 ## Supported features
 
-* Validating request bodies with a schema (See [Request Body
+- Validating request bodies with a schema (See [Request Body
   Object][openapi-request-body-object] and [Schema
   Object][openapi-schema-object])
-  * All schema properties in a Schema Object that are directly supported by
+  - All schema properties in a Schema Object that are directly supported by
     [JSON Schema][json-schema] and [Ajv][ajv] are used in validation
-  * Schemas are validated according to [JSON Schema Specification Wright Draft
+  - Schemas are validated according to [JSON Schema Specification Wright Draft
     00][json-schema-validation-05] (draft-04/05) as specified in [OpenAPI
     specification][openapi-data-types]
-  * `nullable` field for handling properties that can be null is supported (See
+  - `nullable` field for handling properties that can be null is supported (See
     [OpenAPI fixed fields][openapi-fixed-fields])
-  * Validation according to `format` including additional data type formats
+  - Validation according to `format` including additional data type formats
     (like int32 and bytes) defined by OpenAPI (See [OpenAPI data
     types][openapi-data-types] and [Ajv formats][ajv-formats])
-* Validating parameters: query, header, path and cookies (including signed
+- Validating parameters: query, header, path and cookies (including signed
   cookies) (See [Parameter Object][openapi-parameter-object])
-  * The same `schema` features that are supported for request bodies are also
+  - The same `schema` features that are supported for request bodies are also
     supported for parameters
-  * `required` field for marking parameters that must be given is supported
-* Validating response bodies and headers in tests (See [Responses
+  - `required` field for marking parameters that must be given is supported
+- Validating response bodies and headers in tests (See [Responses
   Object][openapi-responses-object] and [Header Object][openapi-header-object])
-* References to [Components Object][openapi-components-object] (See [Reference
+- References to [Components Object][openapi-components-object] (See [Reference
   Object][openapi-reference-object])
-* Typescript definitions are included in the package
+- Typescript definitions are included in the package
 
 ### Currently unsupported features
 
-* Validating request bodies with media type other than `application/json` (See
+- Validating request bodies with media type other than `application/json` (See
   `content` under [Request Body Object][openapi-request-body-object])
-* Some [OpenAPI Schema Object specific fields][openapi-fixed-fields] are
+- Some [OpenAPI Schema Object specific fields][openapi-fixed-fields] are
   unsupported:
-  * `deprecated`
-  * `discriminator`
-  * `xml`
-* External references (references to other files and network resources) (See
+  - `deprecated`
+  - `discriminator`
+  - `xml`
+- External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
-* [Parameter Objects][openapi-parameter-object] (including [Header
+- [Parameter Objects][openapi-parameter-object] (including [Header
   Objects][openapi-header-object]) that define shape using `content` and `style`
   (only `schema` is supported)
-* Links and callbacks (See [Callback Object][openapi-callback-object] and [Link
+- Links and callbacks (See [Callback Object][openapi-callback-object] and [Link
   Object][openapi-link-object])
-* Encodings (See [Encoding Object][openapi-encoding-object])
-* Parameters defined in a [Path Item Object][openapi-path-item-object]
+- Encodings (See [Encoding Object][openapi-encoding-object])
+- Parameters defined in a [Path Item Object][openapi-path-item-object]
   (parameters that apply to all operations under a path).
 
 ## Public API
@@ -295,23 +295,39 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 `ErrorObject`.
 
 [openapi-3]: https://github.com/OAI/OpenAPI-Specification
-[openapi-callback-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#callbackObject
-[openapi-components-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#componentsObject
-[openapi-data-types]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
-[openapi-encoding-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#encoding-object
-[openapi-fixed-fields]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#fixed-fields-20
-[openapi-formats]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
-[openapi-header-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#headerObject
-[openapi-link-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#linkObject
-[openapi-operation-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#operationObject
-[openapi-parameter-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#parameterObject
-[openapi-path-item-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#path-item-object
-[openapi-reference-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#referenceObject
-[openapi-request-body-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#request-body-object
-[openapi-responses-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#responsesObject
-[openapi-schema-object]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#schemaObject
+[openapi-callback-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#callbackObject
+[openapi-components-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#componentsObject
+[openapi-data-types]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
+[openapi-encoding-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#encoding-object
+[openapi-fixed-fields]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#fixed-fields-20
+[openapi-formats]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#data-types
+[openapi-header-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#headerObject
+[openapi-link-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#linkObject
+[openapi-operation-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#operationObject
+[openapi-parameter-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#parameterObject
+[openapi-path-item-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#path-item-object
+[openapi-reference-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#referenceObject
+[openapi-request-body-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#request-body-object
+[openapi-responses-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#responsesObject
+[openapi-schema-object]:
+  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#schemaObject
 [json-schema]: http://json-schema.org/
-[json-schema-validation-05]: https://tools.ietf.org/html/draft-wright-json-schema-validation-00
+[json-schema-validation-05]:
+  https://tools.ietf.org/html/draft-wright-json-schema-validation-00
 [ajv]: http://epoberezkin.github.io/ajv/
 [ajv-error-objects]: http://epoberezkin.github.io/ajv/#error-objects
 [ajv-formats]: http://epoberezkin.github.io/ajv/#formats

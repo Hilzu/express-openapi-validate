@@ -273,14 +273,15 @@ export default class OpenApiValidator {
     path: string
   ): OperationObject {
     if (_.has(this._document, ["paths", path, method])) {
-      const operationObject: any = {...this._document.paths[path][method]};
+      const operationObject: any = { ...this._document.paths[path][method] };
       const pathParameters = this._document.paths[path].parameters;
       if (Array.isArray(pathParameters)) {
         if (!Array.isArray(operationObject.parameters)) {
           operationObject.parameters = [];
         }
-        operationObject.parameters = 
-          operationObject.parameters.concat(pathParameters);
+        operationObject.parameters = operationObject.parameters.concat(
+          pathParameters
+        );
       }
       return operationObject as OperationObject;
     }

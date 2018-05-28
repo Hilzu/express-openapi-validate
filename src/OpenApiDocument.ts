@@ -23,7 +23,7 @@ export default interface OpenApiDocument {
   security?: any[];
   tags?: any[];
   externalDocs?: any;
-};
+}
 
 export interface InfoObject {
   title: string;
