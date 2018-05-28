@@ -14,8 +14,8 @@
   limitations under the License.
 */
 
-import * as cookieParser from "cookie-parser";
-import * as express from "express";
+import cookieParser from "cookie-parser";
+import express from "express";
 import { OpenApiValidator } from "../../dist"; // eslint-disable-line
 import openApiDocument from "../open-api-document";
 

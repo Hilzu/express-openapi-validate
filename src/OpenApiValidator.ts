@@ -14,8 +14,8 @@
   limitations under the License.
 */
 
-import * as Ajv from "ajv";
-import * as draft04Schema from "ajv/lib/refs/json-schema-draft-04.json";
+import Ajv from "ajv";
+import draft04Schema from "ajv/lib/refs/json-schema-draft-04.json";
 // eslint-disable-next-line
 import { RequestHandler } from "express";
 import * as _ from "lodash";

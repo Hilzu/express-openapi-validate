@@ -14,6 +14,6 @@
   limitations under the License.
 */
 
-import * as debug from "debug";
+import debug from "debug";
 
 export default debug("express-openapi-validate");

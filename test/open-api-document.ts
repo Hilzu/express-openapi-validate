@@ -14,11 +14,12 @@
   limitations under the License.
 */
 
-import * as fs from "fs";
-import * as jsYaml from "js-yaml";
+import fs from "fs";
+import jsYaml from "js-yaml";
+import OpenApiDocument from "../src/OpenApiDocument";
 
 const openApiDocument = jsYaml.safeLoad(
   fs.readFileSync("./test/openapi.yaml", "utf-8")
 );
 
-export default openApiDocument;
+export default openApiDocument as OpenApiDocument;

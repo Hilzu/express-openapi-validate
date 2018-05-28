@@ -14,11 +14,11 @@
   limitations under the License.
 */
 
-import * as request from "supertest";
-import app from "./app";
-import openApiDocument from "../open-api-document";
+import request from "supertest";
 // eslint-disable-next-line
 import OpenApiValidator from "../../dist/OpenApiValidator";
+import openApiDocument from "../open-api-document";
+import app from "./app";
 
 const validator = new OpenApiValidator(openApiDocument);
 
