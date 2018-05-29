@@ -86,7 +86,7 @@ export interface PathItemObject {
   patch?: OperationObject;
   trace?: OperationObject;
   servers?: any[];
-  parameters?: any[];
+  parameters?: Array<ParameterObject | ReferenceObject>;
 }
 
 export interface OperationObject {
@@ -95,7 +95,7 @@ export interface OperationObject {
   description?: string;
   externalDocs?: any;
   operationId?: any;
-  parameters?: ParameterObject[];
+  parameters?: Array<ParameterObject | ReferenceObject>;
   requestBody?: RequestBodyObject;
   responses: any;
   callbacks?: any;

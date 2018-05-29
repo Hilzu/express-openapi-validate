@@ -54,6 +54,14 @@ components:
       schema:
         type: string
         minLength: 1
+    RequestIdHeader:
+      name: x-request-id
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        pattern: "^[0-9]+$"
   responses:
     Error:
       description: Error response
@@ -215,6 +223,32 @@ paths:
           schema:
             type: string
             pattern: "^[0-9]+$"
+      responses:
+        '200':
+          description: Response
+  /parameters/override/{pid}:
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: "^[^0-9]+$"
+    get:
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^[0-9]+$"
+      responses:
+        '200':
+          description: Response
+  /parameters/with-refs:
+    get:
+      parameters:
+        - $ref: "#/components/parameters/RequestIdHeader"
       responses:
         '200':
           description: Response

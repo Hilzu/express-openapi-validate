@@ -26,32 +26,12 @@ import * as formats from "./formats";
 import OpenApiDocument, {
   Operation,
   OperationObject,
-  ParameterLocation,
+  PathItemObject,
   SchemaObject,
 } from "./OpenApiDocument";
+import * as parameters from "./parameters";
 import { mapOasSchemaToJsonSchema, resolveReference } from "./schema-utils";
 import ValidationError from "./ValidationError";
-
-const concatArraysCustomizer = <T>(
-  objValue: T,
-  srcValue: any
-): T[] | undefined =>
-  Array.isArray(objValue) ? objValue.concat(srcValue) : undefined;
-
-const parameterLocationToRequestField = (
-  location: ParameterLocation
-): "headers" | "params" | "query" | "cookies" => {
-  if (location === "header") {
-    return "headers";
-  } else if (location === "path") {
-    return "params";
-  } else if (location === "cookie") {
-    return "cookies";
-  } else if (location === "query") {
-    return "query";
-  }
-  throw new Error(`Unrecognized parameter location=${location}`);
-};
 
 const resolveResponse = (res: any) => {
   if (res == null) {
@@ -99,6 +79,7 @@ export default class OpenApiValidator {
   }
 
   public validate(method: Operation, path: string): RequestHandler {
+    const pathItemObject = this._getPathItemObject(path);
     const operation = this._getOperationObject(method, path);
     const requestBodyObject = resolveReference(
       this._document,
@@ -109,7 +90,13 @@ export default class OpenApiValidator {
       ["content", "application/json", "schema"],
       {}
     );
-    const parametersSchema = this._parameterObjectsToSchema(operation);
+
+    const params = parameters.resolve(
+      this._document,
+      pathItemObject.parameters,
+      operation.parameters
+    );
+    const parametersSchema = parameters.buildSchema(params);
     const schema = {
       properties: {
         body: resolveReference(this._document, bodySchema),
@@ -120,6 +107,7 @@ export default class OpenApiValidator {
     if (!_.isEmpty(parametersSchema.cookies)) {
       schema.required.push("cookies");
     }
+
     if (_.get(requestBodyObject, ["required"]) === true) {
       schema.required.push("body");
     }
@@ -237,35 +225,11 @@ export default class OpenApiValidator {
     return resolveReference(this._document, responseObject);
   }
 
-  private _parameterObjectsToSchema(
-    op: OperationObject
-  ): { [field: string]: SchemaObject } {
-    const schema = { query: {}, headers: {}, params: {}, cookies: {} };
-    const parameterObjects = op.parameters;
-    if (Array.isArray(parameterObjects)) {
-      parameterObjects.forEach(po => {
-        const parameterObject = resolveReference(this._document, po);
-        const location = parameterObject.in;
-        const parameterSchema = {
-          type: "object",
-          properties: {
-            [parameterObject.name]: resolveReference(
-              this._document,
-              parameterObject.schema || {}
-            ),
-          },
-        };
-        if (parameterObject.required) {
-          (parameterSchema as any).required = [parameterObject.name];
-        }
-        _.mergeWith(
-          schema[parameterLocationToRequestField(location)],
-          parameterSchema,
-          concatArraysCustomizer
-        );
-      });
+  private _getPathItemObject(path: string): PathItemObject {
+    if (_.has(this._document, ["paths", path])) {
+      return this._document.paths[path] as PathItemObject;
     }
-    return schema;
+    throw new Error(`Path=${path} not found from OpenAPI document`);
   }
 
   private _getOperationObject(
@@ -273,17 +237,7 @@ export default class OpenApiValidator {
     path: string
   ): OperationObject {
     if (_.has(this._document, ["paths", path, method])) {
-      const operationObject: any = { ...this._document.paths[path][method] };
-      const pathParameters = this._document.paths[path].parameters;
-      if (Array.isArray(pathParameters)) {
-        if (!Array.isArray(operationObject.parameters)) {
-          operationObject.parameters = [];
-        }
-        operationObject.parameters = operationObject.parameters.concat(
-          pathParameters
-        );
-      }
-      return operationObject as OperationObject;
+      return this._document.paths[path][method] as OperationObject;
     }
     throw new Error(
       `Path=${path} with method=${method} not found from OpenAPI document`

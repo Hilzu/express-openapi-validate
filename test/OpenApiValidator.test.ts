@@ -16,6 +16,7 @@
 
 import OpenApiDocument, { Operation } from "../src/OpenApiDocument";
 import OpenApiValidator, { ValidatorConfig } from "../src/OpenApiValidator";
+import * as parameters from "../src/parameters";
 import ValidationError from "../src/ValidationError";
 import openApiDocument from "./open-api-document";
 
@@ -101,6 +102,13 @@ describe("OpenApiValidator", () => {
     }).toThrowErrorMatchingSnapshot();
   });
 
+  test("trying to validate with a path that doesn't exist throws", async () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    expect(() => {
+      validator.validate("get", "/non-existent");
+    }).toThrowErrorMatchingSnapshot();
+  });
+
   test("getting an operation object succeeds", () => {
     const validator = new OpenApiValidator(openApiDocument);
     const op = (validator as any)._getOperationObject("post", "/echo");
@@ -139,15 +147,9 @@ describe("OpenApiValidator", () => {
   });
 
   test("creating schema with invalid parameter location throws", () => {
-    const validator = new OpenApiValidator(openApiDocument);
-
     expect(() => {
-      const op = (validator as any)._getOperationObject("get", "/parameters");
-      const withInvalidParam = {
-        ...op,
-        parameters: [{ name: "invalid", in: "invalid" }, ...op.parameters],
-      };
-      (validator as any)._parameterObjectsToSchema(withInvalidParam);
+      const params = [{ name: "invalid", in: "invalid" }];
+      parameters.buildSchema(params as any);
     }).toThrowErrorMatchingSnapshot();
   });
 
@@ -204,9 +206,12 @@ describe("OpenApiValidator", () => {
 
   test("validating path parameters with a parameters schema in paths object", async () => {
     const validate = getValidator("get", "/parameters/all-operations-id/{pid}");
-    const err = await validate({ params: { pid: "abc" } });
+    let err = await validate({ params: { pid: "abc" } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
+
+    err = await validate({ params: { pid: "123" } });
+    expect(err).toBeUndefined();
   });
 
   test("validating path parameters with a parameters schema in both", async () => {
@@ -214,13 +219,44 @@ describe("OpenApiValidator", () => {
       "get",
       "/parameters/both-all-operations-id/{pid}/{id}"
     );
-    let err = await validate({ params: { pid: "123" } });
+    let err = await validate({ params: { pid: "abc" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ params: { pid: "123" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ params: { id: "abc" } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
 
     err = await validate({ params: { id: "123" } });
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
+
+    err = await validate({ params: { id: "123", pid: "123" } });
+    expect(err).toBeUndefined();
+  });
+
+  test("overridden parameter validations", async () => {
+    const validate = getValidator("get", "/parameters/override/{pid}");
+    let err = await validate({ params: { pid: "123a" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ params: { pid: "123" } });
+    expect(err).toBeUndefined();
+  });
+
+  test("parameters with refs", async () => {
+    const validate = getValidator("get", "/parameters/with-refs");
+    let err = await validate({ headers: { "x-request-id": "bbb" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ headers: { "x-request-id": "123" } });
+    expect(err).toBeUndefined();
   });
 
   test("validating bodies with null fields and nullable property is schema", async () => {
