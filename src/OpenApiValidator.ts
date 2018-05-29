@@ -14,7 +14,6 @@
   limitations under the License.
 */
 
-import Ajv from "ajv";
 import draft04Schema from "ajv/lib/refs/json-schema-draft-04.json";
 // eslint-disable-next-line
 import { RequestHandler } from "express";
@@ -32,6 +31,8 @@ import OpenApiDocument, {
 import * as parameters from "./parameters";
 import { mapOasSchemaToJsonSchema, resolveReference } from "./schema-utils";
 import ValidationError from "./ValidationError";
+// tslint:disable-next-line ordered-imports
+import Ajv = require("ajv");
 
 const resolveResponse = (res: any) => {
   if (res == null) {
