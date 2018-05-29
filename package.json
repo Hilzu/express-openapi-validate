@@ -115,6 +115,7 @@
           ]
         }
       ],
+      "linebreak-style": "off",
       "no-restricted-globals": "off",
       "no-undef": "off",
       "no-underscore-dangle": "off",
