@@ -163,8 +163,6 @@ paths:
 - Links and callbacks (See [Callback Object][openapi-callback-object] and [Link
   Object][openapi-link-object])
 - Encodings (See [Encoding Object][openapi-encoding-object])
-- Parameters defined in a [Path Item Object][openapi-path-item-object]
-  (parameters that apply to all operations under a path).
 
 ## Public API
 
