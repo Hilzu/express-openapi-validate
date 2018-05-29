@@ -1,0 +1,10 @@
+* text=auto
+*.js text
+*.json text
+*.lock text
+*.log text
+*.md text
+*.snap text
+*.ts text
+*.yaml text
+*.yml text
