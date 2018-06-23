@@ -55,7 +55,7 @@
     "@types/semver": "^5.5.0",
     "@types/supertest": "^2.0.4",
     "cookie-parser": "^1.4.3",
-    "eslint": "^4.19.1",
+    "eslint": "^5.0.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.12.0",
