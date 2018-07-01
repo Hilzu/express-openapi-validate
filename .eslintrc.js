@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   extends: ["eslint:recommended", "airbnb-base", "prettier"],
   parser: "typescript-eslint-parser",
   settings: {
@@ -29,6 +30,7 @@ module.exports = {
       },
     ],
     "linebreak-style": "off",
+    "lines-between-class-members": "off",
     "no-restricted-globals": "off",
     "no-undef": "off",
     "no-underscore-dangle": "off",

@@ -41,11 +41,14 @@ const parameterLocationToRequestField = (
 ): "headers" | "params" | "query" | "cookies" => {
   if (location === "header") {
     return "headers";
-  } else if (location === "path") {
+  }
+  if (location === "path") {
     return "params";
-  } else if (location === "cookie") {
+  }
+  if (location === "cookie") {
     return "cookies";
-  } else if (location === "query") {
+  }
+  if (location === "query") {
     return "query";
   }
   throw new Error(`Unrecognized parameter location=${location}`);
