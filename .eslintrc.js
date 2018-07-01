@@ -2,6 +2,7 @@ module.exports = {
   root: true,
   extends: ["eslint:recommended", "airbnb-base", "prettier"],
   parser: "typescript-eslint-parser",
+  plugins: ["typescript"],
   settings: {
     "import/extensions": [".ts", ".js"],
     "import/resolver": {
@@ -34,8 +35,9 @@ module.exports = {
     "no-restricted-globals": "off",
     "no-undef": "off",
     "no-underscore-dangle": "off",
-    "no-unused-vars": "off",
+    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "typescript/class-name-casing": "error",
+    "typescript/no-unused-vars": "error",
     "no-useless-constructor": "off",
-    strict: "off",
   },
 };
