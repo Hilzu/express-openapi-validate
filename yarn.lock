@@ -4181,9 +4181,9 @@ type-is@~1.6.15, type-is@~1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.18"
 
-typescript-eslint-parser@^16.0.1:
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/typescript-eslint-parser/-/typescript-eslint-parser-16.0.1.tgz#b40681c7043b222b9772748b700a000b241c031b"
+typescript-eslint-parser@^17.0.0:
+  version "17.0.0"
+  resolved "https://registry.yarnpkg.com/typescript-eslint-parser/-/typescript-eslint-parser-17.0.0.tgz#0e2b5c0d15f2e2cfdf43dd024c96b10d016bef26"
   dependencies:
     lodash.unescape "4.0.1"
     semver "5.5.0"
