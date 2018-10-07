@@ -42,6 +42,40 @@ describe("Integration tests with real app", () => {
     expect(validate(res)).toBeUndefined();
   });
 
+  test("requests against /match are validated correctly", async () => {
+    const validate = validator.validateResponse("post", "/match");
+
+    let res = await request(app)
+      .post("/match")
+      .send({});
+    expect(validate(res)).toBeUndefined();
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body).toMatchSnapshot();
+
+    res = await request(app)
+      .post("/match")
+      .send({ input: "Hello!" });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ output: "Hello!" });
+    expect(validate(res)).toBeUndefined();
+
+    res = await request(app)
+      .post("/match/works-with-url-param")
+      .send({ input: "Hello!" });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ output: "works-with-url-param" });
+    expect(validate(res)).toBeUndefined();
+  });
+
+  test("requests against /no-match are not validated", async () => {
+    const res = await request(app)
+      .post("/no-match")
+      .send({ anything: "anything" });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ extra: "anything" });
+  });
+
   test("path parameters are validated", async () => {
     let res = await request(app).get("/parameters/id/lol");
     expect(res.status).toBe(400);

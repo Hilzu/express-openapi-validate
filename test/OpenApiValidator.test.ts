@@ -591,4 +591,24 @@ describe("OpenApiValidator", () => {
       validateResponse({ ...baseRes, headers: { "x-hullo": "aa" } })
     ).toBeUndefined();
   });
+
+  test("finds validator per request", async () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const match = validator.match();
+
+    const nextMock = jest.fn();
+    const validateMock = jest.fn().mockReturnValue(nextMock);
+    validator.validate = validateMock;
+
+    const req = {
+      ...baseReq,
+      method: "POST",
+      path: "/match/works-with-url-param",
+      body: { input: "Hello!" }
+    };
+
+    match(req, { ...baseRes }, () => {});
+    expect(validateMock).toBeCalledWith("post", "/match");
+    expect(nextMock).toBeCalled();
+  });
 });

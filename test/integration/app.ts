@@ -30,6 +30,14 @@ app.post("/echo", validator.validate("post", "/echo"), (req, res, _next) => {
   res.json({ output: req.body.input });
 });
 
+app.post("/match/:optional?", validator.match(), (req, res, _next) => {
+  res.json({ output: req.params.optional || req.body.input });
+});
+
+app.post("/no-match", validator.match(), (req, res, _next) => {
+  res.json({ extra: req.body.anything });
+});
+
 app.get(
   "/parameters",
   validator.validate("get", "/parameters"),

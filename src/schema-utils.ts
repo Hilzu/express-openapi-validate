@@ -99,3 +99,7 @@ export const mapOasSchemaToJsonSchema = (
   (jsonSchema as any).$schema = "http://json-schema.org/draft-04/schema#";
   return jsonSchema;
 };
+
+export const oasPathToExpressPath = (path: string): string => {
+  return path.replace(/\{([^}]+)\}/g, ':$1');
+};
