@@ -163,7 +163,7 @@ paths:
   /parameters/header:
     get:
       parameters:
-        - name: x-param
+        - name: X-Param
           in: header
           required: true
           schema:

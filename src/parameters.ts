@@ -60,14 +60,18 @@ export function buildSchema(
   const schema = { query: {}, headers: {}, params: {}, cookies: {} };
   parameterObjects.forEach(parameterObject => {
     const location = parameterObject.in;
+    const name =
+      location === "header"
+        ? parameterObject.name.toLowerCase()
+        : parameterObject.name;
     const parameterSchema = {
       type: "object",
       properties: {
-        [parameterObject.name]: parameterObject.schema,
+        [name]: parameterObject.schema,
       },
     };
     if (parameterObject.required) {
-      (parameterSchema as any).required = [parameterObject.name];
+      (parameterSchema as any).required = [name];
     }
     _.mergeWith(
       schema[parameterLocationToRequestField(location)],
