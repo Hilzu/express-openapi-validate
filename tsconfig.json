@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
+    "target": "ES2015",
+    "module": "CommonJS",
     "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "CommonJS",
-    "moduleResolution": "node",
     "noEmitOnError": true,
-    "target": "ES2015",
-    "strict": true,
-    "outDir": "dist",
-    "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*", "src/types/*"]
     }
