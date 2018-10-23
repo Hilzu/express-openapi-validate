@@ -173,6 +173,16 @@ describe("OpenApiValidator", () => {
     expect(err).toMatchSnapshot();
   });
 
+  test("validating headers with a parameter schema where the schema includes uppercase characters", async () => {
+    const validate = getValidator("get", "/parameters/header/caseinsensitive");
+    let err = await validate({ headers: { "x-param": "let-in" } });
+    expect(err).toBeUndefined();
+
+    err = await validate();
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+  });
+
   test("validating cookies with a parameter schema", async () => {
     const validate = getValidator("get", "/parameters/cookie");
     let err = await validate({ cookies: { session: "abc123" } });

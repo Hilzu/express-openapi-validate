@@ -163,6 +163,17 @@ paths:
   /parameters/header:
     get:
       parameters:
+        - name: x-param
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response
+  /parameters/header/caseinsensitive:
+    get:
+      parameters:
         - name: X-Param
           in: header
           required: true
