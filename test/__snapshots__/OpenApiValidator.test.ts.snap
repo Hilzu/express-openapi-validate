@@ -48,7 +48,7 @@ exports[`OpenApiValidator validating cookies with parameters schema fails with n
 
 exports[`OpenApiValidator validating headers with a parameter schema 1`] = `[ValidationError: Error while validating request: request.headers should have required property 'x-param']`;
 
-exports[`OpenApiValidator validating headers with a parameter schema 2`] = `[ValidationError: Error while validating request: request.headers should have required property 'x-param']`;
+exports[`OpenApiValidator validating headers with a parameter schema where the schema includes uppercase characters 1`] = `[ValidationError: Error while validating request: request.headers should have required property 'x-param']`;
 
 exports[`OpenApiValidator validating parameters with two required query parameters 1`] = `[ValidationError: Error while validating request: request.query should have required property 'q2']`;
 
