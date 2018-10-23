@@ -60,3 +60,7 @@ export const byte = (b: string) => {
 export const binary = alwaysTrue;
 
 export const password = alwaysTrue;
+
+if (false) {
+  console.log("Testing coveralls");
+}
