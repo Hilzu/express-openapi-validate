@@ -24,7 +24,7 @@
     "build:ts": "tsc",
     "clean": "rimraf dist",
     "format": "yarn format:prettier --write",
-    "format:prettier": "prettier \"*.{md,js,json}\" \"{src,test}/**/*.{js,json,ts}\"",
+    "format:prettier": "prettier \"*.{js,json,md,ts,yaml,yml}\" \"{resources,src,test}/**/*.{js,json,md,ts,yaml,yml}\"",
     "lint": "run-s clean lint:eslint lint:tslint",
     "lint:eslint": "eslint --ext js,ts .",
     "lint:tslint": "tslint -t verbose --project tsconfig.json",

@@ -10,7 +10,7 @@ components:
         value:
           type: number
       required:
-      - value
+        - value
     Tag:
       type: string
       minLength: 3
@@ -102,9 +102,9 @@ paths:
                 input:
                   type: string
               required:
-              - input
+                - input
       responses:
-        '200':
+        "200":
           description: Response
           content:
             application/json:
@@ -114,13 +114,13 @@ paths:
                   output:
                     type: string
                 required:
-                - output
+                  - output
         default:
           $ref: "#/components/responses/Error"
   /internal-ref:
     post:
       responses:
-        '200':
+        "200":
           description: Response
       requestBody:
         content:
@@ -140,7 +140,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Response
   /parameters/required:
     get:
@@ -169,7 +169,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Response
   /parameters/cookie:
     get:
@@ -181,7 +181,7 @@ paths:
             type: string
             minLength: 1
       responses:
-        '200':
+        "200":
           description: Response
   /parameters/id/{id}:
     get:
@@ -193,7 +193,7 @@ paths:
             type: string
             pattern: "^[0-9]+$"
       responses:
-        '200':
+        "200":
           description: Response
   /parameters/all-operations-id/{pid}:
     parameters:
@@ -205,7 +205,7 @@ paths:
           pattern: "^[0-9]+$"
     get:
       responses:
-        '200':
+        "200":
           description: Response
   /parameters/both-all-operations-id/{pid}/{id}:
     parameters:
@@ -224,7 +224,7 @@ paths:
             type: string
             pattern: "^[0-9]+$"
       responses:
-        '200':
+        "200":
           description: Response
   /parameters/override/{pid}:
     parameters:
@@ -243,14 +243,14 @@ paths:
             type: string
             pattern: "^[0-9]+$"
       responses:
-        '200':
+        "200":
           description: Response
   /parameters/with-refs:
     get:
       parameters:
         - $ref: "#/components/parameters/RequestIdHeader"
       responses:
-        '200':
+        "200":
           description: Response
   /nullable:
     post:
@@ -266,14 +266,14 @@ paths:
                   type: string
                   nullable: true
       responses:
-        '200':
+        "200":
           description: Response
   /ref-parameter:
     get:
       parameters:
         - $ref: "#/components/parameters/hello"
       responses:
-        '200':
+        "200":
           description: Response
   /different-rules:
     post:
@@ -294,7 +294,7 @@ paths:
                   minimum: 2
                   maximum: 256
       responses:
-        '200':
+        "200":
           description: Response
   /required-body:
     post:
@@ -310,7 +310,7 @@ paths:
               required:
                 - a
       responses:
-        '200':
+        "200":
           description: Response
   /format:
     post:
@@ -346,14 +346,14 @@ paths:
                   type: string
                   format: date
       responses:
-        '200':
+        "200":
           description: Response
   /responses:
     post:
       responses:
         2XX:
           description: Generic 2xx response
-        '201':
+        "201":
           description: Created response
           content:
             application/json:
@@ -368,7 +368,7 @@ paths:
   /responses/no-default:
     get:
       responses:
-        '200':
+        "200":
           description: Response
   /responses/header:
     post:
@@ -395,7 +395,7 @@ paths:
   /responses/header2:
     post:
       responses:
-        '200':
+        "200":
           description: Response
           headers:
             X-1:
@@ -415,14 +415,14 @@ paths:
             schema:
               $ref: "#/components/schemas/Reffy"
       responses:
-        '200':
+        "200":
           description: Response
   /more-references:
     post:
       requestBody:
         $ref: "#/components/requestBodies/pong"
       responses:
-        '200':
+        "200":
           description: Response
           headers:
             x-hullo:
