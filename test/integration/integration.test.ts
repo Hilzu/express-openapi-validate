@@ -73,6 +73,12 @@ describe("Integration tests with real app", () => {
     expect(res.body).toEqual({ param: "hallo", porom: "moi" });
   });
 
+  test("several path parameters are validated", async () => {
+    const res = await request(app).get("/parameters/several/aa/a/bb/b/cc");
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ a: "aa", b: "bb", c: "cc" });
+  });
+
   test("header parameters are validated", async () => {
     let res = await request(app).get("/parameters/header");
     expect(res.status).toBe(400);

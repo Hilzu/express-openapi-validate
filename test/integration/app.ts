@@ -48,6 +48,14 @@ app.get(
 );
 
 app.get(
+  "/parameters/several/:a/a/:b/b/:c",
+  validator.validate("get", "/parameters/several/{a}/a/{b}/b/{c}"),
+  (req, res, _next) => {
+    res.json(req.params);
+  }
+);
+
+app.get(
   "/parameters/header",
   validator.validate("get", "/parameters/header"),
   (req, res, _next) => {
