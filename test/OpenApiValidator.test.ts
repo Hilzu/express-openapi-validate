@@ -269,6 +269,16 @@ describe("OpenApiValidator", () => {
     expect(err).toBeUndefined();
   });
 
+  test("validating several path parameters", async () => {
+    const validate = getValidator("get", "/parameters/several/{a}/a/{b}/b/{c}");
+    let err = await validate({ params: { a: "abc", b: "bc" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ params: { a: "a", b: "b", c: "c" } });
+    expect(err).toBeUndefined();
+  });
+
   test("validating bodies with null fields and nullable property is schema", async () => {
     const validate = getValidator("post", "/nullable");
     let err = await validate({ body: { bar: null } });

@@ -279,6 +279,27 @@ paths:
       responses:
         "200":
           description: Response
+  /parameters/several/{a}/a/{b}/b/{c}:
+    get:
+      parameters:
+        - name: a
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: b
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: c
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response
   /ref-parameter:
     get:
       parameters:
