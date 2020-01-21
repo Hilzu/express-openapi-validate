@@ -605,7 +605,7 @@ describe("OpenApiValidator", () => {
       ...baseReq,
       method: "POST",
       path: "/match",
-      body: { input: "Hello!" }
+      body: { input: "Hello!" },
     };
 
     match(req, {} as Response, () => {});
@@ -622,7 +622,7 @@ describe("OpenApiValidator", () => {
 
     const req = {
       ...baseReq,
-      path: "/no-match"
+      path: "/no-match",
     };
 
     match(req, {} as Response, () => {});

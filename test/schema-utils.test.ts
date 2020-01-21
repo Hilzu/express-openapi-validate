@@ -172,8 +172,8 @@ describe("schema utils module", () => {
   });
 
   test("oasPathToExpressPath formats URL parameters for path-to-regexp", () => {
-    expect(oasPathToExpressPath('/foo')).toEqual('/foo');
-    expect(oasPathToExpressPath('/foo/{param}')).toEqual('/foo/:param');
-    expect(oasPathToExpressPath('/foo/{param}/bar')).toEqual('/foo/:param/bar');
+    expect(oasPathToExpressPath("/foo")).toEqual("/foo");
+    expect(oasPathToExpressPath("/foo/{param}")).toEqual("/foo/:param");
+    expect(oasPathToExpressPath("/foo/{param}/bar")).toEqual("/foo/:param/bar");
   });
 });

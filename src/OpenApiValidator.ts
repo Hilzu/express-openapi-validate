@@ -30,7 +30,11 @@ import OpenApiDocument, {
   SchemaObject,
 } from "./OpenApiDocument";
 import * as parameters from "./parameters";
-import { mapOasSchemaToJsonSchema, oasPathToExpressPath, resolveReference } from "./schema-utils";
+import {
+  mapOasSchemaToJsonSchema,
+  oasPathToExpressPath,
+  resolveReference,
+} from "./schema-utils";
 import ValidationError from "./ValidationError";
 // tslint:disable-next-line ordered-imports
 import Ajv = require("ajv");
@@ -147,10 +151,12 @@ export default class OpenApiValidator {
   }
 
   public match(): RequestHandler {
-    const paths: PathRegexpObject[] = _.keys(this._document.paths).map(path => ({
-      path,
-      regex: pathToRegexp(oasPathToExpressPath(path))
-    }));
+    const paths: PathRegexpObject[] = _.keys(this._document.paths).map(
+      path => ({
+        path,
+        regex: pathToRegexp(oasPathToExpressPath(path)),
+      })
+    );
     const matchAndValidate: RequestHandler = (req, res, next) => {
       const match = paths.find(({ regex }) => regex.test(req.path));
       if (match) {

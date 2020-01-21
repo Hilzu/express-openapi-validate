@@ -100,4 +100,5 @@ export const mapOasSchemaToJsonSchema = (
   return jsonSchema;
 };
 
-export const oasPathToExpressPath = (path: string): string => path.replace(/\{([^}]+)\}/g, ':$1');
+export const oasPathToExpressPath = (path: string): string =>
+  path.replace(/\{([^}]+)\}/g, ":$1");

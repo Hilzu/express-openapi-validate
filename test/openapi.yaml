@@ -129,9 +129,9 @@ paths:
                 input:
                   type: string
               required:
-              - input
+                - input
       responses:
-        '200':
+        "200":
           description: Response
           content:
             application/json:
@@ -141,7 +141,7 @@ paths:
                   output:
                     type: string
                 required:
-                - output
+                  - output
         default:
           $ref: "#/components/responses/Error"
   /internal-ref:
