@@ -18,8 +18,8 @@ import draft04Schema from "ajv/lib/refs/json-schema-draft-04.json";
 // eslint-disable-next-line
 import { RequestHandler } from "express";
 import * as _ from "lodash";
-import * as semver from "semver";
 import pathToRegexp from "path-to-regexp";
+import * as semver from "semver";
 
 import debug from "./debug";
 import * as formats from "./formats";
@@ -30,7 +30,7 @@ import OpenApiDocument, {
   SchemaObject,
 } from "./OpenApiDocument";
 import * as parameters from "./parameters";
-import { mapOasSchemaToJsonSchema, resolveReference, oasPathToExpressPath } from "./schema-utils";
+import { mapOasSchemaToJsonSchema, oasPathToExpressPath, resolveReference } from "./schema-utils";
 import ValidationError from "./ValidationError";
 // tslint:disable-next-line ordered-imports
 import Ajv = require("ajv");
