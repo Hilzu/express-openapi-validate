@@ -612,4 +612,20 @@ describe("OpenApiValidator", () => {
     expect(validateMock).toBeCalledWith("post", "/match");
     expect(validateHandler).toBeCalled();
   });
+
+  test("match() - does not call validate() if request does not match", async () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const match = validator.match();
+
+    const validateMock = jest.fn();
+    validator.validate = validateMock;
+
+    const req = {
+      ...baseReq,
+      path: "/no-match"
+    };
+
+    match(req, {} as Response, () => {});
+    expect(validateMock).not.toHaveBeenCalled();
+  });
 });
