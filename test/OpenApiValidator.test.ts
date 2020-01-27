@@ -14,6 +14,7 @@
   limitations under the License.
 */
 
+import { Response } from "express";
 import OpenApiDocument, { Operation } from "../src/OpenApiDocument";
 import OpenApiValidator, { ValidatorConfig } from "../src/OpenApiValidator";
 import * as parameters from "../src/parameters";
@@ -590,5 +591,41 @@ describe("OpenApiValidator", () => {
     expect(
       validateResponse({ ...baseRes, headers: { "x-hullo": "aa" } })
     ).toBeUndefined();
+  });
+
+  test("match() - finds and calls validate() based on request URL", async () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const match = validator.match();
+
+    const validateHandler = jest.fn();
+    const validateMock = jest.fn().mockReturnValue(validateHandler);
+    validator.validate = validateMock;
+
+    const req = {
+      ...baseReq,
+      method: "POST",
+      path: "/match",
+      body: { input: "Hello!" },
+    };
+
+    match(req, {} as Response, () => {});
+    expect(validateMock).toBeCalledWith("post", "/match");
+    expect(validateHandler).toBeCalled();
+  });
+
+  test("match() - does not call validate() if request does not match", async () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const match = validator.match();
+
+    const validateMock = jest.fn();
+    validator.validate = validateMock;
+
+    const req = {
+      ...baseReq,
+      path: "/no-match",
+    };
+
+    match(req, {} as Response, () => {});
+    expect(validateMock).not.toHaveBeenCalled();
   });
 });

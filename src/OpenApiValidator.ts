@@ -18,6 +18,7 @@ import draft04Schema from "ajv/lib/refs/json-schema-draft-04.json";
 // eslint-disable-next-line
 import { RequestHandler } from "express";
 import * as _ from "lodash";
+import pathToRegexp from "path-to-regexp";
 import * as semver from "semver";
 
 import debug from "./debug";
@@ -29,7 +30,11 @@ import OpenApiDocument, {
   SchemaObject,
 } from "./OpenApiDocument";
 import * as parameters from "./parameters";
-import { mapOasSchemaToJsonSchema, resolveReference } from "./schema-utils";
+import {
+  mapOasSchemaToJsonSchema,
+  oasPathToExpressPath,
+  resolveReference,
+} from "./schema-utils";
 import ValidationError from "./ValidationError";
 // tslint:disable-next-line ordered-imports
 import Ajv = require("ajv");
@@ -52,6 +57,11 @@ const resolveResponse = (res: any) => {
 
 export interface ValidatorConfig {
   ajvOptions?: Ajv.Options;
+}
+
+export interface PathRegexpObject {
+  path: string;
+  regex: RegExp;
 }
 
 export default class OpenApiValidator {
@@ -138,6 +148,25 @@ export default class OpenApiValidator {
     };
 
     return validate;
+  }
+
+  public match(): RequestHandler {
+    const paths: PathRegexpObject[] = _.keys(this._document.paths).map(
+      path => ({
+        path,
+        regex: pathToRegexp(oasPathToExpressPath(path)),
+      })
+    );
+    const matchAndValidate: RequestHandler = (req, res, next) => {
+      const match = paths.find(({ regex }) => regex.test(req.path));
+      if (match) {
+        const method = req.method.toLowerCase() as Operation;
+        this.validate(method, match.path)(req, res, next);
+      } else {
+        next();
+      }
+    };
+    return matchAndValidate;
   }
 
   public validateResponse(method: Operation, path: string): (res: any) => void {

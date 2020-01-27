@@ -117,6 +117,33 @@ paths:
                   - output
         default:
           $ref: "#/components/responses/Error"
+  /match:
+    post:
+      description: Echo input back
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: string
+              required:
+                - input
+      responses:
+        "200":
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  output:
+                    type: string
+                required:
+                  - output
+        default:
+          $ref: "#/components/responses/Error"
   /internal-ref:
     post:
       responses:

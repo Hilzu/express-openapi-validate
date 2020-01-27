@@ -19,6 +19,7 @@ import {
   mapOasSchemaToJsonSchema,
   resolveReference,
   walkSchema,
+  oasPathToExpressPath,
 } from "../src/schema-utils";
 import openApiDocument from "./open-api-document";
 
@@ -168,5 +169,11 @@ describe("schema utils module", () => {
       },
       additionalProperties: false,
     });
+  });
+
+  test("oasPathToExpressPath formats URL parameters for path-to-regexp", () => {
+    expect(oasPathToExpressPath("/foo")).toEqual("/foo");
+    expect(oasPathToExpressPath("/foo/{param}")).toEqual("/foo/:param");
+    expect(oasPathToExpressPath("/foo/{param}/bar")).toEqual("/foo/:param/bar");
   });
 });
