@@ -9,7 +9,8 @@
   "license": "Apache-2.0",
   "private": false,
   "engines": {
-    "node": ">=9.0.0 || ^8.7.0 || ^6.5.0"
+    "node": ">=9.0.0 || ^8.7.0 || ^6.5.0",
+    "yarn": "^1.21.1"
   },
   "keywords": [
     "openapi",
