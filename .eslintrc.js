@@ -1,24 +1,30 @@
 module.exports = {
   root: true,
-  extends: ["eslint:recommended", "airbnb-base", "prettier"],
-  parser: "typescript-eslint-parser",
-  plugins: ["typescript"],
-  settings: {
-    "import/extensions": [".ts", ".js"],
-    "import/resolver": {
-      node: {
-        extensions: [".ts", ".js", ".json"],
-      },
-    },
-  },
+  extends: [
+    "eslint:recommended",
+    "airbnb-base",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
+    "prettier",
+  ],
+  parser: "@typescript-eslint/parser",
+  plugins: ["import", "@typescript-eslint"],
   env: {
     jest: true,
     node: true,
   },
   rules: {
+    "@typescript-eslint/no-useless-constructor": "error",
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      { allowExpressions: true, allowTypedFunctionExpressions: true },
+    ],
+    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-explicit-any": "off",
     "import/extensions": [
       "error",
-      "always",
+      "ignorePackages",
       {
         ts: "never",
         js: "never",
@@ -30,14 +36,8 @@ module.exports = {
         ignore: ["\\.\\.?/dist/"],
       },
     ],
-    "linebreak-style": "off",
-    "lines-between-class-members": "off",
-    "no-restricted-globals": "off",
-    "no-undef": "off",
-    "no-underscore-dangle": "off",
-    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-    "typescript/class-name-casing": "error",
-    "typescript/no-unused-vars": "error",
+    "import/prefer-default-export": "off",
     "no-useless-constructor": "off",
+    "no-underscore-dangle": "off",
   },
 };

@@ -17,7 +17,8 @@
 import { ErrorObject } from "ajv";
 
 export default class ValidationError extends Error {
-  public statusCode: number = 400;
+  public statusCode = 400;
+
   public data: ErrorObject[];
 
   constructor(message: string, errors: ErrorObject[]) {

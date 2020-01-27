@@ -26,7 +26,7 @@ const isReferenceObject = <T>(x: T | ReferenceObject): x is ReferenceObject =>
 
 export const resolveReference = <T>(
   document: OpenApiDocument,
-  object: T | ReferenceObject
+  object: T | ReferenceObject,
 ): T => {
   if (isReferenceObject(object)) {
     if (!object.$ref.startsWith("#/components/")) {
@@ -47,35 +47,39 @@ const schemaFields = ["items", "not", "additionalProperties"];
 
 export const walkSchema = (
   originalSchema: SchemaObject,
-  mapper: (x: SchemaObject) => SchemaObject
+  mapper: (x: SchemaObject) => SchemaObject,
 ): SchemaObject => {
   let schema = mapper(originalSchema);
-  const walk = (s: SchemaObject) => walkSchema(s, mapper);
+  const walk = (s: SchemaObject): SchemaObject => walkSchema(s, mapper);
 
   if (schema.properties !== undefined) {
     schema = { ...schema, properties: _.mapValues(schema.properties, walk) };
   }
 
-  arrayFields.filter(f => f in schema).forEach(f => {
-    schema = { ...schema, [f]: (schema as any)[f].map(walk) };
-  });
+  arrayFields
+    .filter(f => f in schema)
+    .forEach(f => {
+      schema = { ...schema, [f]: (schema as any)[f].map(walk) };
+    });
 
-  schemaFields.filter(f => f in schema).forEach(f => {
-    const nestedSchema = (schema as any)[f];
-    if (f === "additionalProperties" && typeof nestedSchema === "boolean") {
-      return;
-    }
-    schema = { ...schema, [f]: walk(nestedSchema) };
-  });
+  schemaFields
+    .filter(f => f in schema)
+    .forEach(f => {
+      const nestedSchema = (schema as any)[f];
+      if (f === "additionalProperties" && typeof nestedSchema === "boolean") {
+        return;
+      }
+      schema = { ...schema, [f]: walk(nestedSchema) };
+    });
 
   return schema;
 };
 
 export const mapOasSchemaToJsonSchema = (
   originalSchema: SchemaObject,
-  document: OpenApiDocument
-) => {
-  const mapOasFieldsToJsonSchemaFields = (s: SchemaObject) => {
+  document: OpenApiDocument,
+): SchemaObject => {
+  const mapOasFieldsToJsonSchemaFields = (s: SchemaObject): SchemaObject => {
     let schema = resolveReference(document, s);
     if (Array.isArray(schema.type)) {
       throw new TypeError("Type field in schema must not be an array");

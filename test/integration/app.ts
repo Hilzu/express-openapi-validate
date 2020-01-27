@@ -44,7 +44,7 @@ app.get(
   (req, res, _next) => {
     const { param, porom } = req.query;
     res.json({ param, porom });
-  }
+  },
 );
 
 app.get(
@@ -52,7 +52,7 @@ app.get(
   validator.validate("get", "/parameters/id/{id}"),
   (req, res, _next) => {
     res.json({ id: Number(req.params.id) });
-  }
+  },
 );
 
 app.get(
@@ -61,7 +61,7 @@ app.get(
   (req, res, _next) => {
     const header = req.get("X-Param");
     res.json({ header });
-  }
+  },
 );
 
 app.get(
@@ -70,7 +70,7 @@ app.get(
   (req, res, _next) => {
     const cookie = req.cookies.session;
     res.json({ cookie });
-  }
+  },
 );
 
 const errorHandler: express.ErrorRequestHandler = (err, req, res, _next) => {

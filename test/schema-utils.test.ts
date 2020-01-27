@@ -110,7 +110,7 @@ describe("schema utils module", () => {
         {
           items: [{ type: "string" }, { type: "number" }] as any,
         },
-        {} as any
+        {} as any,
       );
     }).toThrowErrorMatchingSnapshot();
   });

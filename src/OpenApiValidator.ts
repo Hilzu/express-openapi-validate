@@ -15,10 +15,10 @@
 */
 
 import draft04Schema from "ajv/lib/refs/json-schema-draft-04.json";
-// eslint-disable-next-line
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { RequestHandler } from "express";
 import * as _ from "lodash";
-import pathToRegexp from "path-to-regexp";
+import { pathToRegexp } from "path-to-regexp";
 import * as semver from "semver";
 
 import debug from "./debug";
@@ -39,7 +39,7 @@ import ValidationError from "./ValidationError";
 // tslint:disable-next-line ordered-imports
 import Ajv = require("ajv");
 
-const resolveResponse = (res: any) => {
+const resolveResponse = (res: any): any => {
   if (res == null) {
     throw new TypeError(`Response was ${String(res)}`);
   }
@@ -49,7 +49,7 @@ const resolveResponse = (res: any) => {
   const { headers } = res;
   if (statusCode == null || body == null || headers == null) {
     throw new TypeError(
-      "statusCode, body or header values not found from response"
+      "statusCode, body or header values not found from response",
     );
   }
   return { statusCode, body, headers };
@@ -66,6 +66,7 @@ export interface PathRegexpObject {
 
 export default class OpenApiValidator {
   private _ajv: Ajv.Ajv;
+
   private _document: OpenApiDocument;
 
   constructor(openApiDocument: OpenApiDocument, options: ValidatorConfig = {}) {
@@ -94,18 +95,18 @@ export default class OpenApiValidator {
     const operation = this._getOperationObject(method, path);
     const requestBodyObject = resolveReference(
       this._document,
-      _.get(operation, ["requestBody"], {})
+      _.get(operation, ["requestBody"], {}),
     );
     const bodySchema = _.get(
       requestBodyObject,
       ["content", "application/json", "schema"],
-      {}
+      {},
     );
 
     const params = parameters.resolve(
       this._document,
       pathItemObject.parameters,
-      operation.parameters
+      operation.parameters,
     );
     const parametersSchema = parameters.buildSchema(params);
     const schema = {
@@ -141,7 +142,7 @@ export default class OpenApiValidator {
         const errorText = this._ajv.errorsText(errors, { dataVar: "request" });
         const err = new ValidationError(
           `Error while validating request: ${errorText}`,
-          errors
+          errors,
         );
         next(err);
       }
@@ -155,7 +156,7 @@ export default class OpenApiValidator {
       path => ({
         path,
         regex: pathToRegexp(oasPathToExpressPath(path)),
-      })
+      }),
     );
     const matchAndValidate: RequestHandler = (req, res, next) => {
       const match = paths.find(({ regex }) => regex.test(req.path));
@@ -171,13 +172,13 @@ export default class OpenApiValidator {
 
   public validateResponse(method: Operation, path: string): (res: any) => void {
     const operation = this._getOperationObject(method, path);
-    const validateResponse = (userResponse: any) => {
+    const validateResponse = (userResponse: any): void => {
       const { statusCode, ...response } = resolveResponse(userResponse);
       const responseObject = this._getResponseObject(operation, statusCode);
       const bodySchema = _.get(
         responseObject,
         ["content", "application/json", "schema"],
-        {}
+        {},
       );
 
       const headerObjectMap = _.get(responseObject, ["headers"], {});
@@ -188,7 +189,7 @@ export default class OpenApiValidator {
       Object.keys(headerObjectMap).forEach(key => {
         const headerObject = resolveReference(
           this._document,
-          headerObjectMap[key]
+          headerObjectMap[key],
         );
         const name = key.toLowerCase();
         if (name === "content-type") {
@@ -202,7 +203,7 @@ export default class OpenApiValidator {
         }
         (headersSchema.properties as any)[name] = resolveReference(
           this._document,
-          headerObject.schema || {}
+          headerObject.schema || {},
         );
       });
 
@@ -215,12 +216,12 @@ export default class OpenApiValidator {
           },
           required: ["headers", "body"],
         },
-        this._document
+        this._document,
       );
 
       debug(
         `Response JSON Schema for ${method} ${path} ${statusCode}: %j`,
-        schema
+        schema,
       );
 
       const valid = this._ajv.validate(schema, response);
@@ -230,14 +231,14 @@ export default class OpenApiValidator {
         });
         throw new ValidationError(
           `Error while validating response: ${errorText}`,
-          this._ajv.errors as Ajv.ErrorObject[]
+          this._ajv.errors as Ajv.ErrorObject[],
         );
       }
     };
     return validateResponse;
   }
 
-  private _getResponseObject(op: OperationObject, statusCode: number) {
+  private _getResponseObject(op: OperationObject, statusCode: number): any {
     const statusCodeStr = String(statusCode);
     let responseObject = _.get(op, ["responses", statusCodeStr], null);
     if (responseObject === null) {
@@ -249,7 +250,7 @@ export default class OpenApiValidator {
     }
     if (responseObject === null) {
       throw new Error(
-        `No response object found with statusCode=${statusCodeStr}`
+        `No response object found with statusCode=${statusCodeStr}`,
       );
     }
     return resolveReference(this._document, responseObject);
@@ -264,13 +265,13 @@ export default class OpenApiValidator {
 
   private _getOperationObject(
     method: Operation,
-    path: string
+    path: string,
   ): OperationObject {
     if (_.has(this._document, ["paths", path, method])) {
       return this._document.paths[path][method] as OperationObject;
     }
     throw new Error(
-      `Path=${path} with method=${method} not found from OpenAPI document`
+      `Path=${path} with method=${method} not found from OpenAPI document`,
     );
   }
 }
