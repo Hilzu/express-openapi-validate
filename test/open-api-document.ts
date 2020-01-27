@@ -19,7 +19,7 @@ import jsYaml from "js-yaml";
 import OpenApiDocument from "../src/OpenApiDocument";
 
 const openApiDocument = jsYaml.safeLoad(
-  fs.readFileSync("./test/openapi.yaml", "utf-8")
+  fs.readFileSync("./test/openapi.yaml", "utf-8"),
 );
 
 export default openApiDocument as OpenApiDocument;

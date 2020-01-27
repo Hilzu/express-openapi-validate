@@ -11,17 +11,17 @@ export type Parameters = Array<ParameterObject | ReferenceObject> | undefined;
 
 const normalizeParameters = (
   document: OpenApiDocument,
-  parameters?: Array<ParameterObject | ReferenceObject>
+  parameters?: Array<ParameterObject | ReferenceObject>,
 ): { [name: string]: ParameterObject } =>
   _.keyBy(
     _.map(parameters, p => resolveReference<ParameterObject>(document, p)),
-    "name"
+    "name",
   );
 
 export function resolve(
   document: OpenApiDocument,
   pathParameters: Parameters,
-  itemParameters: Parameters
+  itemParameters: Parameters,
 ): ParameterObject[] {
   const parameters = {
     ...normalizeParameters(document, pathParameters),
@@ -32,12 +32,12 @@ export function resolve(
 
 const concatArraysCustomizer = <T>(
   objValue: T,
-  srcValue: any
+  srcValue: any,
 ): T[] | undefined =>
   Array.isArray(objValue) ? objValue.concat(srcValue) : undefined;
 
 const parameterLocationToRequestField = (
-  location: ParameterLocation
+  location: ParameterLocation,
 ): "headers" | "params" | "query" | "cookies" => {
   if (location === "header") {
     return "headers";
@@ -55,7 +55,7 @@ const parameterLocationToRequestField = (
 };
 
 export function buildSchema(
-  parameterObjects: ParameterObject[]
+  parameterObjects: ParameterObject[],
 ): { [field: string]: SchemaObject } {
   const schema = { query: {}, headers: {}, params: {}, cookies: {} };
   parameterObjects.forEach(parameterObject => {
@@ -76,7 +76,7 @@ export function buildSchema(
     _.mergeWith(
       schema[parameterLocationToRequestField(location)],
       parameterSchema,
-      concatArraysCustomizer
+      concatArraysCustomizer,
     );
   });
   return schema;

@@ -23,7 +23,7 @@ const minInt64 = (-2) ** 63;
 const maxFloat = (2 - 2 ** -23) * 2 ** 127;
 const minFloat = 2 ** -126;
 
-const alwaysTrue = () => true;
+const alwaysTrue = (): boolean => true;
 const base64regExp = /^[A-Za-z0-9+/]*(=|==)?$/;
 
 export const int32 = {
@@ -40,7 +40,7 @@ export const int64 = {
 
 export const float = {
   validate: (i: number) =>
-    typeof i === "number" && (i <= maxFloat && i >= minFloat),
+    typeof i === "number" && i <= maxFloat && i >= minFloat,
   type: "number",
 };
 
@@ -49,7 +49,7 @@ export const double = {
   type: "number",
 };
 
-export const byte = (b: string) => {
+export const byte = (b: string): boolean => {
   const { length } = b;
   if (length % 4 !== 0) {
     return false;

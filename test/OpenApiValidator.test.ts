@@ -33,8 +33,11 @@ const baseRes = { statusCode: 200, body: {}, headers: {} };
 
 const createTestValidator = (
   document: OpenApiDocument,
-  opts?: ValidatorConfig
-) => {
+  opts?: ValidatorConfig,
+): ((
+  method: Operation,
+  path: string,
+) => (userReq?: any) => Promise<unknown>) => {
   const validator = new OpenApiValidator(document, opts);
   return (method: Operation, path: string) => {
     const validate = validator.validate(method, path);
@@ -56,7 +59,7 @@ describe("OpenApiValidator", () => {
 
   test("creating throws with Swagger 2.0 document", () => {
     expect(() => {
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const validator = new OpenApiValidator({
         swagger: "2.0",
         info: { title: "Swagger API", version: "1.0.0" },
@@ -88,17 +91,17 @@ describe("OpenApiValidator", () => {
     const validator = new OpenApiValidator(openApiDocument);
 
     expect(() => {
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const op = (validator as any)._getOperationObject("POST", "/echo");
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const op = (validator as any)._getOperationObject("ppost", "/echo");
     }).toThrowErrorMatchingSnapshot();
 
     expect(() => {
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const op = (validator as any)._getOperationObject("post", "/echoo");
     }).toThrowErrorMatchingSnapshot();
   });
@@ -228,7 +231,7 @@ describe("OpenApiValidator", () => {
   test("validating path parameters with a parameters schema in both", async () => {
     const validate = getValidator(
       "get",
-      "/parameters/both-all-operations-id/{pid}/{id}"
+      "/parameters/both-all-operations-id/{pid}/{id}",
     );
     let err = await validate({ params: { pid: "abc" } });
     expect(err).toBeInstanceOf(ValidationError);
@@ -473,15 +476,15 @@ describe("OpenApiValidator", () => {
 
     expect(validate({ status: 200, data: {}, headers: {} })).toBeUndefined();
     expect(
-      validate({ statusCode: 500, body: {}, headers: {} })
+      validate({ statusCode: 500, body: {}, headers: {} }),
     ).toBeUndefined();
 
     const echoValidate = validator.validateResponse("post", "/echo");
     expect(
-      echoValidate({ status: 200, data: { output: "hello" }, headers: {} })
+      echoValidate({ status: 200, data: { output: "hello" }, headers: {} }),
     ).toBeUndefined();
     expect(
-      echoValidate({ statusCode: 200, body: { output: "hello" }, headers: {} })
+      echoValidate({ statusCode: 200, body: { output: "hello" }, headers: {} }),
     ).toBeUndefined();
   });
 
@@ -496,7 +499,7 @@ describe("OpenApiValidator", () => {
     }).toThrowErrorMatchingSnapshot();
 
     expect(
-      validate({ ...baseRes, statusCode: 201, body: { hello: "hola" } })
+      validate({ ...baseRes, statusCode: 201, body: { hello: "hola" } }),
     ).toBeUndefined();
 
     expect(validate({ ...baseRes, statusCode: 303 })).toBeUndefined();
@@ -516,7 +519,7 @@ describe("OpenApiValidator", () => {
     }).toThrowErrorMatchingSnapshot();
 
     expect(
-      validate({ ...baseRes, headers: { "x-header": "heh" } })
+      validate({ ...baseRes, headers: { "x-header": "heh" } }),
     ).toBeUndefined();
 
     expect(() => {
@@ -530,7 +533,7 @@ describe("OpenApiValidator", () => {
       validate({
         ...baseRes,
         headers: { "x-header": "heh", "x-ref-header": "asa" },
-      })
+      }),
     ).toBeUndefined();
   });
 
@@ -547,7 +550,7 @@ describe("OpenApiValidator", () => {
     }).toThrowErrorMatchingSnapshot();
 
     expect(
-      validate({ ...baseRes, headers: { "x-1": "a", "x-2": "b" } })
+      validate({ ...baseRes, headers: { "x-1": "a", "x-2": "b" } }),
     ).toBeUndefined();
   });
 
@@ -582,14 +585,14 @@ describe("OpenApiValidator", () => {
     const validator = new OpenApiValidator(openApiDocument);
     const validateResponse = validator.validateResponse(
       "post",
-      "/more-references"
+      "/more-references",
     );
     expect(() => {
       validateResponse({ ...baseRes, headers: { "x-hullo": "a" } });
     }).toThrowErrorMatchingSnapshot();
 
     expect(
-      validateResponse({ ...baseRes, headers: { "x-hullo": "aa" } })
+      validateResponse({ ...baseRes, headers: { "x-hullo": "aa" } }),
     ).toBeUndefined();
   });
 
@@ -608,6 +611,7 @@ describe("OpenApiValidator", () => {
       body: { input: "Hello!" },
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     match(req, {} as Response, () => {});
     expect(validateMock).toBeCalledWith("post", "/match");
     expect(validateHandler).toBeCalled();
@@ -625,6 +629,7 @@ describe("OpenApiValidator", () => {
       path: "/no-match",
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     match(req, {} as Response, () => {});
     expect(validateMock).not.toHaveBeenCalled();
   });
