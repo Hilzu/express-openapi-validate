@@ -57,6 +57,18 @@ const server = app.listen(3000, () => {
 });
 ```
 
+Or using `match()`:
+
+```javascript
+// Apply to all requests
+app.use(validator.match());
+
+// On each request validator.validate("post", "/echo") is called automatically
+app.post("/echo", (req, res, next) => {
+  res.json({ output: req.body.input });
+});
+```
+
 ### `openapi.yaml`
 
 ```yaml
@@ -214,6 +226,27 @@ Object][openapi-path-item-object]:
 
 `RequestHandler` is an express middleware function with the signature
 `(req: Request, res: Response, next: NextFunction): any;`.
+
+#### `match(): RequestHandler`
+
+Returns an express middleware function which calls `validate()` based on the
+request method and path. Using this function removes the need to specify
+`validate()` middleware for each express endpoint individually.
+
+The following examples achieve the same result:
+
+```javascript
+// Using validate()
+app.post("/echo", validator.validate("post", "/echo"), (req, res, next) => {
+  res.json({ output: req.body.input });
+});
+
+// Using match()
+app.use(validator.match());
+app.post("/echo", (req, res, next) => {
+  res.json({ output: req.body.input });
+});
+```
 
 #### `validateResponse(method: Operation, path: string): (res: any) => void`
 
