@@ -139,3 +139,23 @@ Object {
   },
 }
 `;
+
+exports[`Integration tests with real app requests against /match are validated correctly 2`] = `
+Object {
+  "error": Object {
+    "data": Array [
+      Object {
+        "dataPath": ".body",
+        "keyword": "required",
+        "message": "should have required property 'input'",
+        "params": Object {
+          "missingProperty": "input",
+        },
+        "schemaPath": "#/properties/body/required",
+      },
+    ],
+    "message": "Error while validating request: request.body should have required property 'input'",
+    "name": "ValidationError",
+  },
+}
+`;
