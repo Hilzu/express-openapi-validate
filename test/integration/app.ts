@@ -16,7 +16,7 @@
 
 import cookieParser from "cookie-parser";
 import express from "express";
-import { OpenApiValidator } from "../../dist"; // eslint-disable-line
+import { OpenApiValidator, ValidationError } from "../../dist"; // eslint-disable-line
 import openApiDocument from "../open-api-document";
 
 const app: express.Express = express();
@@ -34,9 +34,7 @@ app.post("/match/:optional?", validator.match(), (req, res, _next) => {
   res.json({ output: req.params.optional || req.body.input });
 });
 
-app.post("/no-match", validator.match(), (req, res, _next) => {
-  res.json({ extra: req.body.anything });
-});
+app.post("/no-match", validator.match());
 
 app.get(
   "/parameters",
@@ -74,7 +72,7 @@ app.get(
 );
 
 const errorHandler: express.ErrorRequestHandler = (err, req, res, _next) => {
-  res.status(err.statusCode).json({
+  res.status(err instanceof ValidationError ? err.statusCode : 500).json({
     error: {
       name: err.name,
       message: err.message,

@@ -159,3 +159,12 @@ Object {
   },
 }
 `;
+
+exports[`Integration tests with real app requests against /no-match cause an error 1`] = `
+Object {
+  "error": Object {
+    "message": "Path=/no-match with method=post not found from OpenAPI document",
+    "name": "Error",
+  },
+}
+`;

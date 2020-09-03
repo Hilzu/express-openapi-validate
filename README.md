@@ -228,18 +228,18 @@ Object][openapi-path-item-object]:
 `RequestHandler` is an express middleware function with the signature
 `(req: Request, res: Response, next: NextFunction): any;`.
 
-#### `match(): RequestHandler`
+#### `match(options: MatchOptions = { allowNoMatch: false }): RequestHandler`
 
 Returns an express middleware function which calls `validate()` based on the
 request method and path. Using this function removes the need to specify
 `validate()` middleware for each express endpoint individually.
 
-Note that behaviour is different to `validate()` for routes where no schema is
-specified: `validate()` will throw an exception if no matching route
-specification is found in the OpenAPI schema. `match()` will not throw an
-exception in this case; the request is simply not validated. Be careful to
-ensure you OpenAPI schema contains validators for each endpoint if using
-`match()`.
+`match()` throws an error if matching route specification is not found. This
+ensures all requests are validated.
+
+Use `match({ allowNoMatch: true})` if you want to skip validation for routes
+that are not mentioned in the OpenAPI schema. Use with caution: It allows
+requests to be handled without any validation.
 
 The following examples achieve the same result:
 

@@ -64,6 +64,10 @@ export interface PathRegexpObject {
   regex: RegExp;
 }
 
+export interface MatchOptions {
+  allowNoMatch?: boolean;
+}
+
 export default class OpenApiValidator {
   private _ajv: Ajv.Ajv;
 
@@ -151,7 +155,9 @@ export default class OpenApiValidator {
     return validate;
   }
 
-  public match(): RequestHandler {
+  public match(
+    options: MatchOptions = { allowNoMatch: false },
+  ): RequestHandler {
     const paths: PathRegexpObject[] = _.keys(this._document.paths).map(
       path => ({
         path,
@@ -160,10 +166,16 @@ export default class OpenApiValidator {
     );
     const matchAndValidate: RequestHandler = (req, res, next) => {
       const match = paths.find(({ regex }) => regex.test(req.path));
+      const method = req.method.toLowerCase() as Operation;
       if (match) {
-        const method = req.method.toLowerCase() as Operation;
         this.validate(method, match.path)(req, res, next);
+      } else if (!options.allowNoMatch) {
+        const err = new Error(
+          `Path=${req.path} with method=${method} not found from OpenAPI document`,
+        );
+        next(err);
       } else {
+        // match not required
         next();
       }
     };
