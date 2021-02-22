@@ -144,6 +144,40 @@ paths:
                   - output
         default:
           $ref: "#/components/responses/Error"
+  /match/{optional}:
+    post:
+      description: Echo url-param back
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: string
+              required:
+                - input
+      parameters:
+        - name: optional
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  output:
+                    type: string
+                required:
+                  - output
+        default:
+          $ref: "#/components/responses/Error"
+
   /internal-ref:
     post:
       responses:

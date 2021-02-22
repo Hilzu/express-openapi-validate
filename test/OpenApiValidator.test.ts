@@ -617,7 +617,7 @@ describe("OpenApiValidator", () => {
     expect(validateHandler).toBeCalled();
   });
 
-  test("match() - does not call validate() if request does not match", async () => {
+  test("match() - does not call validate() if request does not match and yields error", async () => {
     const validator = new OpenApiValidator(openApiDocument);
     const match = validator.match();
 
@@ -626,11 +626,34 @@ describe("OpenApiValidator", () => {
 
     const req = {
       ...baseReq,
+      method: "POST",
       path: "/no-match",
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    match(req, {} as Response, () => {});
+    const nextMock = jest.fn();
+
+    match(req, {} as Response, nextMock);
     expect(validateMock).not.toHaveBeenCalled();
+    expect(nextMock).toHaveBeenCalledWith(expect.any(Error));
+  });
+
+  test("match({ allowNoMatch: true }) - does not call validate() if request does not match and does not yield error", async () => {
+    const validator = new OpenApiValidator(openApiDocument);
+    const match = validator.match({ allowNoMatch: true });
+
+    const validateMock = jest.fn();
+    validator.validate = validateMock;
+
+    const req = {
+      ...baseReq,
+      method: "POST",
+      path: "/no-match",
+    };
+
+    const nextMock = jest.fn();
+
+    match(req, {} as Response, nextMock);
+    expect(validateMock).not.toHaveBeenCalled();
+    expect(nextMock).toHaveBeenCalledWith();
   });
 });

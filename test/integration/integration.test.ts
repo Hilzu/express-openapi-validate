@@ -66,14 +66,23 @@ describe("Integration tests with real app", () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ output: "works-with-url-param" });
     expect(validate(res)).toBeUndefined();
+
+    res = await request(app)
+      .post("/match/works-with-url-param")
+      .send({});
+    expect(validate(res)).toBeUndefined();
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body).toMatchSnapshot();
   });
 
-  test("requests against /no-match are not validated", async () => {
+  test("requests against /no-match cause an error", async () => {
     const res = await request(app)
       .post("/no-match")
       .send({ anything: "anything" });
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ extra: "anything" });
+    expect(res.status).toBe(500);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body).toMatchSnapshot();
   });
 
   test("path parameters are validated", async () => {
