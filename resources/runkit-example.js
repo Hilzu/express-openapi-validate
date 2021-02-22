@@ -39,7 +39,7 @@ const fakeRequest = {
   params: {},
 };
 const fakeResponse = {};
-const nextFunction = err => {
+const nextFunction = (err) => {
   console.log("Error passed to next:", err);
 };
 

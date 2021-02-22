@@ -18,7 +18,7 @@ import fs from "fs";
 import jsYaml from "js-yaml";
 import OpenApiDocument from "../src/OpenApiDocument";
 
-const openApiDocument = jsYaml.safeLoad(
+const openApiDocument = jsYaml.load(
   fs.readFileSync("./test/openapi.yaml", "utf-8"),
 );
 

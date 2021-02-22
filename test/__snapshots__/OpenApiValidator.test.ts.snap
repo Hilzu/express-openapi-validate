@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OpenApiValidator Ajv formats can be passed in 1`] = `[ValidationError: Error while validating request: request.body.password should match format "password"]`;
+exports[`OpenApiValidator Ajv formats can be passed in 1`] = `[ValidationError: Error while validating request: request/body/password should match format "password"]`;
 
 exports[`OpenApiValidator creating schema with invalid parameter location throws 1`] = `"Unrecognized parameter location=invalid"`;
 
@@ -12,9 +12,9 @@ exports[`OpenApiValidator getting an operation object fails with invalid argumen
 
 exports[`OpenApiValidator getting an operation object fails with invalid arguments 3`] = `"Path=/echoo with method=post not found from OpenAPI document"`;
 
-exports[`OpenApiValidator overridden parameter validations 1`] = `[ValidationError: Error while validating request: request.params.pid should match pattern "^[0-9]+$"]`;
+exports[`OpenApiValidator overridden parameter validations 1`] = `[ValidationError: Error while validating request: request/params/pid should match pattern "^[0-9]+$"]`;
 
-exports[`OpenApiValidator parameters with refs 1`] = `[ValidationError: Error while validating request: request.headers['x-request-id'] should match pattern "^[0-9]+$"]`;
+exports[`OpenApiValidator parameters with refs 1`] = `[ValidationError: Error while validating request: request/headers/x-request-id should match pattern "^[0-9]+$"]`;
 
 exports[`OpenApiValidator response validation with different kinds of response objects 1`] = `"Path=/echooo with method=post not found from OpenAPI document"`;
 
@@ -26,100 +26,100 @@ exports[`OpenApiValidator response validation with different kinds of response o
 
 exports[`OpenApiValidator response validation with different kinds of response objects 5`] = `"statusCode, body or header values not found from response"`;
 
-exports[`OpenApiValidator response validation with different status codes 1`] = `"Error while validating response: response.body should have required property 'hello'"`;
+exports[`OpenApiValidator response validation with different status codes 1`] = `"Error while validating response: response/body should have required property 'hello'"`;
 
 exports[`OpenApiValidator response validation with different status codes 2`] = `"No response object found with statusCode=301"`;
 
-exports[`OpenApiValidator schemas with request body and headers references 1`] = `[ValidationError: Error while validating request: request.body.ping should be equal to one of the allowed values]`;
+exports[`OpenApiValidator schemas with request body and headers references 1`] = `[ValidationError: Error while validating request: request/body/ping should be equal to one of the allowed values]`;
 
-exports[`OpenApiValidator schemas with request body and headers references 2`] = `"Error while validating response: response.headers['x-hullo'] should NOT be shorter than 2 characters"`;
+exports[`OpenApiValidator schemas with request body and headers references 2`] = `"Error while validating response: response/headers/x-hullo should NOT have fewer than 2 characters"`;
 
-exports[`OpenApiValidator schemas with several references 1`] = `[ValidationError: Error while validating request: request.body should have required property 'value']`;
+exports[`OpenApiValidator schemas with several references 1`] = `[ValidationError: Error while validating request: request/body should have required property 'value']`;
 
-exports[`OpenApiValidator schemas with several references 2`] = `[ValidationError: Error while validating request: request.body.tag should NOT be shorter than 3 characters]`;
+exports[`OpenApiValidator schemas with several references 2`] = `[ValidationError: Error while validating request: request/body/tag should NOT have fewer than 3 characters]`;
 
 exports[`OpenApiValidator trying to validate with a path that doesn't exist throws 1`] = `"Path=/non-existent not found from OpenAPI document"`;
 
-exports[`OpenApiValidator validating bodies with null fields and nullable property is schema 1`] = `[ValidationError: Error while validating request: request.body.bar should be string]`;
+exports[`OpenApiValidator validating bodies with null fields and nullable property is schema 1`] = `[ValidationError: Error while validating request: request/body/bar should be string]`;
 
-exports[`OpenApiValidator validating cookies with a parameter schema 1`] = `[ValidationError: Error while validating request: request.cookies should have required property 'session']`;
+exports[`OpenApiValidator validating cookies with a parameter schema 1`] = `[ValidationError: Error while validating request: request/cookies should have required property 'session']`;
 
 exports[`OpenApiValidator validating cookies with parameters schema fails with no cookie parser 1`] = `[ValidationError: Error while validating request: request should have required property 'cookies']`;
 
-exports[`OpenApiValidator validating headers with a parameter schema 1`] = `[ValidationError: Error while validating request: request.headers should have required property 'x-param']`;
+exports[`OpenApiValidator validating headers with a parameter schema 1`] = `[ValidationError: Error while validating request: request/headers should have required property 'x-param']`;
 
-exports[`OpenApiValidator validating headers with a parameter schema where the schema includes uppercase characters 1`] = `[ValidationError: Error while validating request: request.headers should have required property 'x-param']`;
+exports[`OpenApiValidator validating headers with a parameter schema where the schema includes uppercase characters 1`] = `[ValidationError: Error while validating request: request/headers should have required property 'x-param']`;
 
-exports[`OpenApiValidator validating parameters with two required query parameters 1`] = `[ValidationError: Error while validating request: request.query should have required property 'q2']`;
+exports[`OpenApiValidator validating parameters with two required query parameters 1`] = `[ValidationError: Error while validating request: request/query should have required property 'q2']`;
 
-exports[`OpenApiValidator validating parameters with two required query parameters 2`] = `[ValidationError: Error while validating request: request.query should have required property 'q1']`;
+exports[`OpenApiValidator validating parameters with two required query parameters 2`] = `[ValidationError: Error while validating request: request/query should have required property 'q1']`;
 
-exports[`OpenApiValidator validating path parameters with a parameters schema 1`] = `[ValidationError: Error while validating request: request.params should have required property 'id']`;
+exports[`OpenApiValidator validating path parameters with a parameters schema 1`] = `[ValidationError: Error while validating request: request/params should have required property 'id']`;
 
-exports[`OpenApiValidator validating path parameters with a parameters schema 2`] = `[ValidationError: Error while validating request: request.params.id should match pattern "^[0-9]+$"]`;
+exports[`OpenApiValidator validating path parameters with a parameters schema 2`] = `[ValidationError: Error while validating request: request/params/id should match pattern "^[0-9]+$"]`;
 
-exports[`OpenApiValidator validating path parameters with a parameters schema in both 1`] = `[ValidationError: Error while validating request: request.params.pid should match pattern "^[0-9]+$"]`;
+exports[`OpenApiValidator validating path parameters with a parameters schema in both 1`] = `[ValidationError: Error while validating request: request/params should have required property 'id']`;
 
-exports[`OpenApiValidator validating path parameters with a parameters schema in both 2`] = `[ValidationError: Error while validating request: request.params should have required property 'id']`;
+exports[`OpenApiValidator validating path parameters with a parameters schema in both 2`] = `[ValidationError: Error while validating request: request/params should have required property 'id']`;
 
-exports[`OpenApiValidator validating path parameters with a parameters schema in both 3`] = `[ValidationError: Error while validating request: request.params should have required property 'pid']`;
+exports[`OpenApiValidator validating path parameters with a parameters schema in both 3`] = `[ValidationError: Error while validating request: request/params should have required property 'pid']`;
 
-exports[`OpenApiValidator validating path parameters with a parameters schema in both 4`] = `[ValidationError: Error while validating request: request.params should have required property 'pid']`;
+exports[`OpenApiValidator validating path parameters with a parameters schema in both 4`] = `[ValidationError: Error while validating request: request/params should have required property 'pid']`;
 
-exports[`OpenApiValidator validating path parameters with a parameters schema in paths object 1`] = `[ValidationError: Error while validating request: request.params.pid should match pattern "^[0-9]+$"]`;
+exports[`OpenApiValidator validating path parameters with a parameters schema in paths object 1`] = `[ValidationError: Error while validating request: request/params/pid should match pattern "^[0-9]+$"]`;
 
-exports[`OpenApiValidator validating query parameters with internal references 1`] = `[ValidationError: Error while validating request: request.query.hello should NOT be shorter than 1 characters]`;
+exports[`OpenApiValidator validating query parameters with internal references 1`] = `[ValidationError: Error while validating request: request/query/hello should NOT have fewer than 1 characters]`;
 
-exports[`OpenApiValidator validating query with a parameter schema 1`] = `[ValidationError: Error while validating request: request.query should have required property 'param']`;
+exports[`OpenApiValidator validating query with a parameter schema 1`] = `[ValidationError: Error while validating request: request/query should have required property 'param']`;
 
-exports[`OpenApiValidator validating response headers 1`] = `"Error while validating response: response.headers should have required property 'x-header'"`;
+exports[`OpenApiValidator validating response headers 1`] = `"Error while validating response: response/headers should have required property 'x-header'"`;
 
-exports[`OpenApiValidator validating response headers 2`] = `"Error while validating response: response.headers['x-ref-header'] should NOT be shorter than 3 characters"`;
+exports[`OpenApiValidator validating response headers 2`] = `"Error while validating response: response/headers/x-ref-header should NOT have fewer than 3 characters"`;
 
-exports[`OpenApiValidator validating response headers with several required headers 1`] = `"Error while validating response: response.headers should have required property 'x-1'"`;
+exports[`OpenApiValidator validating response headers with several required headers 1`] = `"Error while validating response: response/headers should have required property 'x-1'"`;
 
-exports[`OpenApiValidator validating response headers with several required headers 2`] = `"Error while validating response: response.headers should have required property 'x-2'"`;
+exports[`OpenApiValidator validating response headers with several required headers 2`] = `"Error while validating response: response/headers should have required property 'x-2'"`;
 
-exports[`OpenApiValidator validating response of echo endpoint 1`] = `"Error while validating response: response.body should have required property 'output'"`;
+exports[`OpenApiValidator validating response of echo endpoint 1`] = `"Error while validating response: response/body should have required property 'output'"`;
 
-exports[`OpenApiValidator validating signed cookies generated by cookie-parser 1`] = `[ValidationError: Error while validating request: request.cookies should have required property 'session']`;
+exports[`OpenApiValidator validating signed cookies generated by cookie-parser 1`] = `[ValidationError: Error while validating request: request/cookies should have required property 'session']`;
 
-exports[`OpenApiValidator validating signed cookies generated by cookie-parser 2`] = `[ValidationError: Error while validating request: request.cookies.session should NOT be shorter than 1 characters]`;
+exports[`OpenApiValidator validating signed cookies generated by cookie-parser 2`] = `[ValidationError: Error while validating request: request/cookies/session should NOT have fewer than 1 characters]`;
 
-exports[`OpenApiValidator validating with a simple echo endpoint 1`] = `[ValidationError: Error while validating request: request.body should have required property 'input']`;
+exports[`OpenApiValidator validating with a simple echo endpoint 1`] = `[ValidationError: Error while validating request: request/body should have required property 'input']`;
 
-exports[`OpenApiValidator validating with schema as an internal reference 1`] = `[ValidationError: Error while validating request: request.body.value should be number]`;
+exports[`OpenApiValidator validating with schema as an internal reference 1`] = `[ValidationError: Error while validating request: request/body/value should be number]`;
 
-exports[`OpenApiValidator validation of OpenAPI string formats 1`] = `[ValidationError: Error while validating request: request.body.byte should match format "byte"]`;
+exports[`OpenApiValidator validation of OpenAPI string formats 1`] = `[ValidationError: Error while validating request: request/body/byte should match format "byte"]`;
 
-exports[`OpenApiValidator validation of OpenAPI string formats 2`] = `[ValidationError: Error while validating request: request.body.date should match format "date"]`;
+exports[`OpenApiValidator validation of OpenAPI string formats 2`] = `[ValidationError: Error while validating request: request/body/date should match format "date"]`;
 
-exports[`OpenApiValidator validation of OpenAPI string formats 3`] = `[ValidationError: Error while validating request: request.body.date should match format "date"]`;
+exports[`OpenApiValidator validation of OpenAPI string formats 3`] = `[ValidationError: Error while validating request: request/body/date should match format "date"]`;
 
-exports[`OpenApiValidator validation of numeric OpenAPI formats 1`] = `[ValidationError: Error while validating request: request.body.i32 should match format "int32"]`;
+exports[`OpenApiValidator validation of numeric OpenAPI formats 1`] = `[ValidationError: Error while validating request: request/body/i32 should match format "int32"]`;
 
-exports[`OpenApiValidator validation of numeric OpenAPI formats 2`] = `[ValidationError: Error while validating request: request.body.i32 should be integer]`;
+exports[`OpenApiValidator validation of numeric OpenAPI formats 2`] = `[ValidationError: Error while validating request: request/body/i32 should be integer]`;
 
-exports[`OpenApiValidator validation of numeric OpenAPI formats 3`] = `[ValidationError: Error while validating request: request.body.i64 should be integer]`;
+exports[`OpenApiValidator validation of numeric OpenAPI formats 3`] = `[ValidationError: Error while validating request: request/body/i64 should be integer]`;
 
-exports[`OpenApiValidator validation of numeric OpenAPI formats 4`] = `[ValidationError: Error while validating request: request.body.i64 should be integer]`;
+exports[`OpenApiValidator validation of numeric OpenAPI formats 4`] = `[ValidationError: Error while validating request: request/body/i64 should be integer]`;
 
-exports[`OpenApiValidator validation of numeric OpenAPI formats 5`] = `[ValidationError: Error while validating request: request.body.f should match format "float"]`;
+exports[`OpenApiValidator validation of numeric OpenAPI formats 5`] = `[ValidationError: Error while validating request: request/body/f should match format "float"]`;
 
-exports[`OpenApiValidator validation of numeric OpenAPI formats 6`] = `[ValidationError: Error while validating request: request.body.d should be number]`;
+exports[`OpenApiValidator validation of numeric OpenAPI formats 6`] = `[ValidationError: Error while validating request: request/body/d should be number]`;
 
-exports[`OpenApiValidator validation with multiple different rules schema 1`] = `[ValidationError: Error while validating request: request.query.q1 should match pattern "^[a-zA-Z]+$"]`;
+exports[`OpenApiValidator validation with multiple different rules schema 1`] = `[ValidationError: Error while validating request: request/query/q1 should match pattern "^[a-zA-Z]+$"]`;
 
-exports[`OpenApiValidator validation with multiple different rules schema 2`] = `[ValidationError: Error while validating request: request.query.q1 should NOT be shorter than 3 characters]`;
+exports[`OpenApiValidator validation with multiple different rules schema 2`] = `[ValidationError: Error while validating request: request/query/q1 should NOT have fewer than 3 characters]`;
 
-exports[`OpenApiValidator validation with multiple different rules schema 3`] = `[ValidationError: Error while validating request: request.query.q1 should NOT be longer than 10 characters]`;
+exports[`OpenApiValidator validation with multiple different rules schema 3`] = `[ValidationError: Error while validating request: request/query/q1 should NOT have more than 10 characters]`;
 
-exports[`OpenApiValidator validation with multiple different rules schema 4`] = `[ValidationError: Error while validating request: request.body.i should be integer]`;
+exports[`OpenApiValidator validation with multiple different rules schema 4`] = `[ValidationError: Error while validating request: request/body/i should be integer]`;
 
-exports[`OpenApiValidator validation with multiple different rules schema 5`] = `[ValidationError: Error while validating request: request.body.i should be multiple of 2]`;
+exports[`OpenApiValidator validation with multiple different rules schema 5`] = `[ValidationError: Error while validating request: request/body/i should be multiple of 2]`;
 
 exports[`OpenApiValidator validation with required body 1`] = `[ValidationError: Error while validating request: request should have required property 'body']`;
 
-exports[`OpenApiValidator validation with required body 2`] = `[ValidationError: Error while validating request: request.body should have required property 'a']`;
+exports[`OpenApiValidator validation with required body 2`] = `[ValidationError: Error while validating request: request/body should have required property 'a']`;
 
-exports[`OpenApiValidator validation with required body 3`] = `[ValidationError: Error while validating request: request.body should have required property 'a']`;
+exports[`OpenApiValidator validation with required body 3`] = `[ValidationError: Error while validating request: request/body should have required property 'a']`;

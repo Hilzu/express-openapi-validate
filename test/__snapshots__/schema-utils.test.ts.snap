@@ -4,6 +4,8 @@ exports[`schema utils module map schema throws with invalid OAS schemas 1`] = `"
 
 exports[`schema utils module map schema throws with invalid OAS schemas 2`] = `"Items field in schema must not be an array"`;
 
+exports[`schema utils module map schema throws with invalid OAS schemas 3`] = `"Type field in schema must not be an array"`;
+
 exports[`schema utils module resolveReference throws with unresolved $ref path 1`] = `"Object not found with $ref=#/components/schemas/Testt"`;
 
 exports[`schema utils module resolveReference throws with unsupported $ref 1`] = `"Unsupported $ref=#/a/b/C"`;

@@ -53,53 +53,6 @@ describe("schema utils module", () => {
     expect(walkSchema(schema, _.identity)).toEqual(schema);
   });
 
-  test("maps OAS nullable field to correct type array", () => {
-    const schema = {
-      properties: {
-        foo: {
-          nullable: true,
-          type: "number",
-        },
-        bar: {
-          type: "array",
-          items: {
-            type: "string",
-            nullable: true,
-          },
-        },
-        baz: {
-          type: "string",
-          nullable: false,
-        },
-        xyz: {
-          nullable: true,
-        },
-        xyz2: {
-          nullable: false,
-        },
-      },
-    };
-    expect(mapOasSchemaToJsonSchema(schema, {} as any)).toEqual({
-      $schema: "http://json-schema.org/draft-04/schema#",
-      properties: {
-        foo: {
-          type: ["number", "null"],
-        },
-        bar: {
-          type: "array",
-          items: {
-            type: ["string", "null"],
-          },
-        },
-        baz: {
-          type: "string",
-        },
-        xyz: {},
-        xyz2: {},
-      },
-    });
-  });
-
   test("map schema throws with invalid OAS schemas", () => {
     expect(() => {
       mapOasSchemaToJsonSchema({ type: ["array", "null"] as any }, {} as any);
@@ -109,6 +62,15 @@ describe("schema utils module", () => {
       mapOasSchemaToJsonSchema(
         {
           items: [{ type: "string" }, { type: "number" }] as any,
+        },
+        {} as any,
+      );
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(() => {
+      mapOasSchemaToJsonSchema(
+        {
+          oneOf: [{ type: "string" }, { type: ["number", "null"] } as any],
         },
         {} as any,
       );
@@ -127,48 +89,6 @@ describe("schema utils module", () => {
     expect(() => {
       resolveReference(openApiDocument, { $ref: "#/a/b/C" });
     }).toThrowErrorMatchingSnapshot();
-  });
-
-  test("map schema with several child schemas", () => {
-    const schema = {
-      properties: {
-        a: {
-          type: "string",
-          nullable: true,
-        },
-        b: {
-          oneOf: [{ type: "string", nullable: true }, { type: "number" }],
-        },
-        c: {
-          type: "object",
-          additionalProperties: { type: "string", nullable: true },
-        },
-      },
-      items: {
-        type: "number",
-        nullable: true,
-      },
-      additionalProperties: false,
-    };
-    expect(mapOasSchemaToJsonSchema(schema, {} as any)).toEqual({
-      $schema: "http://json-schema.org/draft-04/schema#",
-      properties: {
-        a: {
-          type: ["string", "null"],
-        },
-        b: {
-          oneOf: [{ type: ["string", "null"] }, { type: "number" }],
-        },
-        c: {
-          type: "object",
-          additionalProperties: { type: ["string", "null"] },
-        },
-      },
-      items: {
-        type: ["number", "null"],
-      },
-      additionalProperties: false,
-    });
   });
 
   test("oasPathToExpressPath formats URL parameters for path-to-regexp", () => {

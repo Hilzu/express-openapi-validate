@@ -42,7 +42,7 @@ const createTestValidator = (
   return (method: Operation, path: string) => {
     const validate = validator.validate(method, path);
     return (userReq?: any) =>
-      new Promise(resolve => {
+      new Promise((resolve) => {
         const req = { ...baseReq, ...userReq };
         validate(req, {} as any, resolve);
       });
@@ -73,16 +73,16 @@ describe("OpenApiValidator", () => {
     const validator = createTestValidator(openApiDocument, opts);
     const validate = validator("post", "/format");
     return validate({ body: { password: "abc" } })
-      .then(err => {
+      .then((err) => {
         expect(err).toBeInstanceOf(ValidationError);
         expect(err).toMatchSnapshot();
         return validate({ body: { password: "password123" } });
       })
-      .then(err => {
+      .then((err) => {
         expect(err).toBeUndefined();
         return validate({ body: { d: 123.1 } });
       })
-      .then(err => {
+      .then((err) => {
         expect(err).toBeUndefined();
       });
   });

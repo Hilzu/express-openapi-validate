@@ -14,10 +14,11 @@
   limitations under the License.
 */
 
-import draft04Schema from "ajv/lib/refs/json-schema-draft-04.json";
+import Ajv, { Options as AjvOptions, ErrorObject } from "ajv";
+import addFormats from "ajv-formats";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { RequestHandler } from "express";
-import * as _ from "lodash";
+import _ from "lodash";
 import { pathToRegexp } from "path-to-regexp";
 import * as semver from "semver";
 
@@ -36,8 +37,6 @@ import {
   resolveReference,
 } from "./schema-utils";
 import ValidationError from "./ValidationError";
-// tslint:disable-next-line ordered-imports
-import Ajv = require("ajv");
 
 const resolveResponse = (res: any): any => {
   if (res == null) {
@@ -56,7 +55,7 @@ const resolveResponse = (res: any): any => {
 };
 
 export interface ValidatorConfig {
-  ajvOptions?: Ajv.Options;
+  ajvOptions?: AjvOptions;
 }
 
 export interface PathRegexpObject {
@@ -69,7 +68,7 @@ export interface MatchOptions {
 }
 
 export default class OpenApiValidator {
-  private _ajv: Ajv.Ajv;
+  private _ajv: Ajv;
 
   private _document: OpenApiDocument;
 
@@ -81,17 +80,12 @@ export default class OpenApiValidator {
     }
     this._document = openApiDocument;
     const userAjvFormats = _.get(options, ["ajvOptions", "formats"], {});
-    const ajvOptions: Ajv.Options = {
+    const ajvOptions: AjvOptions = {
       ...options.ajvOptions,
       formats: { ...formats, ...userAjvFormats },
-      schemaId: "id",
-      meta: false,
     };
     this._ajv = new Ajv(ajvOptions);
-    this._ajv.removeKeyword("propertyNames");
-    this._ajv.removeKeyword("contains");
-    this._ajv.removeKeyword("const");
-    this._ajv.addMetaSchema(draft04Schema);
+    addFormats(this._ajv, ["date", "date-time"]);
   }
 
   public validate(method: Operation, path: string): RequestHandler {
@@ -114,6 +108,7 @@ export default class OpenApiValidator {
     );
     const parametersSchema = parameters.buildSchema(params);
     const schema = {
+      type: "object",
       properties: {
         body: resolveReference(this._document, bodySchema),
         ...parametersSchema,
@@ -133,7 +128,7 @@ export default class OpenApiValidator {
 
     const validate: RequestHandler = (req, res, next) => {
       const reqToValidate = {
-        ...req,
+        ..._.pick(req, "query", "headers", "params", "body"),
         cookies: req.cookies
           ? { ...req.cookies, ...req.signedCookies }
           : undefined,
@@ -142,7 +137,7 @@ export default class OpenApiValidator {
       if (valid) {
         next();
       } else {
-        const errors = validator.errors as Ajv.ErrorObject[];
+        const errors = validator.errors as ErrorObject[];
         const errorText = this._ajv.errorsText(errors, { dataVar: "request" });
         const err = new ValidationError(
           `Error while validating request: ${errorText}`,
@@ -159,7 +154,7 @@ export default class OpenApiValidator {
     options: MatchOptions = { allowNoMatch: false },
   ): RequestHandler {
     const paths: PathRegexpObject[] = _.keys(this._document.paths).map(
-      path => ({
+      (path) => ({
         path,
         regex: pathToRegexp(oasPathToExpressPath(path)),
       }),
@@ -198,7 +193,7 @@ export default class OpenApiValidator {
         type: "object",
         properties: {},
       };
-      Object.keys(headerObjectMap).forEach(key => {
+      Object.keys(headerObjectMap).forEach((key) => {
         const headerObject = resolveReference(
           this._document,
           headerObjectMap[key],
@@ -243,7 +238,7 @@ export default class OpenApiValidator {
         });
         throw new ValidationError(
           `Error while validating response: ${errorText}`,
-          this._ajv.errors as Ajv.ErrorObject[],
+          this._ajv.errors as ErrorObject[],
         );
       }
     };

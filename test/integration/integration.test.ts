@@ -26,17 +26,13 @@ describe("Integration tests with real app", () => {
   test("requests against /echo are validated correctly", async () => {
     const validate = validator.validateResponse("post", "/echo");
 
-    let res = await request(app)
-      .post("/echo")
-      .send({});
+    let res = await request(app).post("/echo").send({});
     expect(validate(res)).toBeUndefined();
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("error");
     expect(res.body).toMatchSnapshot();
 
-    res = await request(app)
-      .post("/echo")
-      .send({ input: "Hello!" });
+    res = await request(app).post("/echo").send({ input: "Hello!" });
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ output: "Hello!" });
     expect(validate(res)).toBeUndefined();
@@ -45,17 +41,13 @@ describe("Integration tests with real app", () => {
   test("requests against /match are validated correctly", async () => {
     const validate = validator.validateResponse("post", "/match");
 
-    let res = await request(app)
-      .post("/match")
-      .send({});
+    let res = await request(app).post("/match").send({});
     expect(validate(res)).toBeUndefined();
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("error");
     expect(res.body).toMatchSnapshot();
 
-    res = await request(app)
-      .post("/match")
-      .send({ input: "Hello!" });
+    res = await request(app).post("/match").send({ input: "Hello!" });
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ output: "Hello!" });
     expect(validate(res)).toBeUndefined();
@@ -67,9 +59,7 @@ describe("Integration tests with real app", () => {
     expect(res.body).toEqual({ output: "works-with-url-param" });
     expect(validate(res)).toBeUndefined();
 
-    res = await request(app)
-      .post("/match/works-with-url-param")
-      .send({});
+    res = await request(app).post("/match/works-with-url-param").send({});
     expect(validate(res)).toBeUndefined();
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("error");
@@ -102,9 +92,7 @@ describe("Integration tests with real app", () => {
     expect(res.body).toHaveProperty("error");
     expect(res.body).toMatchSnapshot();
 
-    res = await request(app)
-      .get("/parameters")
-      .query({ porom: "moi" });
+    res = await request(app).get("/parameters").query({ porom: "moi" });
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("error");
     expect(res.body).toMatchSnapshot();
@@ -122,9 +110,7 @@ describe("Integration tests with real app", () => {
     expect(res.body).toHaveProperty("error");
     expect(res.body).toMatchSnapshot();
 
-    res = await request(app)
-      .get("/parameters/header")
-      .set("X-param", "hullo");
+    res = await request(app).get("/parameters/header").set("X-param", "hullo");
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ header: "hullo" });
   });

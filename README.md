@@ -1,8 +1,8 @@
 # express-openapi-validate
 
 [![Build Status](https://travis-ci.org/Hilzu/express-openapi-validate.svg?branch=master)](https://travis-ci.org/Hilzu/express-openapi-validate)
-[![Coverage Status](https://coveralls.io/repos/github/Hilzu/express-openapi-validate/badge.svg?branch=master)](https://coveralls.io/github/Hilzu/express-openapi-validate?branch=master)
-[![npm version](https://badge.fury.io/js/express-openapi-validate.svg)](https://badge.fury.io/js/express-openapi-validate)
+[![codecov](https://codecov.io/gh/Hilzu/express-openapi-validate/branch/master/graph/badge.svg?token=4WVa86OfWl)](https://codecov.io/gh/Hilzu/express-openapi-validate)
+![npm](https://img.shields.io/npm/v/express-openapi-validate)
 [![Try on RunKit](https://badge.runkitcdn.com/express-openapi-validate.svg)](https://npm.runkit.com/express-openapi-validate)
 
 Express middleware to validate requests based on an [OpenAPI 3.0
@@ -290,14 +290,10 @@ const validator = new OpenApiValidator(openApiDocument);
 
 test("/echo responses", async () => {
   const validateResponse = validator.validateResponse("post", "/echo");
-  let res = await request(app)
-    .post("/echo")
-    .send({});
+  let res = await request(app).post("/echo").send({});
   expect(validateResponse(res)).toBeUndefined();
 
-  res = await request(app)
-    .post("/echo")
-    .send({ input: "Hello!" });
+  res = await request(app).post("/echo").send({ input: "Hello!" });
   expect(validateResponse(res)).toBeUndefined();
 });
 ```

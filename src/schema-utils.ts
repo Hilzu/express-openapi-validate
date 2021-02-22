@@ -15,7 +15,6 @@
 */
 
 import _ from "lodash";
-import { dissoc } from "./object-utils";
 import OpenApiDocument, {
   ReferenceObject,
   SchemaObject,
@@ -57,14 +56,14 @@ export const walkSchema = (
   }
 
   arrayFields
-    .filter(f => f in schema)
-    .forEach(f => {
+    .filter((f) => f in schema)
+    .forEach((f) => {
       schema = { ...schema, [f]: (schema as any)[f].map(walk) };
     });
 
   schemaFields
-    .filter(f => f in schema)
-    .forEach(f => {
+    .filter((f) => f in schema)
+    .forEach((f) => {
       const nestedSchema = (schema as any)[f];
       if (f === "additionalProperties" && typeof nestedSchema === "boolean") {
         return;
@@ -80,7 +79,7 @@ export const mapOasSchemaToJsonSchema = (
   document: OpenApiDocument,
 ): SchemaObject => {
   const mapOasFieldsToJsonSchemaFields = (s: SchemaObject): SchemaObject => {
-    let schema = resolveReference(document, s);
+    const schema = resolveReference(document, s);
     if (Array.isArray(schema.type)) {
       throw new TypeError("Type field in schema must not be an array");
     }
@@ -88,20 +87,9 @@ export const mapOasSchemaToJsonSchema = (
       throw new TypeError("Items field in schema must not be an array");
     }
 
-    // Need to figure out how to handle the case when nullable is false and
-    // there's no type specified. The OAS spec isn't explicit about that corner
-    // case. Setting type to an array with all the primitive types except null
-    // is one option but doesn't seem right. Do nothing for now.
-    if (schema.nullable === true && typeof schema.type === "string") {
-      schema = { ...schema, type: [schema.type, "null"] } as any;
-    }
-    schema = dissoc(schema, "nullable");
-
     return schema;
   };
-  const jsonSchema = walkSchema(originalSchema, mapOasFieldsToJsonSchemaFields);
-  (jsonSchema as any).$schema = "http://json-schema.org/draft-04/schema#";
-  return jsonSchema;
+  return walkSchema(originalSchema, mapOasFieldsToJsonSchemaFields);
 };
 
 export const oasPathToExpressPath = (path: string): string =>
