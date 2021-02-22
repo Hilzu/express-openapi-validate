@@ -290,14 +290,10 @@ const validator = new OpenApiValidator(openApiDocument);
 
 test("/echo responses", async () => {
   const validateResponse = validator.validateResponse("post", "/echo");
-  let res = await request(app)
-    .post("/echo")
-    .send({});
+  let res = await request(app).post("/echo").send({});
   expect(validateResponse(res)).toBeUndefined();
 
-  res = await request(app)
-    .post("/echo")
-    .send({ input: "Hello!" });
+  res = await request(app).post("/echo").send({ input: "Hello!" });
   expect(validateResponse(res)).toBeUndefined();
 });
 ```

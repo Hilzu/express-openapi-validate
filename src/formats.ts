@@ -27,25 +27,25 @@ const alwaysTrue = (): boolean => true;
 const base64regExp = /^[A-Za-z0-9+/]*(=|==)?$/;
 
 export const int32 = {
-  validate: (i: number) =>
+  validate: (i: number): boolean =>
     Number.isInteger(i) && i <= maxInt32 && i >= minInt32,
   type: "number",
 };
 
 export const int64 = {
-  validate: (i: number) =>
+  validate: (i: number): boolean =>
     Number.isInteger(i) && i <= maxInt64 && i >= minInt64,
   type: "number",
 };
 
 export const float = {
-  validate: (i: number) =>
+  validate: (i: number): boolean =>
     typeof i === "number" && i <= maxFloat && i >= minFloat,
   type: "number",
 };
 
 export const double = {
-  validate: (i: number) => typeof i === "number",
+  validate: (i: number): boolean => typeof i === "number",
   type: "number",
 };
 

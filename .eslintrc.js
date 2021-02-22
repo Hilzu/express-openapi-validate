@@ -2,13 +2,16 @@ module.exports = {
   root: true,
   extends: [
     "eslint:recommended",
-    "airbnb-base",
-    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
     "plugin:import/typescript",
     "prettier",
   ],
   parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 2021,
+    sourceType: "module",
+  },
   plugins: ["import", "@typescript-eslint"],
   env: {
     jest: true,

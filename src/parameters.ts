@@ -14,7 +14,7 @@ const normalizeParameters = (
   parameters?: Array<ParameterObject | ReferenceObject>,
 ): { [name: string]: ParameterObject } =>
   _.keyBy(
-    _.map(parameters, p => resolveReference<ParameterObject>(document, p)),
+    _.map(parameters, (p) => resolveReference<ParameterObject>(document, p)),
     "name",
   );
 
@@ -58,7 +58,7 @@ export function buildSchema(
   parameterObjects: ParameterObject[],
 ): { [field: string]: SchemaObject } {
   const schema = { query: {}, headers: {}, params: {}, cookies: {} };
-  parameterObjects.forEach(parameterObject => {
+  parameterObjects.forEach((parameterObject) => {
     const location = parameterObject.in;
     const name =
       location === "header"
