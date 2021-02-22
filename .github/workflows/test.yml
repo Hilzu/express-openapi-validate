@@ -21,9 +21,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm test
-    - name: Publish code coverage to Coveralls
-      uses: coverallsapp/github-action@v1.1.2
-      with:
-        github-token: ${{ secrets.github_token }}
-        flag-name: node-${{ matrix.node-version }}
-        parallel: true
+    - name: Upload code coverage to Codecov
+      uses: codecov/codecov-action@v1
