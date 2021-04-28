@@ -18,14 +18,14 @@ import ValidationError from "../src/ValidationError";
 
 test("ValidationError can be created and has correct fields", () => {
   const e = new ValidationError("msg", [
-    { keyword: "a", dataPath: "b", schemaPath: "c", params: [] },
+    { keyword: "a", instancePath: "b", schemaPath: "c", params: [] },
   ]);
   expect(e).toBeInstanceOf(Error);
   expect(e).toBeInstanceOf(ValidationError);
   expect(e.message).toBe("msg");
   expect(e.name).toBe("ValidationError");
   expect(e.data).toEqual([
-    { keyword: "a", dataPath: "b", schemaPath: "c", params: [] },
+    { keyword: "a", instancePath: "b", schemaPath: "c", params: [] },
   ]);
   expect(e.stack).toBeDefined();
 });
