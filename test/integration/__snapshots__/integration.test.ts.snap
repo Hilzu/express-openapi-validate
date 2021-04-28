@@ -5,16 +5,16 @@ Object {
   "error": Object {
     "data": Array [
       Object {
-        "dataPath": "/cookies",
+        "instancePath": "/cookies",
         "keyword": "required",
-        "message": "should have required property 'session'",
+        "message": "must have required property 'session'",
         "params": Object {
           "missingProperty": "session",
         },
         "schemaPath": "#/properties/cookies/required",
       },
     ],
-    "message": "Error while validating request: request/cookies should have required property 'session'",
+    "message": "Error while validating request: request/cookies must have required property 'session'",
     "name": "ValidationError",
   },
 }
@@ -25,16 +25,16 @@ Object {
   "error": Object {
     "data": Array [
       Object {
-        "dataPath": "/headers",
+        "instancePath": "/headers",
         "keyword": "required",
-        "message": "should have required property 'x-param'",
+        "message": "must have required property 'x-param'",
         "params": Object {
           "missingProperty": "x-param",
         },
         "schemaPath": "#/properties/headers/required",
       },
     ],
-    "message": "Error while validating request: request/headers should have required property 'x-param'",
+    "message": "Error while validating request: request/headers must have required property 'x-param'",
     "name": "ValidationError",
   },
 }
@@ -45,16 +45,16 @@ Object {
   "error": Object {
     "data": Array [
       Object {
-        "dataPath": "/params/id",
+        "instancePath": "/params/id",
         "keyword": "pattern",
-        "message": "should match pattern \\"^[0-9]+$\\"",
+        "message": "must match pattern \\"^[0-9]+$\\"",
         "params": Object {
           "pattern": "^[0-9]+$",
         },
         "schemaPath": "#/properties/params/properties/id/pattern",
       },
     ],
-    "message": "Error while validating request: request/params/id should match pattern \\"^[0-9]+$\\"",
+    "message": "Error while validating request: request/params/id must match pattern \\"^[0-9]+$\\"",
     "name": "ValidationError",
   },
 }
@@ -65,16 +65,16 @@ Object {
   "error": Object {
     "data": Array [
       Object {
-        "dataPath": "/query",
+        "instancePath": "/query",
         "keyword": "required",
-        "message": "should have required property 'param'",
+        "message": "must have required property 'param'",
         "params": Object {
           "missingProperty": "param",
         },
         "schemaPath": "#/properties/query/required",
       },
     ],
-    "message": "Error while validating request: request/query should have required property 'param'",
+    "message": "Error while validating request: request/query must have required property 'param'",
     "name": "ValidationError",
   },
 }
@@ -85,16 +85,16 @@ Object {
   "error": Object {
     "data": Array [
       Object {
-        "dataPath": "/query",
+        "instancePath": "/query",
         "keyword": "required",
-        "message": "should have required property 'param'",
+        "message": "must have required property 'param'",
         "params": Object {
           "missingProperty": "param",
         },
         "schemaPath": "#/properties/query/required",
       },
     ],
-    "message": "Error while validating request: request/query should have required property 'param'",
+    "message": "Error while validating request: request/query must have required property 'param'",
     "name": "ValidationError",
   },
 }
@@ -105,16 +105,16 @@ Object {
   "error": Object {
     "data": Array [
       Object {
-        "dataPath": "/body",
+        "instancePath": "/body",
         "keyword": "required",
-        "message": "should have required property 'input'",
+        "message": "must have required property 'input'",
         "params": Object {
           "missingProperty": "input",
         },
         "schemaPath": "#/properties/body/required",
       },
     ],
-    "message": "Error while validating request: request/body should have required property 'input'",
+    "message": "Error while validating request: request/body must have required property 'input'",
     "name": "ValidationError",
   },
 }
@@ -125,16 +125,16 @@ Object {
   "error": Object {
     "data": Array [
       Object {
-        "dataPath": "/body",
+        "instancePath": "/body",
         "keyword": "required",
-        "message": "should have required property 'input'",
+        "message": "must have required property 'input'",
         "params": Object {
           "missingProperty": "input",
         },
         "schemaPath": "#/properties/body/required",
       },
     ],
-    "message": "Error while validating request: request/body should have required property 'input'",
+    "message": "Error while validating request: request/body must have required property 'input'",
     "name": "ValidationError",
   },
 }
@@ -145,16 +145,16 @@ Object {
   "error": Object {
     "data": Array [
       Object {
-        "dataPath": "/body",
+        "instancePath": "/body",
         "keyword": "required",
-        "message": "should have required property 'input'",
+        "message": "must have required property 'input'",
         "params": Object {
           "missingProperty": "input",
         },
         "schemaPath": "#/properties/body/required",
       },
     ],
-    "message": "Error while validating request: request/body should have required property 'input'",
+    "message": "Error while validating request: request/body must have required property 'input'",
     "name": "ValidationError",
   },
 }
