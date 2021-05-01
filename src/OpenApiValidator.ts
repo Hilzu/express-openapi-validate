@@ -86,6 +86,9 @@ export default class OpenApiValidator {
     };
     this._ajv = new Ajv(ajvOptions);
     addFormats(this._ajv, ["date", "date-time"]);
+    this._ajv.addKeyword("example");
+    this._ajv.addKeyword("xml");
+    this._ajv.addKeyword("externalDocs");
   }
 
   public validate(method: Operation, path: string): RequestHandler {

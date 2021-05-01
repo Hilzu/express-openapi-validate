@@ -656,4 +656,14 @@ describe("OpenApiValidator", () => {
     expect(validateMock).not.toHaveBeenCalled();
     expect(nextMock).toHaveBeenCalledWith();
   });
+
+  test("extra OAS fields in schema", async () => {
+    const validate = getValidator("post", "/extra-oas-fields-in-schema");
+    let err = await validate({ body: "aaa" });
+    expect(err).toBeUndefined();
+
+    err = await validate({ body: 123 });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+  });
 });
