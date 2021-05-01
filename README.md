@@ -157,6 +157,7 @@ paths:
 - References to [Components Object][openapi-components-object] (See [Reference
   Object][openapi-reference-object])
 - Typescript definitions are included in the package
+- [Discriminator keyword](ajv-discriminator)
 
 ### Currently unsupported features
 
@@ -165,7 +166,6 @@ paths:
 - Some [OpenAPI Schema Object specific fields][openapi-fixed-fields] are
   unsupported:
   - `deprecated`
-  - `discriminator`
   - `xml`
 - External references (references to other files and network resources) (See
   [Reference Object][openapi-reference-object])
@@ -368,3 +368,4 @@ Objects][ajv-error-objects] documentation contains a list of the fields in
 [i8]: https://github.com/Hilzu/express-openapi-validate/issues/8
 [jest]: https://facebook.github.io/jest/
 [supertest]: https://github.com/visionmedia/supertest
+[ajv-discriminator]: https://ajv.js.org/json-schema.html#discriminator

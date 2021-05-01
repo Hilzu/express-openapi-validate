@@ -81,6 +81,7 @@ export default class OpenApiValidator {
     this._document = openApiDocument;
     const userAjvFormats = _.get(options, ["ajvOptions", "formats"], {});
     const ajvOptions: AjvOptions = {
+      discriminator: true,
       ...options.ajvOptions,
       formats: { ...formats, ...userAjvFormats },
     };

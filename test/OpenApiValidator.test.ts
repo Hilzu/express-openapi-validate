@@ -666,4 +666,36 @@ describe("OpenApiValidator", () => {
     expect(err).toBeInstanceOf(ValidationError);
     expect(err).toMatchSnapshot();
   });
+
+  test("discriminator", async () => {
+    const validate = getValidator("post", "/discriminator");
+    let err = await validate({ body: { foo: "x", a: "any" } });
+    expect(err).toBeUndefined();
+
+    err = await validate({ body: { foo: "y", b: "any" } });
+    expect(err).toBeUndefined();
+
+    err = await validate({ body: { foo: "z", b: "any" } });
+    expect(err).toBeUndefined();
+
+    err = await validate({ body: {} });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ body: { foo: 1 } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ body: { foo: "bar" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ body: { foo: "x", b: "b" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+
+    err = await validate({ body: { foo: "y", a: "a" } });
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err).toMatchSnapshot();
+  });
 });
