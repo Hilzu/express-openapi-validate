@@ -6,6 +6,18 @@ exports[`OpenApiValidator creating schema with invalid parameter location throws
 
 exports[`OpenApiValidator creating throws with Swagger 2.0 document 1`] = `"Unsupported OpenAPI / Swagger version=2.0"`;
 
+exports[`OpenApiValidator discriminator 1`] = `[ValidationError: Error while validating request: request/body must have required property 'foo']`;
+
+exports[`OpenApiValidator discriminator 2`] = `[ValidationError: Error while validating request: request/body tag "foo" must be string]`;
+
+exports[`OpenApiValidator discriminator 3`] = `[ValidationError: Error while validating request: request/body value of tag "foo" must be in oneOf]`;
+
+exports[`OpenApiValidator discriminator 4`] = `[ValidationError: Error while validating request: request/body must have required property 'a']`;
+
+exports[`OpenApiValidator discriminator 5`] = `[ValidationError: Error while validating request: request/body must have required property 'b']`;
+
+exports[`OpenApiValidator extra OAS fields in schema 1`] = `[ValidationError: Error while validating request: request/body must be string]`;
+
 exports[`OpenApiValidator getting an operation object fails with invalid arguments 1`] = `"Path=/echo with method=POST not found from OpenAPI document"`;
 
 exports[`OpenApiValidator getting an operation object fails with invalid arguments 2`] = `"Path=/echo with method=ppost not found from OpenAPI document"`;

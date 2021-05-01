@@ -500,3 +500,48 @@ paths:
           headers:
             x-hullo:
               $ref: "#/components/headers/hullo"
+  /extra-oas-fields-in-schema:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example: abc
+              readOnly: true
+              writeOnly: false
+              xml: {}
+              externalDocs: {}
+              deprecated: false
+      responses:
+        "200":
+          description: Response
+  /discriminator:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              discriminator:
+                propertyName: foo
+              required:
+                - foo
+              oneOf:
+                - properties:
+                    foo:
+                      const: x
+                    a:
+                      type: string
+                  required:
+                    - a
+                - properties:
+                    foo:
+                      enum:
+                        - y
+                        - z
+                    b:
+                      type: string
+                  required:
+                    - b
