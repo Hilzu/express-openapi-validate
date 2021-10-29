@@ -41,8 +41,8 @@ export const resolveReference = <T>(
   return object;
 };
 
-const arrayFields = ["allOf", "anyOf", "oneOf"];
-const schemaFields = ["items", "not", "additionalProperties"];
+const arrayFields = ["allOf", "anyOf", "oneOf"] as const;
+const schemaFields = ["items", "not", "additionalProperties"] as const;
 
 export const walkSchema = (
   originalSchema: SchemaObject | ReferenceObject,
@@ -59,17 +59,21 @@ export const walkSchema = (
   arrayFields
     .filter((f) => f in schema)
     .forEach((f) => {
-      schema = { ...schema, [f]: (schema as any)[f].map(walk) };
+      schema = { ...schema, [f]: schema[f]?.map(walk) };
     });
 
   schemaFields
     .filter((f) => f in schema)
     .forEach((f) => {
-      const nestedSchema = (schema as any)[f];
+      const nestedSchema = schema[f];
       if (f === "additionalProperties" && typeof nestedSchema === "boolean") {
         return;
+      } else {
+        schema = {
+          ...schema,
+          [f]: walk(nestedSchema as SchemaObject | ReferenceObject),
+        };
       }
-      schema = { ...schema, [f]: walk(nestedSchema) };
     });
 
   return schema;
