@@ -45,11 +45,12 @@ const arrayFields = ["allOf", "anyOf", "oneOf"];
 const schemaFields = ["items", "not", "additionalProperties"];
 
 export const walkSchema = (
-  originalSchema: SchemaObject,
-  mapper: (x: SchemaObject) => SchemaObject,
+  originalSchema: SchemaObject | ReferenceObject,
+  mapper: (x: SchemaObject | ReferenceObject) => SchemaObject,
 ): SchemaObject => {
   let schema = mapper(originalSchema);
-  const walk = (s: SchemaObject): SchemaObject => walkSchema(s, mapper);
+  const walk = (s: SchemaObject | ReferenceObject): SchemaObject =>
+    walkSchema(s, mapper);
 
   if (schema.properties !== undefined) {
     schema = { ...schema, properties: _.mapValues(schema.properties, walk) };
@@ -75,10 +76,12 @@ export const walkSchema = (
 };
 
 export const mapOasSchemaToJsonSchema = (
-  originalSchema: SchemaObject,
+  originalSchema: SchemaObject | ReferenceObject,
   document: OpenApiDocument,
 ): SchemaObject => {
-  const mapOasFieldsToJsonSchemaFields = (s: SchemaObject): SchemaObject => {
+  const mapOasFieldsToJsonSchemaFields = (
+    s: SchemaObject | ReferenceObject,
+  ): SchemaObject => {
     const schema = resolveReference(document, s);
     if (Array.isArray(schema.type)) {
       throw new TypeError("Type field in schema must not be an array");
