@@ -36,15 +36,15 @@ export interface InfoObject {
 
 export interface SchemaObject {
   type?: string;
-  items?: SchemaObject;
-  properties?: { [property: string]: SchemaObject };
+  items?: SchemaObject | ReferenceObject;
+  properties?: { [property: string]: SchemaObject | ReferenceObject };
   nullable?: boolean;
   required?: string[];
-  allOf?: SchemaObject[];
-  anyOf?: SchemaObject[];
-  oneOf?: SchemaObject[];
-  not?: SchemaObject;
-  additionalProperties?: boolean | SchemaObject;
+  allOf?: (SchemaObject | ReferenceObject)[];
+  anyOf?: (SchemaObject | ReferenceObject)[];
+  oneOf?: (SchemaObject | ReferenceObject)[];
+  not?: SchemaObject | ReferenceObject;
+  additionalProperties?: boolean | SchemaObject | ReferenceObject;
 }
 
 export interface ComponentsObject {
