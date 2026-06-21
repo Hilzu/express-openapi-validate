@@ -4,7 +4,7 @@
   "description": "Express middleware to validate request based on an OpenAPI 3 document",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "git@github.com:Hilzu/express-openapi-validate.git",
+  "repository": "git+https://github.com/Hilzu/express-openapi-validate.git",
   "author": "Santeri Hiltunen",
   "license": "Apache-2.0",
   "private": false,
